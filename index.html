@@ -447,6 +447,85 @@
               Every NOOR purchase includes complimentary custom hem adjustments and sleeve tailoring. Connect directly via our WhatsApp Concierge to arrange bespoke adjustments with our master tailors.
             </div>
           </div>
+      </section>
+
+      <!-- ========================================================
+           CUSTOMER REVIEWS & VERIFIED BUYER RATINGS SECTION
+           ======================================================== -->
+      <section class="max-w-7xl mx-auto px-gutter py-space-lg w-full border-b border-secondary/15">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 pb-6 border-b border-secondary/20">
+          <div>
+            <span class="font-label-md text-secondary uppercase tracking-widest block mb-1">Patron Testimonials & Experiences</span>
+            <h2 class="font-headline-lg text-on-surface">Verified Customer Reviews (গ্রাহক প্রতিক্রিয়া)</h2>
+            <p class="text-body-sm text-on-surface-variant mt-1">Authentic experiences shared by our esteemed verified patrons.</p>
+          </div>
+          <button type="button" class="px-6 py-3 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-all font-headline-sm uppercase text-xs flex items-center gap-2 shadow-sm font-bold" onclick="openWriteReviewModal()">
+            <span class="material-symbols-outlined text-[18px]">rate_review</span>
+            <span>Write a Review • রিভিউ দিন</span>
+          </button>
+        </div>
+
+        <!-- Rating Summary & Breakdown Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 bg-surface-container-low p-6 md:p-8 border border-secondary/20">
+          <!-- Left: Big Rating Score (4 Cols) -->
+          <div class="lg:col-span-4 flex flex-col justify-center items-center text-center p-4 border-b lg:border-b-0 lg:border-r border-secondary/20 space-y-2">
+            <span class="text-5xl md:text-6xl font-display-lg text-secondary font-bold" id="pdp-review-summary-score">5.0</span>
+            <div class="flex items-center gap-1 text-amber-500 text-xl" id="pdp-review-summary-stars">
+              <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">star</span>
+            </div>
+            <p class="text-body-sm text-on-surface-variant font-medium" id="pdp-review-summary-total">Based on Verified Reviews</p>
+            <div class="inline-flex items-center gap-1 text-xs text-emerald-800 bg-emerald-100/90 border border-emerald-300 px-3 py-1 rounded-full font-bold mt-2">
+              <span class="material-symbols-outlined text-[15px] text-emerald-700">verified</span> 100% Verified Purchases (শুধুমাত্র ক্রেতারা রিভিউ দিতে পারেন)
+            </div>
+          </div>
+
+          <!-- Middle: Breakdown Bars (8 Cols) -->
+          <div class="lg:col-span-8 flex flex-col justify-center space-y-2.5 px-2 md:px-6">
+            <div class="flex items-center gap-3 text-xs text-on-surface-variant">
+              <span class="w-12 font-medium">5 Star</span>
+              <div class="flex-grow bg-surface-container-highest h-2.5 rounded-full overflow-hidden">
+                <div class="bg-secondary h-full rounded-full" style="width: 95%;"></div>
+              </div>
+              <span class="w-10 text-right font-mono font-bold">95%</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-on-surface-variant">
+              <span class="w-12 font-medium">4 Star</span>
+              <div class="flex-grow bg-surface-container-highest h-2.5 rounded-full overflow-hidden">
+                <div class="bg-secondary h-full rounded-full" style="width: 5%;"></div>
+              </div>
+              <span class="w-10 text-right font-mono font-bold">5%</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-on-surface-variant">
+              <span class="w-12 font-medium">3 Star</span>
+              <div class="flex-grow bg-surface-container-highest h-2.5 rounded-full overflow-hidden">
+                <div class="bg-secondary h-full rounded-full" style="width: 0%;"></div>
+              </div>
+              <span class="w-10 text-right font-mono font-bold">0%</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-on-surface-variant">
+              <span class="w-12 font-medium">2 Star</span>
+              <div class="flex-grow bg-surface-container-highest h-2.5 rounded-full overflow-hidden">
+                <div class="bg-secondary h-full rounded-full" style="width: 0%;"></div>
+              </div>
+              <span class="w-10 text-right font-mono font-bold">0%</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-on-surface-variant">
+              <span class="w-12 font-medium">1 Star</span>
+              <div class="flex-grow bg-surface-container-highest h-2.5 rounded-full overflow-hidden">
+                <div class="bg-secondary h-full rounded-full" style="width: 0%;"></div>
+              </div>
+              <span class="w-10 text-right font-mono font-bold">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verified Reviews Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="pdp-reviews-list-container">
+          <!-- Rendered dynamically -->
         </div>
       </section>
 
@@ -970,6 +1049,100 @@
           Proceed to Checkout
         </button>
       </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================
+       VERIFIED BUYER REVIEW SUBMISSION MODAL
+       ========================================================== -->
+  <div class="center-modal-overlay" id="write-review-modal" onclick="if(event.target === this) closeWriteReviewModal()">
+    <div class="center-modal-box p-6 md:p-8 max-w-xl">
+      <div class="flex justify-between items-center pb-4 border-b border-secondary/20 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-secondary/15 text-secondary flex items-center justify-center">
+            <span class="material-symbols-outlined text-[22px]">verified</span>
+          </div>
+          <div>
+            <h3 class="font-headline-sm uppercase tracking-wider text-on-surface">Verified Patron Review</h3>
+            <p class="text-xs text-on-surface-variant">শুধুমাত্র পণ্যটি ক্রয়কারী ভেরিফাইড ক্রেতাদের জন্য</p>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" onclick="closeWriteReviewModal()">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- STEP 1: VERIFICATION CHECK SECTION -->
+      <div id="review-verification-section" class="space-y-4">
+        <div class="p-4 bg-amber-500/10 border border-amber-500/30 text-xs text-on-surface space-y-1">
+          <div class="flex items-center gap-1.5 font-bold text-secondary">
+            <span class="material-symbols-outlined text-[18px]">security</span>
+            <span>ক্রয় যাচাইকরণ • Purchase Verification</span>
+          </div>
+          <p class="text-on-surface-variant leading-relaxed">রিভিউ প্রদান করতে আপনি যে মোবাইল নম্বর অথবা অর্ডার আইডি দিয়ে এই পণ্যটি ক্রয় করেছেন তা প্রদান করে ভেরিফাই করুন।</p>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="text-[11px] uppercase tracking-wider text-on-surface-variant font-bold block mb-1">
+              আপনার ফোন নম্বর অথবা অর্ডার আইডি (Phone / Order ID) *
+            </label>
+            <div class="flex gap-2">
+              <input type="text" id="review-verifier-input" class="flex-grow px-3.5 py-2.5 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" placeholder="e.g. 01712345678 বা NR-88214-BD" />
+              <button type="button" class="px-5 py-2.5 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm uppercase text-xs font-bold" onclick="verifyBuyerForReview()">
+                যাচাই করুন
+              </button>
+            </div>
+          </div>
+          <div id="review-verification-msg" class="text-xs min-h-[20px]"></div>
+        </div>
+      </div>
+
+      <!-- STEP 2: REVIEW SUBMISSION FORM (Hidden until verified) -->
+      <form id="verified-review-form" onsubmit="handleReviewSubmit(event)" class="space-y-4 hidden pt-4 border-t border-secondary/20">
+        <div class="p-3 bg-emerald-50 border border-emerald-300 text-xs text-emerald-900 flex items-center gap-2 rounded">
+          <span class="material-symbols-outlined text-emerald-600 text-[20px]">verified</span>
+          <div>
+            <strong>✓ ভেরিফাইড ক্রেতা নিশ্চিত হয়েছে: </strong>
+            <span id="review-verified-patron-name" class="font-bold">Princess Yasmin Al-Sabah</span> (<span id="review-verified-order-id" class="font-mono">NR-88214-BD</span>)
+          </div>
+        </div>
+
+        <!-- Star Rating Picker -->
+        <div>
+          <label class="text-label-md uppercase text-on-surface-variant block mb-1">Overall Rating / রেটিং *</label>
+          <div class="flex items-center gap-1.5" id="review-star-picker">
+            <button type="button" class="star-picker-btn text-amber-400 text-3xl hover:scale-110 transition-transform" data-star="1" onclick="setReviewRating(1)">★</button>
+            <button type="button" class="star-picker-btn text-amber-400 text-3xl hover:scale-110 transition-transform" data-star="2" onclick="setReviewRating(2)">★</button>
+            <button type="button" class="star-picker-btn text-amber-400 text-3xl hover:scale-110 transition-transform" data-star="3" onclick="setReviewRating(3)">★</button>
+            <button type="button" class="star-picker-btn text-amber-400 text-3xl hover:scale-110 transition-transform" data-star="4" onclick="setReviewRating(4)">★</button>
+            <button type="button" class="star-picker-btn text-amber-400 text-3xl hover:scale-110 transition-transform" data-star="5" onclick="setReviewRating(5)">★</button>
+            <span class="text-xs font-bold text-secondary uppercase ml-2" id="review-rating-label">5 Stars (Excellent)</span>
+          </div>
+          <input type="hidden" id="review-rating-value" value="5" />
+        </div>
+
+        <div>
+          <label class="text-label-md uppercase text-on-surface-variant block mb-1">Review Headline / শিরোনাম *</label>
+          <input type="text" id="review-title-input" class="w-full px-3 py-2 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" placeholder="e.g. অসাধারণ প্রিমিয়াম কোয়ালিটি ও ফিনিশিং" required />
+        </div>
+
+        <div>
+          <label class="text-label-md uppercase text-on-surface-variant block mb-1">Detailed Experience / বিস্তারিত রিভিউ *</label>
+          <textarea id="review-comment-input" rows="3" class="w-full px-3 py-2 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" placeholder="কাপড়ের মান, সাইজিং, আরাম ও ডেলিভারি নিয়ে আপনার মূল্যবান মতামত লিখুন..." required></textarea>
+        </div>
+
+        <div class="flex gap-3 pt-4 border-t border-secondary/20">
+          <button type="button" class="flex-1 py-3 bg-surface-container-high text-on-surface font-label-md uppercase tracking-wider hover:bg-surface-container-highest transition-colors" onclick="closeWriteReviewModal()">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-3 bg-primary text-on-primary font-label-md uppercase tracking-wider hover:bg-secondary hover:text-on-secondary transition-colors font-bold shadow-md">
+            Publish Verified Review
+          </button>
+        </div>
+      </form>
+
     </div>
   </div>
 

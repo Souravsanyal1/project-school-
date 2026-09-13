@@ -9,7 +9,7 @@ class DataStore {
   }
 
   init() {
-    const DATA_VERSION = "v10_archive_banner_customizer";
+    const DATA_VERSION = "v11_verified_buyer_reviews";
     const currentVersion = localStorage.getItem("noor_data_version");
 
     if (currentVersion !== DATA_VERSION) {
@@ -18,7 +18,9 @@ class DataStore {
       localStorage.setItem("noor_products", JSON.stringify(DEFAULT_PRODUCTS));
       localStorage.setItem("noor_categories", JSON.stringify(DEFAULT_CATEGORIES));
       localStorage.setItem("noor_coupons", JSON.stringify(DEFAULT_COUPONS));
-      localStorage.setItem("noor_orders", JSON.stringify([]));
+      localStorage.setItem("noor_orders", JSON.stringify(typeof DEFAULT_ORDERS !== "undefined" ? DEFAULT_ORDERS : []));
+      localStorage.setItem("noor_addresses", JSON.stringify(typeof DEFAULT_ADDRESSES !== "undefined" ? DEFAULT_ADDRESSES : []));
+      localStorage.setItem("noor_product_reviews", JSON.stringify(typeof DEFAULT_REVIEWS !== "undefined" ? DEFAULT_REVIEWS : []));
       localStorage.setItem("noor_data_version", DATA_VERSION);
     }
 
@@ -27,6 +29,12 @@ class DataStore {
     }
     if (!localStorage.getItem("noor_wishlist")) {
       localStorage.setItem("noor_wishlist", JSON.stringify(["prod-1", "prod-2", "prod-3"]));
+    }
+    if (!localStorage.getItem("noor_product_reviews")) {
+      localStorage.setItem("noor_product_reviews", JSON.stringify(typeof DEFAULT_REVIEWS !== "undefined" ? DEFAULT_REVIEWS : []));
+    }
+    if (!localStorage.getItem("noor_addresses")) {
+      localStorage.setItem("noor_addresses", JSON.stringify(typeof DEFAULT_ADDRESSES !== "undefined" ? DEFAULT_ADDRESSES : []));
     }
   }
 
@@ -407,6 +415,120 @@ class DataStore {
     this.emitChange("addresses");
   }
 
+  // --- Customer Reviews (Verified Buyer Reviews) ---
+  getReviews(productId = null) {
+    try {
+      let list = JSON.parse(localStorage.getItem("noor_product_reviews"));
+      if (!Array.isArray(list) || list.length === 0) {
+        list = typeof DEFAULT_REVIEWS !== "undefined" ? DEFAULT_REVIEWS : [];
+      }
+      if (productId) {
+        return list.filter(r => r.productId === productId);
+      }
+      return list;
+    } catch {
+      return typeof DEFAULT_REVIEWS !== "undefined" ? DEFAULT_REVIEWS : [];
+    }
+  }
+
+  hasUserPurchasedProduct(productId, identifier = null) {
+    const orders = this.getOrders();
+    if (!orders || orders.length === 0) {
+      return { hasPurchased: false, reason: "No purchase records found in store." };
+    }
+
+    // If identifier (phone, orderId, or email) is provided:
+    if (identifier && identifier.trim()) {
+      const cleanInput = identifier.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+      
+      const matchedOrder = orders.find(o => {
+        const oId = (o.orderId || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const oPhone = (o.phone || "").replace(/[^0-9]/g, "");
+        const oEmail = (o.email || "").toLowerCase().trim();
+        const hasItem = Array.isArray(o.items) && o.items.some(it => (it.id === productId || it.productId === productId));
+        
+        return hasItem && (oId.includes(cleanInput) || oPhone.includes(cleanInput) || oEmail.includes(cleanInput));
+      });
+
+      if (matchedOrder) {
+        const item = matchedOrder.items.find(it => (it.id === productId || it.productId === productId));
+        return {
+          hasPurchased: true,
+          order: matchedOrder,
+          customerName: matchedOrder.customerName || "Valued Patron",
+          phone: matchedOrder.phone || "",
+          orderId: matchedOrder.orderId,
+          variant: `${item?.color || 'Standard'} • ${item?.size || 'Standard'}`
+        };
+      } else {
+        return {
+          hasPurchased: false,
+          reason: "প্রদত্ত অর্ডার নম্বর বা ফোন নম্বরে এই পণ্যটি ক্রয়ের কোনো রেকর্ড পাওয়া যায়নি।"
+        };
+      }
+    }
+
+    // If no identifier provided, check if ANY saved order in local history contains this product
+    const anyOrder = orders.find(o => Array.isArray(o.items) && o.items.some(it => (it.id === productId || it.productId === productId)));
+    if (anyOrder) {
+      const item = anyOrder.items.find(it => (it.id === productId || it.productId === productId));
+      return {
+        hasPurchased: true,
+        order: anyOrder,
+        customerName: anyOrder.customerName || "Valued Patron",
+        phone: anyOrder.phone || "",
+        orderId: anyOrder.orderId,
+        variant: `${item?.color || 'Standard'} • ${item?.size || 'Standard'}`
+      };
+    }
+
+    return {
+      hasPurchased: false,
+      reason: "You have not purchased this piece yet."
+    };
+  }
+
+  addReview(reviewData) {
+    let reviews = this.getReviews();
+    const newRev = {
+      id: "rev-" + Date.now(),
+      date: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
+      likes: 0,
+      isVerified: true,
+      ...reviewData
+    };
+    reviews.unshift(newRev);
+    localStorage.setItem("noor_product_reviews", JSON.stringify(reviews));
+
+    // Update product rating and reviewsCount
+    const prodReviews = reviews.filter(r => r.productId === newRev.productId);
+    const avgRating = (prodReviews.reduce((sum, r) => sum + Number(r.rating || 5), 0) / prodReviews.length).toFixed(1);
+    
+    let products = this.getProducts();
+    const pIdx = products.findIndex(p => p.id === newRev.productId);
+    if (pIdx !== -1) {
+      products[pIdx].rating = Number(avgRating);
+      products[pIdx].reviewsCount = (products[pIdx].reviewsCount || 0) + 1;
+      localStorage.setItem("noor_products", JSON.stringify(products));
+      this.emitChange("products");
+    }
+
+    this.emitChange("reviews");
+    return newRev;
+  }
+
+  likeReview(reviewId) {
+    let reviews = this.getReviews();
+    const rev = reviews.find(r => r.id === reviewId);
+    if (rev) {
+      rev.likes = (rev.likes || 0) + 1;
+      localStorage.setItem("noor_product_reviews", JSON.stringify(reviews));
+      this.emitChange("reviews");
+      return rev.likes;
+    }
+    return 0;
+  }
+
   // Reset & Backup
   resetToDefault() {
     localStorage.setItem("noor_settings", JSON.stringify(DEFAULT_SETTINGS));
@@ -415,6 +537,7 @@ class DataStore {
     localStorage.setItem("noor_coupons", JSON.stringify(DEFAULT_COUPONS));
     localStorage.setItem("noor_orders", JSON.stringify(DEFAULT_ORDERS));
     localStorage.setItem("noor_addresses", JSON.stringify(DEFAULT_ADDRESSES));
+    localStorage.setItem("noor_product_reviews", JSON.stringify(DEFAULT_REVIEWS));
     localStorage.setItem("noor_cart", JSON.stringify([]));
     localStorage.setItem("noor_wishlist", JSON.stringify(["prod-1", "prod-2", "prod-3"]));
     this.emitChange("all");
@@ -427,7 +550,8 @@ class DataStore {
       categories: this.getCategories(),
       coupons: this.getCoupons(),
       orders: this.getOrders(),
-      addresses: this.getAddresses()
+      addresses: this.getAddresses(),
+      reviews: this.getReviews()
     }, null, 2);
   }
 
@@ -440,6 +564,7 @@ class DataStore {
       if (data.coupons) localStorage.setItem("noor_coupons", JSON.stringify(data.coupons));
       if (data.orders) localStorage.setItem("noor_orders", JSON.stringify(data.orders));
       if (data.addresses) localStorage.setItem("noor_addresses", JSON.stringify(data.addresses));
+      if (data.reviews) localStorage.setItem("noor_product_reviews", JSON.stringify(data.reviews));
       this.emitChange("all");
       return { success: true };
     } catch (err) {
@@ -454,3 +579,4 @@ class DataStore {
 
 // Global Store Instance
 window.Store = new DataStore();
+

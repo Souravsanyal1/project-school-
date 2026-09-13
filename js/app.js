@@ -434,6 +434,9 @@ function loadProductDetail(productId, shouldScroll = false) {
 
   // Related Products Grid on PDP
   renderPdpRelatedProducts(product.id, product.category);
+
+  // Customer Reviews & Ratings
+  renderProductReviews(product.id);
 }
 
 function switchPdpImage(imgUrl, btn) {
@@ -526,6 +529,261 @@ function renderPdpRelatedProducts(currentId, category) {
       </div>
     </div>
   `).join("");
+}
+
+// ==========================================
+// VERIFIED BUYER REVIEWS & RATINGS LOGIC
+// ==========================================
+let currentVerifiedPurchaseData = null;
+
+function renderProductReviews(productId) {
+  const container = document.getElementById("pdp-reviews-list-container");
+  if (!container) return;
+
+  const reviews = Store.getReviews(productId);
+  const totalReviews = reviews.length;
+
+  // Calculate Average Rating
+  let avgRating = 5.0;
+  if (totalReviews > 0) {
+    const sum = reviews.reduce((acc, r) => acc + Number(r.rating || 5), 0);
+    avgRating = (sum / totalReviews).toFixed(1);
+  }
+
+  // Update Summary UI
+  const scoreEl = document.getElementById("pdp-review-summary-score");
+  if (scoreEl) scoreEl.textContent = avgRating;
+
+  const totalEl = document.getElementById("pdp-review-summary-total");
+  if (totalEl) totalEl.textContent = `Based on ${totalReviews} Verified Reviews`;
+
+  const pdpCountEl = document.getElementById("pdp-reviews-count");
+  if (pdpCountEl) pdpCountEl.textContent = `(${totalReviews} Reviews)`;
+
+  const starsEl = document.getElementById("pdp-review-summary-stars");
+  if (starsEl) {
+    const fullStars = Math.round(Number(avgRating));
+    let starsHtml = "";
+    for (let i = 1; i <= 5; i++) {
+      starsHtml += `<span class="material-symbols-outlined text-[24px] text-amber-500" style="font-variation-settings: 'FILL' ${i <= fullStars ? 1 : 0};">star</span>`;
+    }
+    starsEl.innerHTML = starsHtml;
+  }
+
+  // If no reviews
+  if (reviews.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full py-10 text-center bg-surface-container-lowest border border-dashed border-secondary/30 p-6 space-y-3">
+        <span class="material-symbols-outlined text-[32px] text-secondary">rate_review</span>
+        <h4 class="font-headline-sm text-on-surface">No Customer Reviews Yet</h4>
+        <p class="text-body-sm text-on-surface-variant max-w-md mx-auto">Be the first verified patron to review this masterpiece after placing your order.</p>
+        <button type="button" class="px-5 py-2.5 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm uppercase text-xs inline-flex items-center gap-2" onclick="openWriteReviewModal()">
+          <span class="material-symbols-outlined text-[16px]">edit</span> Write First Review
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // Render review cards
+  container.innerHTML = reviews.map(rev => {
+    let starIcons = "";
+    for (let i = 1; i <= 5; i++) {
+      starIcons += `<span class="material-symbols-outlined text-[16px] text-amber-500" style="font-variation-settings: 'FILL' ${i <= rev.rating ? 1 : 0};">star</span>`;
+    }
+
+    return `
+      <div class="bg-surface-container-lowest p-6 border border-secondary/20 relative flex flex-col justify-between shadow-sm hover:border-secondary transition-colors">
+        <div class="space-y-3">
+          <!-- Top Row: Rating & Verified Badge -->
+          <div class="flex justify-between items-start gap-2">
+            <div class="flex items-center gap-1 text-amber-500">
+              ${starIcons}
+            </div>
+            <span class="inline-flex items-center gap-1 text-[11px] text-emerald-800 bg-emerald-100/90 border border-emerald-300 px-2 py-0.5 rounded font-bold">
+              <span class="material-symbols-outlined text-[14px] text-emerald-700">verified</span>
+              <span>Verified Buyer</span>
+            </span>
+          </div>
+
+          <!-- Review Title & Comment -->
+          <div>
+            <h4 class="font-headline-sm text-on-surface font-bold text-sm">${rev.title || 'Exquisite Piece'}</h4>
+            <p class="text-body-sm text-on-surface-variant mt-1.5 leading-relaxed font-light">${rev.comment}</p>
+          </div>
+        </div>
+
+        <!-- Author, Variant & Date -->
+        <div class="pt-4 mt-4 border-t border-secondary/10 flex justify-between items-end text-xs">
+          <div>
+            <strong class="text-on-surface font-semibold block">${rev.author || 'Anonymous Patron'}</strong>
+            ${rev.variant ? `<span class="text-[11px] text-slate-500 block">${rev.variant}</span>` : ''}
+            <span class="text-[11px] text-on-surface-variant font-mono">${rev.date || 'Recent'}</span>
+          </div>
+          <button type="button" class="text-slate-600 hover:text-amber-600 flex items-center gap-1 text-xs font-semibold px-2 py-1 bg-surface-container rounded border border-outline-variant/50 transition-colors" onclick="handleLikeReview('${rev.id}', this)">
+            <span class="material-symbols-outlined text-[14px]">thumb_up</span>
+            <span class="like-count">${rev.likes || 0}</span>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function handleLikeReview(reviewId, btn) {
+  const newLikes = Store.likeReview(reviewId);
+  const countSpan = btn.querySelector(".like-count");
+  if (countSpan) countSpan.textContent = newLikes;
+  btn.classList.add("text-secondary", "font-bold");
+}
+
+function openWriteReviewModal() {
+  const modal = document.getElementById("write-review-modal");
+  const form = document.getElementById("verified-review-form");
+  const msgEl = document.getElementById("review-verification-msg");
+  const verifierInput = document.getElementById("review-verifier-input");
+
+  if (!modal || !currentPdpProduct) return;
+
+  if (form) form.reset();
+  if (form) form.classList.add("hidden");
+  if (msgEl) msgEl.innerHTML = "";
+  if (verifierInput) verifierInput.value = "";
+  setReviewRating(5);
+  currentVerifiedPurchaseData = null;
+
+  // Auto-check if the user placed an order for this product in current browser
+  const autoCheck = Store.hasUserPurchasedProduct(currentPdpProduct.id);
+  if (autoCheck.hasPurchased && autoCheck.order) {
+    currentVerifiedPurchaseData = autoCheck;
+    if (verifierInput) verifierInput.value = autoCheck.orderId || autoCheck.phone;
+    
+    // Auto-unlock Step 2
+    if (msgEl) {
+      msgEl.innerHTML = `
+        <div class="p-2.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded font-medium flex items-center gap-1.5 mt-2">
+          <span class="material-symbols-outlined text-emerald-600 text-[18px]">verified</span>
+          <span>স্বয়ংক্রিয়ভাবে আপনার পূর্ববর্তী ক্রয়ের অর্ডার (${autoCheck.orderId}) পাওয়া গেছে! নিচে আপনার রিভিউ লিখুন।</span>
+        </div>
+      `;
+    }
+    document.getElementById("review-verified-patron-name").textContent = autoCheck.customerName || "Valued Patron";
+    document.getElementById("review-verified-order-id").textContent = autoCheck.orderId;
+    if (form) form.classList.remove("hidden");
+  }
+
+  modal.classList.add("active");
+}
+
+function closeWriteReviewModal() {
+  const modal = document.getElementById("write-review-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+function verifyBuyerForReview() {
+  const input = document.getElementById("review-verifier-input");
+  const msgEl = document.getElementById("review-verification-msg");
+  const form = document.getElementById("verified-review-form");
+  const val = input ? input.value.trim() : "";
+
+  if (!val) {
+    if (msgEl) {
+      msgEl.innerHTML = `<span class="text-error font-medium">⚠️ অনুগ্রহ করে আপনার অর্ডার নম্বর (Order ID) অথবা ফোন নম্বর প্রদান করুন।</span>`;
+    }
+    return;
+  }
+
+  if (!currentPdpProduct) return;
+
+  const result = Store.hasUserPurchasedProduct(currentPdpProduct.id, val);
+
+  if (result.hasPurchased) {
+    currentVerifiedPurchaseData = result;
+    if (msgEl) {
+      msgEl.innerHTML = `
+        <div class="p-2.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded font-medium flex items-center gap-1.5 mt-2">
+          <span class="material-symbols-outlined text-emerald-600 text-[18px]">verified</span>
+          <span>✓ ভেরিফিকেশন সফল! আপনি এই পণ্যটির ভেরিফাইড ক্রেতা।</span>
+        </div>
+      `;
+    }
+    document.getElementById("review-verified-patron-name").textContent = result.customerName || "Valued Patron";
+    document.getElementById("review-verified-order-id").textContent = result.orderId;
+    if (form) form.classList.remove("hidden");
+  } else {
+    currentVerifiedPurchaseData = null;
+    if (form) form.classList.add("hidden");
+    if (msgEl) {
+      msgEl.innerHTML = `
+        <div class="p-3 bg-red-50 text-red-800 border border-red-200 rounded text-xs space-y-1.5 mt-2">
+          <div class="font-bold flex items-center gap-1">
+            <span class="material-symbols-outlined text-red-600 text-[16px]">lock</span>
+            <span>ক্রয় রেকর্ড পাওয়া যায়নি (Purchase Not Found)</span>
+          </div>
+          <p>শুধুমাত্র এই পণ্যটি ক্রয়কারী ক্রেতারা রিভিউ দিতে পারবেন। আপনি যদি পণ্যটি কিনে থাকেন, অনুগ্রহ করে অর্ডারে ব্যবহৃত সঠিক ফোন নম্বর বা অর্ডার আইডি দিয়ে চেষ্টা করুন।</p>
+        </div>
+      `;
+    }
+  }
+}
+
+function setReviewRating(rating) {
+  document.getElementById("review-rating-value").value = rating;
+  const ratingLabels = {
+    1: "1 Star (Poor)",
+    2: "2 Stars (Fair)",
+    3: "3 Stars (Good)",
+    4: "4 Stars (Very Good)",
+    5: "5 Stars (Excellent)"
+  };
+  const labelEl = document.getElementById("review-rating-label");
+  if (labelEl) labelEl.textContent = ratingLabels[rating] || `${rating} Stars`;
+
+  document.querySelectorAll(".star-picker-btn").forEach(btn => {
+    const starNum = Number(btn.getAttribute("data-star"));
+    if (starNum <= rating) {
+      btn.classList.add("text-amber-400");
+      btn.classList.remove("text-slate-300");
+    } else {
+      btn.classList.remove("text-amber-400");
+      btn.classList.add("text-slate-300");
+    }
+  });
+}
+
+function handleReviewSubmit(e) {
+  if (e) e.preventDefault();
+  if (!currentPdpProduct || !currentVerifiedPurchaseData) {
+    showToast("Please verify your purchase before submitting", "error");
+    return;
+  }
+
+  const rating = Number(document.getElementById("review-rating-value")?.value || 5);
+  const title = document.getElementById("review-title-input")?.value.trim() || "";
+  const comment = document.getElementById("review-comment-input")?.value.trim() || "";
+
+  if (!title || !comment) {
+    showToast("Please provide both a review headline and detailed comments", "warning");
+    return;
+  }
+
+  const reviewData = {
+    productId: currentPdpProduct.id,
+    author: currentVerifiedPurchaseData.customerName || "Valued Patron",
+    phone: currentVerifiedPurchaseData.phone || "",
+    orderId: currentVerifiedPurchaseData.orderId || "",
+    variant: currentVerifiedPurchaseData.variant || "Standard",
+    rating: rating,
+    title: title,
+    comment: comment
+  };
+
+  Store.addReview(reviewData);
+  showToast("✓ আপনার ভেরিফাইড রিভিউ সফলভাবে প্রকাশিত হয়েছে!", "success");
+  closeWriteReviewModal();
+  renderProductReviews(currentPdpProduct.id);
+  renderFeaturedProducts();
+  renderShopProducts();
 }
 
 // Accordion Toggle

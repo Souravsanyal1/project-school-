@@ -241,7 +241,37 @@ const DEFAULT_COUPONS = [
   { code: "WELCOME500", discountFixed: 500, minSpend: 2000, active: true }
 ];
 
-const DEFAULT_ORDERS = [];
+const DEFAULT_ORDERS = [
+  {
+    orderId: "NR-88214-BD",
+    date: "10/09/2026, 14:30",
+    status: "Delivered",
+    currentStep: 5,
+    customerName: "Princess Yasmin Al-Sabah",
+    email: "patron@noor.com.bd",
+    phone: "01712345678",
+    address: "Villa 42, Road 11, Gulshan 2, Dhaka - 1212",
+    deliveryArea: "inside",
+    deliveryFee: 80,
+    paymentMethod: "cod",
+    trxId: "N/A (Cash on Delivery)",
+    items: [
+      {
+        id: "prod-1",
+        name: "The Medina Cashmere Abaya (মেদিনা ক্যাশমিয়ার আবায়া)",
+        price: 14500,
+        image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85",
+        color: "Onyx Black",
+        size: "54 (Standard)",
+        quantity: 1
+      }
+    ],
+    subtotal: 14500,
+    discount: 0,
+    couponCode: "",
+    total: 14580
+  }
+];
 
 const DEFAULT_ADDRESSES = [
   {
@@ -253,6 +283,65 @@ const DEFAULT_ADDRESSES = [
     city: "Dhaka - 1212",
     deliveryArea: "inside",
     isDefault: true
+  }
+];
+
+const DEFAULT_REVIEWS = [
+  {
+    id: "rev-1",
+    productId: "prod-1",
+    author: "Princess Yasmin Al-Sabah",
+    phone: "01712345678",
+    orderId: "NR-88214-BD",
+    rating: 5,
+    title: "অসাধারণ প্রিমিয়াম কোয়ালিটি ও সূক্ষ্ম ফিনিশিং",
+    comment: "ক্যাশমিয়ার ফেব্রিক অত্যন্ত নরম ও হালকা। পরলে এক অসাধারণ রাজকীয় অনুভূতি পাওয়া যায়। হাতার গোল্ডেন এমব্রয়ডারি নিখুঁত। সিগনেচার গিফট বক্স প্যাকেজিং দারুণ হয়েছে।",
+    date: "10 Sep 2026",
+    isVerified: true,
+    variant: "Onyx Black • 54 (Standard)",
+    likes: 18
+  },
+  {
+    id: "rev-2",
+    productId: "prod-1",
+    author: "Tanvir Ahmed",
+    phone: "01819998877",
+    orderId: "NR-74219-BD",
+    rating: 5,
+    title: "Worth every penny!",
+    comment: "Bespoke sizing fits comfortably and fabric feels extremely luxurious. Fast courier delivery within Dhaka.",
+    date: "04 Sep 2026",
+    isVerified: true,
+    variant: "Midnight Navy • 56 (Tall)",
+    likes: 12
+  },
+  {
+    id: "rev-3",
+    productId: "prod-2",
+    author: "Dr. Farhana Chowdhury",
+    phone: "01711223344",
+    orderId: "NR-59124-BD",
+    rating: 5,
+    title: "মেমোরি ফোম অসাধারণ আরামদায়ক",
+    comment: "নামাজের সময় হাঁটু ও পায়ে কোনো চাপ পড়ে না। ভেলভেটের কোয়ালিটি অত্যন্ত প্রিমিয়াম। পরিবারের সবার জন্য পছন্দ হয়েছে।",
+    date: "12 Sep 2026",
+    isVerified: true,
+    variant: "Midnight Blue • Standard",
+    likes: 24
+  },
+  {
+    id: "rev-4",
+    productId: "prod-3",
+    author: "Sheikh Mahmud Hasan",
+    phone: "01912345678",
+    orderId: "NR-33102-BD",
+    rating: 5,
+    title: "রয়েল তায়িফি গোলাপ ও খাঁটি কম্বোডিয়ান উদ",
+    comment: "সুগন্ধিটি দীর্ঘস্থায়ী এবং এর চমৎকার মিষ্টি ও গম্ভীর আবহ মনকে প্রশান্ত করে। খাঁটি ইসলামিক আতরের স্বাদ পেলাম।",
+    date: "08 Sep 2026",
+    isVerified: true,
+    variant: "12ml Crystal Flacon",
+    likes: 31
   }
 ];
 
