@@ -543,17 +543,117 @@ function deleteProductConfirm(productId) {
   }
 }
 
+// Interactive 5-Step Visual Tracking Pipeline Controller
+let selectedAdminTrackerOrderId = null;
+
+function renderAdmin5StepTimeline(order) {
+  if (!order) {
+    return `
+      <div class="bg-black text-white p-6 border border-secondary/30 text-center rounded">
+        <p class="text-xs text-slate-400">No active commission orders in pipeline.</p>
+      </div>
+    `;
+  }
+
+  const step = order.currentStep || (
+    order.status === "Pending" ? 1 :
+    (order.status === "Processing" || order.status === "Crafting" ? 2 :
+    (order.status === "Confirmed" || order.status === "Inspecting" ? 3 :
+    (order.status === "Shipped" || order.status === "Dispatched" ? 4 :
+    (order.status === "Delivered" || order.status === "Completed" ? 5 : 1))))
+  );
+
+  const stepsData = [
+    { num: 1, key: "Pending", title: "Order Placed", sub: "Confirmed", icon: "check" },
+    { num: 2, key: "Processing", title: "Artisanal Crafting", sub: "Atelier Tailoring", icon: "handyman" },
+    { num: 3, key: "Confirmed", title: "Quality Inspection", sub: "Inspected", icon: "verified" },
+    { num: 4, key: "Shipped", title: "Dispatched", sub: "Courier En Route", icon: "local_shipping" },
+    { num: 5, key: "Delivered", title: "Delivered", sub: "White-Glove Handover", icon: "home" }
+  ];
+
+  const primaryItemName = order.items && order.items.length > 0 ? order.items.map(i => i.name).join(" & ") : "Masterpiece Order";
+  const progressPct = ((step - 1) / 4) * 100;
+
+  return `
+    <div class="bg-black text-white p-6 md:p-8 border border-secondary/40 shadow-xl relative overflow-hidden rounded">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-secondary/20">
+        <div>
+          <span class="text-xs font-mono uppercase text-secondary tracking-widest block mb-1">ORDER #${order.orderId} • PATRON: ${order.customerName}</span>
+          <h3 class="text-base md:text-lg font-bold text-white">${primaryItemName}</h3>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="status-badge status-${order.status}">${order.status}</span>
+          <span class="text-xs text-slate-400 font-mono">${order.date}</span>
+        </div>
+      </div>
+
+      <!-- 5-Step Visual Pipeline -->
+      <div class="py-4 relative">
+        <div class="absolute top-[28px] md:top-1/2 left-4 right-4 h-[3px] bg-slate-800 -translate-y-1/2 hidden md:block z-0"></div>
+        <div class="absolute top-[28px] md:top-1/2 left-4 h-[3px] bg-secondary -translate-y-1/2 hidden md:block transition-all duration-500 z-0" style="width: calc(${progressPct}% - 8px);"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4 relative z-10">
+          ${stepsData.map(s => {
+            const isDone = step >= s.num;
+            const isCurrent = step === s.num;
+            return `
+              <div class="flex md:flex-col items-center gap-3.5 md:text-center cursor-pointer group p-3 rounded transition-all ${isCurrent ? 'bg-secondary/20 border border-secondary shadow-lg' : 'hover:bg-white/5 border border-transparent'}" onclick="setOrderStepInteractive('${order.orderId}', '${s.key}', ${s.num})" title="Click to update to Step 0${s.num}: ${s.title}">
+                <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm shadow-md transition-transform group-hover:scale-110 flex-shrink-0 ${isDone ? 'bg-secondary text-on-secondary ring-4 ring-secondary/25' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
+                  <span class="material-symbols-outlined text-[20px]">${s.icon}</span>
+                </div>
+                <div>
+                  <span class="text-[10px] font-mono uppercase block ${isDone ? 'text-secondary font-bold' : 'text-slate-400'}">STEP 0${s.num}</span>
+                  <h4 class="text-xs font-bold ${isDone ? 'text-white' : 'text-slate-400'}">${s.title}</h4>
+                  <p class="text-[11px] ${isCurrent ? 'text-secondary font-semibold' : 'text-slate-500'}">${isCurrent ? '● Active' : s.sub}</p>
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs text-slate-400">
+        <span>✨ <strong>1-Click Control</strong>: ওপরের যেকোনো স্টেপে ক্লিক করলেই লাইভ অর্ডার আপডেট হবে এবং কাস্টমারের পোর্টালে সাথে সাথে চলে যাবে।</span>
+        <button class="px-3 py-1 bg-secondary/15 text-secondary hover:bg-secondary hover:text-black font-semibold uppercase text-[11px] transition-colors rounded border border-secondary/30" onclick="openOrderDetailsModal('${order.orderId}')">
+          Full Order Dossier ➔
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+window.setOrderStepInteractive = function(orderId, status, stepNum) {
+  Store.updateOrderStatus(orderId, status);
+  selectedAdminTrackerOrderId = orderId;
+  renderAdminOrdersTable();
+  renderAdminDashboardStats();
+  const modal = document.getElementById("admin-order-details-modal");
+  if (modal && modal.classList.contains("active")) {
+    openOrderDetailsModal(orderId);
+  }
+  showToast(`⚡ Order ${orderId} updated to Step 0${stepNum} (${status})`, "success");
+};
+
 // 3. Orders Tab & Status Updater
 function renderAdminOrdersTable(filterStatus = "all") {
   let orders = Store.getOrders();
   const settings = Store.getSettings();
   const curr = settings.currency || "৳";
   const tbody = document.getElementById("admin-orders-tbody");
-  if (!tbody) return;
+  const trackerBox = document.getElementById("admin-live-tracker-box");
 
   if (filterStatus !== "all") {
     orders = orders.filter(o => o.status === filterStatus);
   }
+
+  // Render 5-Step Visual Tracker Pipeline on top of Orders Tab
+  if (trackerBox) {
+    const allOrders = Store.getOrders();
+    const activeOrder = allOrders.find(o => o.orderId === selectedAdminTrackerOrderId) || allOrders[0] || null;
+    trackerBox.innerHTML = renderAdmin5StepTimeline(activeOrder);
+  }
+
+  if (!tbody) return;
 
   if (orders.length === 0) {
     tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:#747878;">No commissions found.</td></tr>`;
@@ -561,7 +661,7 @@ function renderAdminOrdersTable(filterStatus = "all") {
   }
 
   tbody.innerHTML = orders.map(o => `
-    <tr>
+    <tr class="${selectedAdminTrackerOrderId === o.orderId ? 'bg-secondary/5' : ''}">
       <td><strong class="text-secondary font-mono">${o.orderId}</strong><br><small style="color:#747878;">${o.date}</small></td>
       <td>
         <strong>${o.customerName}</strong><br>
@@ -575,7 +675,7 @@ function renderAdminOrdersTable(filterStatus = "all") {
       </td>
       <td><strong>${curr}${Number(o.total).toLocaleString()}</strong></td>
       <td>
-        <select onchange="updateOrderStatusFromTable('${o.orderId}', this.value)" style="padding:6px 10px; border-radius:4px; font-size:0.82rem; font-weight:600; border:1px solid #c4c7c7; background:#fff;">
+        <select onchange="updateOrderStatusFromTable('${o.orderId}', this.value)" style="padding:6px 10px; border-radius:4px; font-size:0.82rem; font-weight:600; border:1px solid #c4c7c7; background:#fff; cursor:pointer;">
           <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>1. Order Placed</option>
           <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>2. Artisanal Crafting</option>
           <option value="Confirmed" ${o.status === 'Confirmed' ? 'selected' : ''}>3. Quality Inspection</option>
@@ -586,7 +686,7 @@ function renderAdminOrdersTable(filterStatus = "all") {
       </td>
       <td>
         <div style="display:flex; gap:6px;">
-          <button class="px-2.5 py-1.5 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary transition-colors" onclick="openOrderDetailsModal('${o.orderId}')" title="Details">
+          <button class="px-2.5 py-1.5 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary transition-colors" onclick="selectedAdminTrackerOrderId='${o.orderId}'; renderAdminOrdersTable(); openOrderDetailsModal('${o.orderId}')" title="Details & Live Tracker">
             <i class="fas fa-eye"></i>
           </button>
           <button class="px-2.5 py-1.5 bg-primary text-on-primary hover:bg-secondary transition-colors" onclick="printInvoice('${o.orderId}')" title="Print Invoice">
@@ -603,13 +703,18 @@ function renderAdminOrdersTable(filterStatus = "all") {
 
 function updateOrderStatusFromTable(orderId, newStatus) {
   Store.updateOrderStatus(orderId, newStatus);
+  selectedAdminTrackerOrderId = orderId;
+  renderAdminOrdersTable();
+  renderAdminDashboardStats();
   showToast(`Order ${orderId} status updated: ${newStatus}`, "success");
 }
 
 function deleteOrderConfirm(orderId) {
   if (confirm(`Delete commission order "${orderId}" permanently?`)) {
     Store.deleteOrder(orderId);
+    if (selectedAdminTrackerOrderId === orderId) selectedAdminTrackerOrderId = null;
     renderAdminOrdersTable();
+    renderAdminDashboardStats();
     showToast("Order removed", "success");
   }
 }
@@ -619,6 +724,7 @@ function openOrderDetailsModal(orderId) {
   const order = orders.find(o => o.orderId === orderId);
   if (!order) return;
 
+  selectedAdminTrackerOrderId = orderId;
   const settings = Store.getSettings();
   const curr = settings.currency || "৳";
 
@@ -628,11 +734,16 @@ function openOrderDetailsModal(orderId) {
   content.innerHTML = `
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #735c00; padding-bottom:12px; margin-bottom:16px;">
       <div>
-        <span style="text-transform:uppercase; font-size:11px; letter-spacing:2px; color:#735c00;">Order Dossier</span>
+        <span style="text-transform:uppercase; font-size:11px; letter-spacing:2px; color:#735c00;">Order Dossier & 5-Step Pipeline</span>
         <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-main);">${order.orderId}</h3>
         <span style="font-size:0.85rem; color:#747878;">Date: ${order.date}</span>
       </div>
       <span class="status-badge status-${order.status}">${order.status}</span>
+    </div>
+
+    <!-- Embedded 5-Step Visual Tracker Pipeline Inside Modal -->
+    <div style="margin-bottom:18px;">
+      ${renderAdmin5StepTimeline(order)}
     </div>
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; font-size:0.88rem;">

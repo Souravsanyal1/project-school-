@@ -267,7 +267,10 @@
 
       <!-- 3. ORDERS TAB -->
       <div class="admin-tab-pane" id="admin-tab-orders" style="display: none;">
-        <div class="bg-black p-6 border border-secondary/20">
+        <!-- Live 5-Step Visual Tracker Pipeline -->
+        <div id="admin-live-tracker-box" class="mb-6"></div>
+
+        <div class="bg-black p-4 sm:p-6 border border-secondary/20 rounded">
           <div class="flex justify-between items-center mb-6">
             <h3 class="font-headline-sm text-white uppercase tracking-wider">Commission Orders & 5-Step Status</h3>
             <select onchange="renderAdminOrdersTable(this.value)" class="px-3 py-1.5 bg-[#222] text-white border border-secondary/40 text-xs">
