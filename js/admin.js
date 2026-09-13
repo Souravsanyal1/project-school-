@@ -682,6 +682,9 @@ function loadAdminSettingsForm() {
   if (!form) return;
 
   form.storeName.value = settings.storeName || "";
+  if (form.brandSubtitle) form.brandSubtitle.value = settings.brandSubtitle || "";
+  if (form.logoIcon) form.logoIcon.value = settings.logoIcon || "diamond";
+  if (form.logoImage) form.logoImage.value = settings.logoImage || "";
   form.tagline.value = settings.tagline || "";
   form.contactPhone.value = settings.contactPhone || "";
   form.whatsappNumber.value = settings.whatsappNumber || "";
@@ -715,6 +718,9 @@ function handleSaveSettingsSubmit(e) {
 
   const newSettings = {
     storeName: form.storeName.value.trim(),
+    brandSubtitle: form.brandSubtitle ? form.brandSubtitle.value.trim() : "Gazipur Zone",
+    logoIcon: form.logoIcon ? form.logoIcon.value.trim() : "diamond",
+    logoImage: form.logoImage ? form.logoImage.value.trim() : "",
     tagline: form.tagline.value.trim(),
     currency: "৳",
     currencyCode: "BDT",
@@ -739,7 +745,7 @@ function handleSaveSettingsSubmit(e) {
   };
 
   Store.saveSettings(newSettings);
-  showToast("All flagship settings & hero banner saved successfully!", "success");
+  showToast("All flagship settings, logo & brand title saved successfully!", "success");
 }
 
 // 7. Backup & Reset

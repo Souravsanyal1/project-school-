@@ -118,39 +118,44 @@
   <div id="admin-main-interface" class="flex flex-col lg:flex-row min-h-screen hidden">
     
     <!-- Sidebar -->
-    <aside class="w-full lg:w-64 bg-black p-6 border-b lg:border-b-0 lg:border-r border-secondary/20 flex flex-col flex-shrink-0">
-      <div class="flex items-center gap-3 pb-6 border-b border-secondary/20 mb-6">
-        <div class="w-9 h-9 rounded-full bg-secondary/20 border border-secondary flex items-center justify-center text-secondary-fixed">
-          <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+    <aside class="w-full lg:w-64 bg-black p-4 lg:p-6 border-b lg:border-b-0 lg:border-r border-secondary/20 flex flex-col flex-shrink-0">
+      <div class="flex items-center justify-between lg:justify-start gap-3 pb-4 lg:pb-6 border-b border-secondary/20 mb-3 lg:mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-secondary/20 border border-secondary flex items-center justify-center text-secondary-fixed">
+            <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+          </div>
+          <div>
+            <h3 class="font-headline-sm text-sm uppercase tracking-widest text-white site-name-display">INSAF Admin</h3>
+            <p class="text-[10px] text-secondary tracking-widest uppercase site-brand-subtitle-display">Gazipur Zone</p>
+          </div>
         </div>
-        <div>
-          <h3 class="font-headline-sm text-sm uppercase tracking-widest text-white">NOOR Admin</h3>
-          <p class="text-[10px] text-secondary tracking-widest uppercase">Base Currency: ৳ BDT</p>
-        </div>
+        <a href="index.html" class="lg:hidden px-3 py-1.5 bg-white/10 text-white rounded text-xs uppercase flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">storefront</span> Store
+        </a>
       </div>
 
-      <nav class="space-y-2 flex-1">
-        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 active transition-colors" data-tab="dashboard" onclick="switchAdminTab('dashboard')">
+      <nav class="flex lg:flex-col overflow-x-auto no-scrollbar gap-1.5 lg:gap-2 flex-1 pb-2 lg:pb-0">
+        <button class="admin-nav-btn whitespace-nowrap flex-shrink-0 lg:w-full p-2.5 lg:p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-2.5 hover:bg-white/10 active transition-colors rounded" data-tab="dashboard" onclick="switchAdminTab('dashboard')">
           <span class="material-symbols-outlined text-[18px] text-secondary">dashboard</span> Dashboard
         </button>
-        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="products" onclick="switchAdminTab('products')">
+        <button class="admin-nav-btn whitespace-nowrap flex-shrink-0 lg:w-full p-2.5 lg:p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-2.5 hover:bg-white/10 transition-colors rounded" data-tab="products" onclick="switchAdminTab('products')">
           <span class="material-symbols-outlined text-[18px] text-secondary">inventory_2</span> Products & Stock
         </button>
-        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="orders" onclick="switchAdminTab('orders')">
+        <button class="admin-nav-btn whitespace-nowrap flex-shrink-0 lg:w-full p-2.5 lg:p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-2.5 hover:bg-white/10 transition-colors rounded" data-tab="orders" onclick="switchAdminTab('orders')">
           <span class="material-symbols-outlined text-[18px] text-secondary">order_approve</span> Orders & Timeline
         </button>
-        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="categories" onclick="switchAdminTab('categories')">
+        <button class="admin-nav-btn whitespace-nowrap flex-shrink-0 lg:w-full p-2.5 lg:p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-2.5 hover:bg-white/10 transition-colors rounded" data-tab="categories" onclick="switchAdminTab('categories')">
           <span class="material-symbols-outlined text-[18px] text-secondary">category</span> Categories
         </button>
-        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="coupons" onclick="switchAdminTab('coupons')">
+        <button class="admin-nav-btn whitespace-nowrap flex-shrink-0 lg:w-full p-2.5 lg:p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-2.5 hover:bg-white/10 transition-colors rounded" data-tab="coupons" onclick="switchAdminTab('coupons')">
           <span class="material-symbols-outlined text-[18px] text-secondary">confirmation_number</span> VIP Coupons
         </button>
-        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="settings" onclick="switchAdminTab('settings')">
-          <span class="material-symbols-outlined text-[18px] text-secondary">settings</span> Store & Payments
+        <button class="admin-nav-btn whitespace-nowrap flex-shrink-0 lg:w-full p-2.5 lg:p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-2.5 hover:bg-white/10 transition-colors rounded" data-tab="settings" onclick="switchAdminTab('settings')">
+          <span class="material-symbols-outlined text-[18px] text-secondary">settings</span> Store & Brand
         </button>
       </nav>
 
-      <div class="pt-6 border-t border-secondary/20 space-y-2 mt-auto">
+      <div class="hidden lg:block pt-6 border-t border-secondary/20 space-y-2 mt-auto">
         <a href="index.html" class="w-full py-2.5 bg-white/10 text-white hover:bg-secondary hover:text-on-secondary text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2">
           <span class="material-symbols-outlined text-[16px]">storefront</span> Live Storefront
         </a>
@@ -385,8 +390,20 @@
           <form id="admin-settings-form" onsubmit="handleSaveSettingsSubmit(event)">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
               <div>
-                <label class="uppercase text-secondary block mb-1">Brand Name</label>
-                <input type="text" name="storeName" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
+                <label class="uppercase text-secondary block mb-1">Brand Main Name (ব্র্যান্ড নাম) *</label>
+                <input type="text" name="storeName" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" placeholder="e.g. INSAF" required>
+              </div>
+              <div>
+                <label class="uppercase text-secondary block mb-1">Brand Subtitle / Zone (সাবটাইটেল)</label>
+                <input type="text" name="brandSubtitle" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" placeholder="e.g. Collection Gazipur">
+              </div>
+              <div>
+                <label class="uppercase text-secondary block mb-1">Logo Icon (চিহ্ন e.g. diamond, stars, mosque, verified)</label>
+                <input type="text" name="logoIcon" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" placeholder="diamond">
+              </div>
+              <div>
+                <label class="uppercase text-secondary block mb-1">Logo Image URL (ঐচ্ছিক লোগো ছবি লিঙ্ক)</label>
+                <input type="url" name="logoImage" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" placeholder="https://...">
               </div>
               <div>
                 <label class="uppercase text-secondary block mb-1">Tagline</label>

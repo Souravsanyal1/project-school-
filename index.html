@@ -95,13 +95,13 @@
     <div class="h-20 max-w-7xl mx-auto px-gutter flex items-center justify-between">
       
       <!-- Brand Logo -->
-      <div class="flex items-center gap-4 cursor-pointer" onclick="switchView('home')">
-        <div class="w-9 h-9 rounded-full bg-primary border border-secondary flex items-center justify-center text-secondary-fixed">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('home')">
+        <div class="w-9 h-9 rounded-full bg-primary border border-secondary flex items-center justify-center text-secondary-fixed header-logo-container shadow-sm flex-shrink-0 overflow-hidden">
           <span class="material-symbols-outlined text-[20px]">diamond</span>
         </div>
         <div class="flex flex-col">
-          <span class="font-headline-md tracking-[0.25em] text-on-surface uppercase font-light site-name-display">NOOR</span>
-          <span class="text-[9px] text-secondary tracking-[0.3em] uppercase -mt-1 font-semibold">Flagship BD</span>
+          <span class="font-headline-md tracking-[0.18em] text-on-surface uppercase font-bold text-base sm:text-lg site-name-display leading-tight">INSAF</span>
+          <span class="text-[9px] text-secondary tracking-[0.22em] uppercase font-semibold site-brand-subtitle-display leading-tight">Collection Gazipur</span>
         </div>
       </div>
 
@@ -1307,11 +1307,23 @@
             <form id="admin-settings-form" onsubmit="handleSaveSettingsSubmit(event)">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
                 <div>
-                  <label class="uppercase text-secondary block mb-1">Brand Name</label>
-                  <input type="text" name="storeName" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
+                  <label class="uppercase text-secondary block mb-1">Brand Main Name (ব্র্যান্ড নাম)</label>
+                  <input type="text" name="storeName" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" placeholder="e.g. INSAF" required>
                 </div>
                 <div>
-                  <label class="uppercase text-secondary block mb-1">Tagline</label>
+                  <label class="uppercase text-secondary block mb-1">Brand Subtitle / Zone (সাবটাইটেল)</label>
+                  <input type="text" name="brandSubtitle" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" placeholder="e.g. Collection Gazipur">
+                </div>
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Logo Icon (চিহ্ন e.g. diamond, stars, mosque, verified)</label>
+                  <input type="text" name="logoIcon" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" placeholder="diamond">
+                </div>
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Logo Image URL (ঐচ্ছিক লোগো ছবি লিঙ্ক)</label>
+                  <input type="url" name="logoImage" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" placeholder="https://...">
+                </div>
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Tagline (ট্যাগলাইন)</label>
                   <input type="text" name="tagline" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
                 </div>
                 <div>
@@ -1508,6 +1520,33 @@
     </div>
   </div>
 
+
+  <!-- ==========================================================
+       MOBILE BOTTOM NAVIGATION BAR
+       ========================================================== -->
+  <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 py-2 px-3 flex items-center justify-around shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+    <button type="button" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-amber-600 focus:text-amber-600 transition-colors py-1 px-2" onclick="switchView('home')">
+      <span class="material-symbols-outlined text-[20px]">home</span>
+      <span class="text-[10px] font-bold">হোম</span>
+    </button>
+    <button type="button" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-amber-600 focus:text-amber-600 transition-colors py-1 px-2" onclick="switchView('shop')">
+      <span class="material-symbols-outlined text-[20px]">grid_view</span>
+      <span class="text-[10px] font-bold">কালেকশন</span>
+    </button>
+    <button type="button" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-amber-600 focus:text-amber-600 transition-colors py-1 px-2" onclick="openMobileSearch()">
+      <span class="material-symbols-outlined text-[20px]">search</span>
+      <span class="text-[10px] font-bold">সার্চ</span>
+    </button>
+    <button type="button" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-amber-600 focus:text-amber-600 transition-colors py-1 px-2" onclick="switchView('member'); switchMemberTab('orders');">
+      <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+      <span class="text-[10px] font-bold">ট্র্যাক অর্ডার</span>
+    </button>
+    <button type="button" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-amber-600 focus:text-amber-600 transition-colors py-1 px-2 relative" onclick="openCartDrawer()">
+      <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+      <span class="cart-count-badge absolute top-0 right-1 bg-amber-600 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+      <span class="text-[10px] font-bold">ব্যাগ</span>
+    </button>
+  </div>
 
   <!-- Core Application Scripts -->
   <script type="module" src="js/firebase-config.js"></script>

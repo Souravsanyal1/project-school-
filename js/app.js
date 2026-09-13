@@ -92,12 +92,22 @@ function switchView(viewName, scroll = true) {
 // Apply Store Settings
 function applyStoreSettings() {
   const settings = Store.getSettings();
-  document.querySelectorAll(".site-name-display").forEach(el => el.textContent = settings.storeName);
-  document.querySelectorAll(".site-tagline-display").forEach(el => el.textContent = settings.tagline);
-  document.querySelectorAll(".site-phone-display").forEach(el => el.textContent = settings.contactPhone);
-  document.querySelectorAll(".site-email-display").forEach(el => el.textContent = settings.contactEmail);
-  document.querySelectorAll(".site-address-display").forEach(el => el.textContent = settings.address);
-  document.querySelectorAll(".site-announcement-display").forEach(el => el.textContent = settings.announcement);
+  document.querySelectorAll(".site-name-display").forEach(el => el.textContent = settings.storeName || "INSAF");
+  document.querySelectorAll(".site-brand-subtitle-display").forEach(el => el.textContent = settings.brandSubtitle || "Collection Gazipur");
+  document.querySelectorAll(".site-tagline-display").forEach(el => el.textContent = settings.tagline || "");
+  document.querySelectorAll(".site-phone-display").forEach(el => el.textContent = settings.contactPhone || "");
+  document.querySelectorAll(".site-email-display").forEach(el => el.textContent = settings.contactEmail || "");
+  document.querySelectorAll(".site-address-display").forEach(el => el.textContent = settings.address || "");
+  document.querySelectorAll(".site-announcement-display").forEach(el => el.textContent = settings.announcement || "");
+
+  // Dynamic Logo (Image or Material Symbol Icon)
+  document.querySelectorAll(".header-logo-container").forEach(el => {
+    if (settings.logoImage && settings.logoImage.trim()) {
+      el.innerHTML = `<img src="${settings.logoImage.trim()}" alt="Logo" class="w-full h-full object-cover">`;
+    } else {
+      el.innerHTML = `<span class="material-symbols-outlined text-[20px] text-amber-400">${settings.logoIcon || 'diamond'}</span>`;
+    }
+  });
 
   // Dynamic Hero Section
   const heroBg = document.getElementById("hero-bg-container");
@@ -121,6 +131,18 @@ function applyStoreSettings() {
   if (waPromptMsg && !waPromptMsg.value) {
     waPromptMsg.value = settings.whatsappDefaultMsg || "Assalamu Alaikum, I want to inquire about your luxury items.";
   }
+}
+
+// Mobile Search Action
+function openMobileSearch() {
+  switchView("shop");
+  setTimeout(() => {
+    const searchInput = document.querySelector(".global-search-input") || document.getElementById("mobile-search-input");
+    if (searchInput) {
+      searchInput.focus();
+      searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, 100);
 }
 
 // Render Categories Grid (Homepage & Shop Filters)

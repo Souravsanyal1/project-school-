@@ -5,14 +5,17 @@
  */
 
 const DEFAULT_SETTINGS = {
-  storeName: "NOOR Flagship BD",
+  storeName: "INSAF Collection",
+  brandSubtitle: "Gazipur Zone",
+  logoIcon: "diamond",
+  logoImage: "",
   tagline: "Elegance Rooted in Faith - ইসলামিক লাক্সারি লাইফস্টাইল ও প্রিমিয়াম কালেকশন",
   currency: "৳",
   currencyCode: "BDT",
   contactPhone: "+8801700000000",
   whatsappNumber: "8801700000000",
   whatsappDefaultMsg: "Assalamu Alaikum, I would like to inquire about your luxury collection.",
-  contactEmail: "concierge@noor.com.bd",
+  contactEmail: "contact@insaf.com.bd",
   adminEmail: "admin@gmail.com",
   adminPassword: "admin123",
   adminPin: "admin123",
@@ -20,7 +23,7 @@ const DEFAULT_SETTINGS = {
   heroTitle: "Elegance Rooted in Faith",
   heroSubtitle: "✨ Flagship Collection 2026 • ৳ BDT",
   heroDescription: "Uncompromising craftsmanship blending timeless Islamic heritage with contemporary global luxury standards. Base currency in ৳ (BDT) with nationwide fast delivery.",
-  address: "House 12, Road 4, Gulshan-2, Dhaka - 1212, Bangladesh",
+  address: "Gazipur, Dhaka, Bangladesh",
   insideDhakaDelivery: 80,
   outsideDhakaDelivery: 150,
   bkashNumber: "01700000000 (Merchant/Send Money)",
