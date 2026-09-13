@@ -100,18 +100,18 @@
           <span class="material-symbols-outlined text-[20px]">diamond</span>
         </div>
         <div class="flex flex-col">
-          <span class="font-headline-md tracking-[0.18em] text-on-surface uppercase font-bold text-base sm:text-lg site-name-display leading-tight">INSAF</span>
-          <span class="text-[9px] text-secondary tracking-[0.22em] uppercase font-semibold site-brand-subtitle-display leading-tight">Collection Gazipur</span>
+          <span class="font-headline-md tracking-[0.18em] text-on-surface uppercase font-bold text-base sm:text-lg site-name-display leading-tight">ইনসাফ কালেকশন</span>
+          <span class="text-[9px] text-secondary tracking-[0.22em] uppercase font-semibold site-brand-subtitle-display leading-tight">গাজীপুর জোন</span>
         </div>
       </div>
 
       <!-- Navigation Links -->
       <nav class="hidden lg:flex items-center space-x-8">
-        <a class="text-body-md text-secondary font-bold transition-colors cursor-pointer" data-nav-target="home" onclick="switchView('home')">Home</a>
-        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" data-nav-target="shop" onclick="switchView('shop')">Collection</a>
-        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" data-nav-target="pdp" onclick="switchView('pdp')">Masterpiece</a>
-        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" data-nav-target="member" onclick="switchView('member')">Member & Track</a>
-        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" onclick="document.getElementById('heritage-section')?.scrollIntoView({behavior: 'smooth'})">Heritage</a>
+        <a class="text-body-md text-secondary font-bold transition-colors cursor-pointer" data-nav-target="home" onclick="switchView('home')">হোম</a>
+        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" data-nav-target="shop" onclick="switchView('shop')">কালেকশন</a>
+        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" data-nav-target="pdp" onclick="switchView('pdp')">মাস্টারপিস</a>
+        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" data-nav-target="member" onclick="switchView('member')">অর্ডার ট্র্যাকিং</a>
+        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" onclick="document.getElementById('heritage-section')?.scrollIntoView({behavior: 'smooth'})">আমাদের ঐতিহ্য</a>
       </nav>
 
       <!-- Header Action Icons -->
@@ -119,18 +119,18 @@
         
         <!-- Search Trigger / Input -->
         <div class="relative hidden sm:block">
-          <input type="text" class="global-search-input pl-9 pr-4 py-1.5 bg-surface border border-outline-variant/60 text-xs w-44 lg:w-56 focus:w-64 focus:border-secondary outline-none transition-all" placeholder="Search collection...">
+          <input type="text" class="global-search-input pl-9 pr-4 py-1.5 bg-surface border border-outline-variant/60 text-xs w-44 lg:w-56 focus:w-64 focus:border-secondary outline-none transition-all" placeholder="কালেকশন খুঁজুন...">
           <span class="material-symbols-outlined text-[18px] text-on-surface-variant absolute left-2.5 top-1/2 -translate-y-1/2">search</span>
         </div>
 
         <!-- Wishlist Button -->
-        <button class="text-on-surface-variant hover:text-secondary transition-colors relative" onclick="switchView('member'); switchMemberTab('wishlist');" title="Curated Wishlist">
+        <button class="text-on-surface-variant hover:text-secondary transition-colors relative" onclick="switchView('member'); switchMemberTab('wishlist');" title="পছন্দের তালিকা">
           <span class="material-symbols-outlined text-[22px]">favorite</span>
           <span class="wishlist-count-badge absolute -top-1.5 -right-1.5 bg-secondary text-on-secondary text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
         </button>
 
         <!-- Shopping Bag Trigger -->
-        <button class="text-on-surface-variant hover:text-secondary transition-colors relative" onclick="openCartDrawer()" title="Shopping Bag">
+        <button class="text-on-surface-variant hover:text-secondary transition-colors relative" onclick="openCartDrawer()" title="শপিং ব্যাগ">
           <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
           <span class="cart-count-badge absolute -top-1.5 -right-1.5 bg-primary text-on-primary border border-secondary text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
         </button>
@@ -157,29 +157,29 @@
         
         <div class="relative z-20 max-w-5xl mx-auto px-gutter text-center flex flex-col items-center space-y-5">
           <span id="hero-subtitle-display" class="font-label-md text-amber-400 font-bold uppercase tracking-[0.3em] bg-black/70 px-5 py-1.5 border border-amber-500/40 rounded-full backdrop-blur-md shadow-lg">
-            ✨ Flagship Collection 2026 • ৳ BDT
+            ✨ ফ্ল্যাগশিপ কালেকশন ২০২৬ • ৳ BDT
           </span>
           <h1 id="hero-title-display" class="font-display-xl text-white max-w-4xl tracking-tight leading-tight font-extrabold drop-shadow-md">
-            Elegance Rooted in Faith
+            বিশ্বাসের ছোঁয়ায় আভিজাত্য ও সৌন্দর্য
           </h1>
           <div class="w-20 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent my-1"></div>
           <p id="hero-desc-display" class="font-body-lg text-slate-200 max-w-2xl mx-auto font-normal leading-relaxed text-shadow-sm">
-            Uncompromising craftsmanship blending timeless Islamic heritage with contemporary global luxury standards. Base currency in <strong class="text-amber-400 font-bold">৳ (BDT)</strong> with nationwide fast delivery.
+            ইসলামিক ঐতিহ্য ও আধুনিক প্রিমিয়াম মানের অপূর্ব সমন্বয়। সারাদেশে দ্রুত ও বিশ্বস্ত হোম ডেলিভারি সুবিধা।
           </p>
           <div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
             <button class="btn-gold px-8 py-4 text-sm font-bold uppercase tracking-widest rounded-lg shadow-xl" onclick="switchView('shop')">
               <span class="material-symbols-outlined text-[18px]">explore</span>
-              কালেকশন দেখুন • Explore Collection
+              কালেকশন দেখুন
             </button>
             <button class="btn-black px-8 py-4 text-sm font-bold uppercase tracking-widest rounded-lg shadow-xl border border-amber-500/50" onclick="switchView('pdp')">
               <span class="material-symbols-outlined text-[18px]">diamond</span>
-              মাস্টারপিস • View Masterpiece
+              মাস্টারপিস দেখুন
             </button>
           </div>
         </div>
 
         <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 opacity-80 cursor-pointer" onclick="document.getElementById('shop-categories-anchor').scrollIntoView({behavior: 'smooth'})">
-          <span class="font-label-md uppercase text-[11px] tracking-widest text-amber-300 font-semibold">Scroll Down</span>
+          <span class="font-label-md uppercase text-[11px] tracking-widest text-amber-300 font-semibold">নিচে স্ক্রল করুন</span>
           <div class="w-[2px] h-7 bg-amber-400 animate-pulse"></div>
         </div>
       </section>
@@ -188,11 +188,11 @@
       <section class="w-full py-space-xl max-w-7xl mx-auto px-gutter" id="shop-categories-anchor">
         <div class="flex flex-col md:flex-row justify-between items-end mb-space-lg gap-4">
           <div>
-            <span class="font-label-md text-secondary font-bold uppercase tracking-[0.2em]">Curated Categories</span>
-            <h2 class="font-headline-lg text-slate-900 font-bold mt-1">The Sanctum of Craft (ক্যাটাগরি সমূহ)</h2>
+            <span class="font-label-md text-secondary font-bold uppercase tracking-[0.2em]">বাছাইকৃত কালেকশন</span>
+            <h2 class="font-headline-lg text-slate-900 font-bold mt-1">ক্যাটাগরি সমূহ</h2>
           </div>
           <p class="font-body-sm text-slate-600 max-w-md font-medium">
-            Every artifact and textile is thoughtfully designed with reverence for geometric purity, fine materials, and spiritual grace.
+            প্রতিটি পণ্য ও পোশাক তৈরি করা হয়েছে ইসলামী ঐতিহ্য, আভিজাত্য ও আধ্যাত্মিক সৌন্দর্যের গভীর অনুভূতির সাথে।
           </p>
         </div>
 
@@ -206,12 +206,12 @@
         <div class="max-w-7xl mx-auto px-gutter">
           <div class="flex flex-col md:flex-row justify-between items-end mb-space-lg gap-4">
             <div>
-              <span class="font-label-md text-amber-700 font-bold uppercase tracking-[0.2em]">Masterpieces</span>
-              <h2 class="font-headline-lg text-slate-900 font-bold mt-1">Featured Editions (৳ BDT)</h2>
+              <span class="font-label-md text-amber-700 font-bold uppercase tracking-[0.2em]">বিশেষ সম্ভার</span>
+              <h2 class="font-headline-lg text-slate-900 font-bold mt-1">ফিচার্ড কালেকশন (৳ টাকা)</h2>
             </div>
             <button class="btn-black px-6 py-3 rounded-md text-xs font-bold uppercase tracking-wider" onclick="switchView('shop')">
               <span class="material-symbols-outlined text-[16px]">grid_view</span>
-              View All Masterpieces
+              সকল পণ্য দেখুন
             </button>
           </div>
 
@@ -226,15 +226,15 @@
         <div id="archive-banner-bg" class="absolute inset-0 z-0 bg-cover bg-fixed bg-center transition-all duration-700" style="display: none;"></div>
         <div class="absolute inset-0 z-10 bg-slate-950/80 backdrop-blur-[1px]"></div>
         <div class="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center space-y-5">
-          <span id="archive-badge-display" class="font-label-md text-amber-400 font-bold uppercase tracking-[0.3em] bg-amber-500/20 px-4 py-1 rounded border border-amber-500/40">The Royal Archive</span>
-          <h2 id="archive-title-display" class="font-display-lg text-white font-extrabold drop-shadow">The Heritage of Andalusian Craft</h2>
+          <span id="archive-badge-display" class="font-label-md text-amber-400 font-bold uppercase tracking-[0.3em] bg-amber-500/20 px-4 py-1 rounded border border-amber-500/40">দ্য রয়্যাল আর্কাইভ</span>
+          <h2 id="archive-title-display" class="font-display-lg text-white font-extrabold drop-shadow">ঐতিহ্যবাহী কারুশিল্প ও রাজকীয় আভিজাত্য</h2>
           <p id="archive-desc-display" class="font-body-lg text-slate-200 max-w-2xl font-normal leading-relaxed">
-            A limited release honoring the golden age of Islamic craftsmanship. Each piece is individually numbered and accompanied by a certificate of authenticity.
+            ইসলামিক সোনালী যুগের কারুশিল্পের ঐতিহ্য বহনকারী লিমিটেড এডিশন সংগ্রহ। প্রতিটি পণ্যের সাথে থাকবে সত্যতা ও আভিজাত্যের নিশ্চয়তা।
           </p>
           <div class="pt-4">
             <button id="archive-btn-display" class="btn-gold px-8 sm:px-10 py-3.5 sm:py-4 font-bold uppercase tracking-widest rounded-lg shadow-2xl" onclick="switchView('shop')">
               <span class="material-symbols-outlined text-[18px]">explore</span>
-              Discover The Archive
+              আর্কাইভ এক্সপ্লোর করুন
             </button>
           </div>
         </div>
@@ -245,25 +245,25 @@
         <div class="max-w-7xl mx-auto px-gutter relative z-10">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div class="space-y-6">
-              <span class="font-label-md text-amber-700 font-bold uppercase tracking-[0.2em]">Our Philosophy</span>
-              <h2 class="font-headline-lg text-slate-900 font-bold">Rooted in Tradition, Elevated for the Modern Sovereign</h2>
+              <span class="font-label-md text-amber-700 font-bold uppercase tracking-[0.2em]">আমাদের দর্শন</span>
+              <h2 class="font-headline-lg text-slate-900 font-bold">ঐতিহ্যের ধারক, আধুনিক আভিজাত্যের প্রতীক</h2>
               <p class="font-body-lg text-slate-600 font-normal leading-relaxed">
-                NOOR was founded on the belief that faith and exquisite aesthetics are inseparable. We collaborate with master artisans across Fez, Istanbul, Lahore, and Dhaka who have preserved centuries-old techniques in textile weaving, metalwork, and calligraphy.
+                ইনসাফ কালেকশনের বিশ্বাস—বিশ্বাস, শালীনতা এবং নান্দনিকতা একে অপরের পরিপূরক। আমরা ঢাকা, ইস্তাম্বুল, লাহোর ও মরক্কোর প্রবীণ কারিগরদের সাথে ঐতিহ্যবাহী হস্তশিল্প ও টেক্সটাইল প্রযুক্তির সমন্বয়ে কাজ করি।
               </p>
               <div class="pt-4 flex items-center gap-8 border-t border-slate-200">
                 <div>
-                  <span class="font-display-lg text-slate-900 font-bold block">100%</span>
-                  <span class="font-label-md text-slate-500 uppercase tracking-wider font-semibold">Ethical Craft</span>
+                  <span class="font-display-lg text-slate-900 font-bold block">১০০%</span>
+                  <span class="font-label-md text-slate-500 uppercase tracking-wider font-semibold">বিশুদ্ধ কারুশিল্প</span>
                 </div>
                 <div class="w-[1px] h-12 bg-slate-300"></div>
                 <div>
-                  <span class="font-display-lg text-slate-900 font-bold block">24k</span>
-                  <span class="font-label-md text-slate-500 uppercase tracking-wider font-semibold">Gold Accents</span>
+                  <span class="font-display-lg text-slate-900 font-bold block">২৪ ক্যারেট</span>
+                  <span class="font-label-md text-slate-500 uppercase tracking-wider font-semibold">গোল্ড অ্যাকসেন্ট</span>
                 </div>
                 <div class="w-[1px] h-12 bg-slate-300"></div>
                 <div>
-                  <span class="font-display-lg text-slate-900 font-bold block">12+</span>
-                  <span class="font-label-md text-slate-500 uppercase tracking-wider font-semibold">Global Ateliers</span>
+                  <span class="font-display-lg text-slate-900 font-bold block">১২+</span>
+                  <span class="font-label-md text-slate-500 uppercase tracking-wider font-semibold">গ্লোবাল অ্যাটেলিয়ার</span>
                 </div>
               </div>
             </div>
@@ -273,8 +273,8 @@
                 <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85" alt="Master Artisan Craftsmanship" class="w-full h-full object-cover">
               </div>
               <div class="absolute -bottom-6 -left-6 bg-slate-950 text-white p-6 rounded-lg max-w-xs shadow-2xl hidden sm:block border border-amber-500/40">
-                <span class="font-label-md text-amber-400 font-bold uppercase tracking-widest block mb-1">Master Artisan Note</span>
-                <p class="font-body-sm text-slate-300 italic">"True luxury is found in the patience of the hands that make it."</p>
+                <span class="font-label-md text-amber-400 font-bold uppercase tracking-widest block mb-1">প্রধান কারিগরের বাণী</span>
+                <p class="font-body-sm text-slate-300 italic">"প্রকৃত আভিজাত্য লুকায়িত থাকে ধৈর্য এবং ভালোবাসায় গড়া হাতের শৈল্পিক ছোঁয়ায়।"</p>
               </div>
             </div>
           </div>
@@ -955,41 +955,41 @@
       <div class="max-w-7xl mx-auto px-gutter grid grid-cols-1 md:grid-cols-4 gap-space-md mb-space-lg">
         <div class="space-y-space-sm">
           <div class="flex items-center gap-3 mb-2">
-            <span class="font-headline-md uppercase text-on-surface tracking-wider site-name-display">INSAF Collection</span>
+            <span class="font-headline-md uppercase text-on-surface tracking-wider site-name-display">ইনসাফ কালেকশন</span>
           </div>
-          <p class="text-body-sm text-on-surface-variant site-tagline-display">Elegance Rooted in Faith - ইসলামিক লাক্সারি লাইফস্টাইল ও প্রিমিয়াম কালেকশন</p>
+          <p class="text-body-sm text-on-surface-variant site-tagline-display">বিশ্বাসের ছোঁয়ায় আভিজাত্য — ইসলামিক লাক্সারি লাইফস্টাইল ও প্রিমিয়াম কালেকশন</p>
           <p class="text-body-sm text-on-surface-variant pt-2">
-            <i class="fas fa-map-marker-alt text-secondary mr-2"></i><span class="site-address-display">Gazipur, Dhaka, Bangladesh</span>
+            <i class="fas fa-map-marker-alt text-secondary mr-2"></i><span class="site-address-display">গাজীপুর, ঢাকা, বাংলাদেশ</span>
           </p>
         </div>
         <div class="space-y-space-sm">
-          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider footer-care-title-display">Customer Care</h4>
+          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider footer-care-title-display">কাস্টমার কেয়ার</h4>
           <ul class="space-y-2 text-body-sm text-on-surface-variant">
-            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('member')">Live Order Tracking</a></li>
-            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('shop')">Collection Catalog</a></li>
-            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="toggleWhatsAppPopup()">WhatsApp Concierge</a></li>
+            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('member')">লাইভ অর্ডার ট্র্যাকিং</a></li>
+            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('shop')">কালেকশন ক্যাটালগ</a></li>
+            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="toggleWhatsAppPopup()">হোয়াটসঅ্যাপ সহায়তা</a></li>
           </ul>
         </div>
         <div class="space-y-space-sm">
-          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider footer-payment-title-display">Payment Partners</h4>
+          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider footer-payment-title-display">পেমেন্ট পার্টনার্স</h4>
           <ul class="space-y-2 text-body-sm text-on-surface-variant">
-            <li><span style="color: #e2136e;"><i class="fas fa-check mr-1.5"></i> <span class="footer-bkash-label">bKash (বিকাশ)</span></span></li>
-            <li><span style="color: #f7931e;"><i class="fas fa-check mr-1.5"></i> <span class="footer-nagad-label">Nagad (নগদ)</span></span></li>
-            <li><span style="color: #8c3494;"><i class="fas fa-check mr-1.5"></i> <span class="footer-rocket-label">Rocket (রকেট)</span></span></li>
-            <li><span class="text-secondary"><i class="fas fa-check mr-1.5"></i> <span class="footer-cod-label">Cash on Delivery</span></span></li>
+            <li><span style="color: #e2136e;"><i class="fas fa-check mr-1.5"></i> <span class="footer-bkash-label">বিকাশ (bKash)</span></span></li>
+            <li><span style="color: #f7931e;"><i class="fas fa-check mr-1.5"></i> <span class="footer-nagad-label">নগদ (Nagad)</span></span></li>
+            <li><span style="color: #8c3494;"><i class="fas fa-check mr-1.5"></i> <span class="footer-rocket-label">রকেট (Rocket)</span></span></li>
+            <li><span class="text-secondary"><i class="fas fa-check mr-1.5"></i> <span class="footer-cod-label">ক্যাশ অন ডেলিভারি (Cash on Delivery)</span></span></li>
           </ul>
         </div>
         <div class="space-y-space-sm">
-          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider footer-newsletter-title-display">Private Concierge</h4>
-          <p class="text-body-sm text-on-surface-variant footer-newsletter-desc-display">Subscribe to receive private lookbooks and seasonal bespoke releases.</p>
+          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider footer-newsletter-title-display">প্রাইভেট কনসিয়ার্জ / অফার আপডেট</h4>
+          <p class="text-body-sm text-on-surface-variant footer-newsletter-desc-display">নতুন লুকবুক ও সিজনাল অফার সবার আগে পেতে ইমেইল দিয়ে যুক্ত থাকুন।</p>
           <div class="flex gap-2">
-            <input class="px-4 py-2 bg-surface border border-outline-variant text-body-sm w-full focus:border-secondary outline-none" placeholder="Enter email" type="email"/>
-            <button class="px-4 py-2 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors text-body-sm uppercase" onclick="showToast('Thank you for subscribing!', 'success')">Join</button>
+            <input class="px-4 py-2 bg-surface border border-outline-variant text-body-sm w-full focus:border-secondary outline-none" placeholder="আপনার ইমেইল লিখুন" type="email"/>
+            <button class="px-4 py-2 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors text-body-sm uppercase" onclick="showToast('সাবস্ক্রাইব করার জন্য ধন্যবাদ!', 'success')">যুক্ত হোন</button>
           </div>
         </div>
       </div>
       <div class="max-w-7xl mx-auto px-gutter pt-8 border-t border-secondary/10 text-center text-body-sm text-on-surface-variant">
-        <span class="site-copyright-display">© 2026 INSAF Collection. All rights reserved. Base Currency: <strong>৳ (BDT)</strong></span>
+        <span class="site-copyright-display">© ২০২৬ ইনসাফ কালেকশন। সর্বস্বত্ব সংরক্ষিত। বেস কারেন্সি: <strong>৳ (টাকা)</strong></span>
       </div>
     </footer>
 

@@ -9,7 +9,7 @@ class DataStore {
   }
 
   init() {
-    const DATA_VERSION = "v14_pure_clean_slate_no_demo";
+    const DATA_VERSION = "v15_bengali_pure_localization";
     const currentVersion = localStorage.getItem("noor_data_version");
 
     if (currentVersion !== DATA_VERSION) {
