@@ -151,23 +151,12 @@ function renderCategories() {
     shopFilterContainer.innerHTML = categories.map(cat => {
       const cleanName = (cat.name || cat.id).replace(/\s*\([^)]*\)/g, "").trim() || cat.name;
       return `
-        <button type="button" class="category-filter-btn ${currentCategory === cat.id ? 'active' : 'inactive'}" onclick="handleCategoryFilterClick(event, '${cat.id}')">
-          <span class="material-symbols-outlined text-[16px]">${cat.icon || 'diamond'}</span>
-          <span class="whitespace-nowrap">${cleanName}</span>
+        <button type="button" class="category-filter-btn ${currentCategory === cat.id ? 'active' : 'inactive'}" onclick="setCategoryFilter('${cat.id}')">
+          ${cleanName}
         </button>
       `;
     }).join("");
   }
-}
-
-let isCategoryDragging = false;
-
-function handleCategoryFilterClick(e, catId) {
-  if (isCategoryDragging) {
-    e.preventDefault();
-    return;
-  }
-  setCategoryFilter(catId);
 }
 
 function filterByCategoryAndShop(catId) {
@@ -1208,62 +1197,14 @@ function setupEventListeners() {
     radio.addEventListener("change", () => renderCheckoutSummary());
   });
 
-  // Initialize category drag and scroll
-  initCategoryFilterScroll();
-}
-
-// Drag, Wheel, and Arrow Scroll for Category Filters
-function initCategoryFilterScroll() {
-  const container = document.getElementById("shop-category-filters");
-  if (!container) return;
-
-  let isDown = false;
-  let startX = 0;
-  let scrollLeft = 0;
-
-  container.addEventListener("mousedown", (e) => {
-    isDown = true;
-    isCategoryDragging = false;
-    container.classList.add("dragging");
-    startX = e.pageX - container.offsetLeft;
-    scrollLeft = container.scrollLeft;
-  });
-
-  container.addEventListener("mouseleave", () => {
-    isDown = false;
-    container.classList.remove("dragging");
-  });
-
-  container.addEventListener("mouseup", () => {
-    isDown = false;
-    container.classList.remove("dragging");
-    setTimeout(() => { isCategoryDragging = false; }, 80);
-  });
-
-  container.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - container.offsetLeft;
-    const walk = (x - startX) * 1.6;
-    if (Math.abs(walk) > 6) {
-      isCategoryDragging = true;
-    }
-    container.scrollLeft = scrollLeft - walk;
-  });
-
-  // Wheel horizontal scroll on hover
-  container.addEventListener("wheel", (e) => {
-    if (e.deltaY !== 0) {
-      e.preventDefault();
-      container.scrollLeft += e.deltaY;
-    }
-  }, { passive: false });
-}
-
-// Global Category Scroll Helper for Left/Right arrows
-window.scrollCategoryFilters = function(amount) {
-  const container = document.getElementById("shop-category-filters");
-  if (container) {
-    container.scrollBy({ left: amount, behavior: "smooth" });
+  // Enable mouse wheel horizontal scroll on desktop
+  const catFilters = document.getElementById("shop-category-filters");
+  if (catFilters) {
+    catFilters.addEventListener("wheel", (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        catFilters.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
   }
-};
+}

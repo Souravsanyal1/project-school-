@@ -128,29 +128,25 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.65) 60%, rgba(15, 23, 42, 0.95) 100%);
 }
 
-/* Category Filter Bar */
+/* Category Filter Bar - Pure Touch Swipe */
 .category-filter-bar {
   display: flex !important;
+  flex-wrap: nowrap !important;
   align-items: center !important;
-  gap: 0.5rem !important;
+  gap: 0.6rem !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch !important;
-  touch-action: pan-x pinch-zoom !important;
   scroll-behavior: smooth !important;
   white-space: nowrap !important;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.category-filter-bar.dragging {
-  cursor: grabbing !important;
-  scroll-behavior: auto !important;
+  padding-bottom: 0.5rem !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 .category-filter-bar::-webkit-scrollbar {
-  display: none;
-  height: 0;
-  width: 0;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .category-filter-btn {
@@ -160,32 +156,24 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 0.45rem !important;
   height: 38px !important;
   min-height: 38px !important;
-  max-height: 38px !important;
-  padding: 0 1.15rem !important;
+  padding: 0 1.25rem !important;
   border-radius: 9999px !important;
-  font-size: 0.82rem !important;
+  font-size: 0.85rem !important;
   font-weight: 600 !important;
   letter-spacing: 0.2px !important;
   line-height: 1 !important;
   box-sizing: border-box !important;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
   cursor: pointer !important;
-  user-select: none !important;
-}
-.category-filter-btn span {
-  white-space: nowrap !important;
-  word-break: keep-all !important;
-  line-height: 1 !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 .category-filter-btn.active {
   background: #0f172a !important;
   color: #ffffff !important;
   border: 1.5px solid #d97706 !important;
   box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35) !important;
-  transform: translateY(-1px);
 }
 .category-filter-btn.inactive {
   background: #ffffff !important;
