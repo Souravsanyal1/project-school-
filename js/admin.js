@@ -7,10 +7,13 @@
 let isAdminLoggedIn = false;
 let currentAdminTab = "dashboard";
 
-// Initialize Admin Portal
+// Initialize Admin Portal via secret hash or direct trigger
 function openAdminPortal() {
-  const settings = Store.getSettings();
   const sessionAuth = sessionStorage.getItem("noor_admin_auth");
+
+  if (window.location.hash !== "#admin-master-panel") {
+    history.replaceState(null, null, "#admin-master-panel");
+  }
 
   if (sessionAuth === "true") {
     isAdminLoggedIn = true;
@@ -40,6 +43,9 @@ function handleAdminLogin(e) {
 
 function closeAdminLogin() {
   document.getElementById("admin-login-modal").classList.remove("active");
+  if (window.location.hash === "#admin-master-panel") {
+    history.replaceState(null, null, window.location.pathname);
+  }
 }
 
 function adminLogout() {
@@ -47,12 +53,14 @@ function adminLogout() {
   sessionStorage.removeItem("noor_admin_auth");
   document.getElementById("admin-portal-view").classList.remove("active");
   document.getElementById("storefront-view").style.display = "block";
+  history.replaceState(null, null, window.location.pathname);
   showToast("Logged out of Sovereign Admin Panel", "warning");
 }
 
 function exitAdminPortal() {
   document.getElementById("admin-portal-view").classList.remove("active");
   document.getElementById("storefront-view").style.display = "block";
+  history.replaceState(null, null, window.location.pathname);
 }
 
 function showAdminDashboard() {

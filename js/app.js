@@ -15,7 +15,18 @@ let appliedCoupon = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   initApp();
+  checkAdminSecretHash();
 });
+
+window.addEventListener("hashchange", () => {
+  checkAdminSecretHash();
+});
+
+function checkAdminSecretHash() {
+  if (window.location.hash === "#admin-master-panel") {
+    openAdminPortal();
+  }
+}
 
 function initApp() {
   applyStoreSettings();
