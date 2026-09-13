@@ -187,21 +187,31 @@ function renderCategories() {
   const shopFilterContainer = document.getElementById("shop-category-filters");
 
   if (homeGrid) {
-    homeGrid.innerHTML = categories.filter(c => c.id !== "all").map(cat => `
-      <div class="group relative h-96 rounded-xl overflow-hidden flex flex-col justify-end p-6 border border-slate-200 shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer bg-slate-900" onclick="filterByCategoryAndShop('${cat.id}')">
-        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('${cat.image || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'}')"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
-        <div class="relative z-10 flex flex-col justify-end">
-          <span class="font-label-md text-amber-400 font-bold uppercase tracking-widest text-xs mb-1 drop-shadow">${cat.tag || cat.id}</span>
-          <h3 class="font-headline-md text-white font-extrabold text-lg group-hover:text-amber-300 transition-colors drop-shadow-md">${cat.name}</h3>
-          <div class="mt-3 flex items-center justify-between">
-            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
-              Explore Collection <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </span>
+    const customCategories = categories.filter(c => c.id !== "all");
+    if (customCategories.length === 0) {
+      homeGrid.innerHTML = `
+        <div class="col-span-full text-center py-12 px-6 bg-slate-900/40 rounded-2xl border border-slate-800 text-slate-400">
+          <span class="material-symbols-outlined text-[42px] text-amber-400 mb-2">category</span>
+          <p class="text-base font-medium text-slate-300">এডমিন প্যানেল থেকে নতুন ক্যাটাগরি যুক্ত করা হলে এখানে প্রদর্শিত হবে।</p>
+        </div>
+      `;
+    } else {
+      homeGrid.innerHTML = customCategories.map(cat => `
+        <div class="group relative h-96 rounded-xl overflow-hidden flex flex-col justify-end p-6 border border-slate-200 shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer bg-slate-900" onclick="filterByCategoryAndShop('${cat.id}')">
+          <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('${cat.image || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'}')"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
+          <div class="relative z-10 flex flex-col justify-end">
+            <span class="font-label-md text-amber-400 font-bold uppercase tracking-widest text-xs mb-1 drop-shadow">${cat.tag || cat.id}</span>
+            <h3 class="font-headline-md text-white font-extrabold text-lg group-hover:text-amber-300 transition-colors drop-shadow-md">${cat.name}</h3>
+            <div class="mt-3 flex items-center justify-between">
+              <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+                Explore Collection <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    `).join("");
+      `).join("");
+    }
   }
 
   if (shopFilterContainer) {
@@ -237,6 +247,17 @@ function renderFeaturedProducts() {
   const products = Store.getProducts().slice(0, 3);
   const settings = Store.getSettings();
   const curr = settings.currency || "৳";
+
+  if (products.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full text-center py-16 px-6 bg-white/70 rounded-2xl border border-dashed border-slate-300">
+        <span class="material-symbols-outlined text-[48px] text-amber-500/70 mb-2">inventory_2</span>
+        <h3 class="font-headline-sm text-slate-900 font-bold text-lg">বর্তমানে কোনো পণ্য তালিকাভুক্ত নেই</h3>
+        <p class="text-sm text-slate-600 mt-1">এডমিন প্যানেল থেকে নতুন পণ্য যোগ করা হলে এখানে স্বয়ংক্রিয়ভাবে প্রদর্শিত হবে।</p>
+      </div>
+    `;
+    return;
+  }
 
   container.innerHTML = products.map(product => `
     <div class="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-amber-500 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">

@@ -9,18 +9,20 @@ class DataStore {
   }
 
   init() {
-    const DATA_VERSION = "v11_verified_buyer_reviews";
+    const DATA_VERSION = "v14_pure_clean_slate_no_demo";
     const currentVersion = localStorage.getItem("noor_data_version");
 
     if (currentVersion !== DATA_VERSION) {
-      // Refresh default products, categories and settings with crystal-clear high-res assets & clean slate
+      // Clean slate: No demo products, orders, reviews, addresses, or coupons
       localStorage.setItem("noor_settings", JSON.stringify(DEFAULT_SETTINGS));
-      localStorage.setItem("noor_products", JSON.stringify(DEFAULT_PRODUCTS));
-      localStorage.setItem("noor_categories", JSON.stringify(DEFAULT_CATEGORIES));
-      localStorage.setItem("noor_coupons", JSON.stringify(DEFAULT_COUPONS));
-      localStorage.setItem("noor_orders", JSON.stringify(typeof DEFAULT_ORDERS !== "undefined" ? DEFAULT_ORDERS : []));
-      localStorage.setItem("noor_addresses", JSON.stringify(typeof DEFAULT_ADDRESSES !== "undefined" ? DEFAULT_ADDRESSES : []));
-      localStorage.setItem("noor_product_reviews", JSON.stringify(typeof DEFAULT_REVIEWS !== "undefined" ? DEFAULT_REVIEWS : []));
+      localStorage.setItem("noor_products", JSON.stringify(DEFAULT_PRODUCTS || []));
+      localStorage.setItem("noor_categories", JSON.stringify(DEFAULT_CATEGORIES || []));
+      localStorage.setItem("noor_coupons", JSON.stringify(DEFAULT_COUPONS || []));
+      localStorage.setItem("noor_orders", JSON.stringify(DEFAULT_ORDERS || []));
+      localStorage.setItem("noor_addresses", JSON.stringify(DEFAULT_ADDRESSES || []));
+      localStorage.setItem("noor_product_reviews", JSON.stringify(DEFAULT_REVIEWS || []));
+      localStorage.setItem("noor_cart", JSON.stringify([]));
+      localStorage.setItem("noor_wishlist", JSON.stringify([]));
       localStorage.setItem("noor_data_version", DATA_VERSION);
     }
 
@@ -28,13 +30,13 @@ class DataStore {
       localStorage.setItem("noor_cart", JSON.stringify([]));
     }
     if (!localStorage.getItem("noor_wishlist")) {
-      localStorage.setItem("noor_wishlist", JSON.stringify(["prod-1", "prod-2", "prod-3"]));
+      localStorage.setItem("noor_wishlist", JSON.stringify([]));
     }
     if (!localStorage.getItem("noor_product_reviews")) {
-      localStorage.setItem("noor_product_reviews", JSON.stringify(typeof DEFAULT_REVIEWS !== "undefined" ? DEFAULT_REVIEWS : []));
+      localStorage.setItem("noor_product_reviews", JSON.stringify([]));
     }
     if (!localStorage.getItem("noor_addresses")) {
-      localStorage.setItem("noor_addresses", JSON.stringify(typeof DEFAULT_ADDRESSES !== "undefined" ? DEFAULT_ADDRESSES : []));
+      localStorage.setItem("noor_addresses", JSON.stringify([]));
     }
   }
 

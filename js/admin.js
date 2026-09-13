@@ -461,7 +461,10 @@ function openProductEditModal(productId = null) {
   form.reset();
 
   const catSelect = document.getElementById("prod-category-select");
-  const categories = Store.getCategories().filter(c => c.id !== 'all');
+  let categories = Store.getCategories().filter(c => c.id !== 'all');
+  if (categories.length === 0) {
+    categories = [{ id: "general", name: "জেনারেল কালেকশন (General)" }];
+  }
   catSelect.innerHTML = categories.map(c => `
     <option value="${c.id}">${c.name}</option>
   `).join("");

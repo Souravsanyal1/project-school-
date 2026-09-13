@@ -216,32 +216,22 @@ let isInitialOrdersLoad = true;
 export function initRealtimeListeners() {
   // 1. Live Orders Listener (User <-> Admin Bidirectional)
   onSnapshot(collection(db, "orders"), (snapshot) => {
-    if (snapshot.empty && isInitialOrdersLoad) {
-      // Seed default orders to cloud if first time
-      const localOrders = (window.Store && window.Store.getOrders()) || [];
-      localOrders.forEach(o => syncOrderToFirebase(o));
-      isInitialOrdersLoad = false;
-      return;
-    }
-
     const cloudOrders = [];
     snapshot.forEach(docSnap => cloudOrders.push(docSnap.data()));
 
-    if (cloudOrders.length > 0) {
-      // Check if new order arrived while app is open
-      const previousOrdersCount = (window.Store && window.Store.getOrders().length) || 0;
-      if (!isInitialOrdersLoad && cloudOrders.length > previousOrdersCount) {
-        playNewOrderChime();
-        if (window.showToast) {
-          showToast("🔔 নতুন কমিশন অর্ডার এসেছে! (New Realtime Order)", "success");
-        }
+    // Check if new order arrived while app is open
+    const previousOrdersCount = (window.Store && window.Store.getOrders().length) || 0;
+    if (!isInitialOrdersLoad && cloudOrders.length > previousOrdersCount) {
+      playNewOrderChime();
+      if (window.showToast) {
+        showToast("🔔 নতুন কমিশন অর্ডার এসেছে! (New Realtime Order)", "success");
       }
-
-      // Sort by date descending
-      cloudOrders.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-      localStorage.setItem("noor_orders", JSON.stringify(cloudOrders));
-      if (window.Store) window.Store.emitChange("orders");
     }
+
+    // Sort by date descending
+    cloudOrders.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+    localStorage.setItem("noor_orders", JSON.stringify(cloudOrders));
+    if (window.Store) window.Store.emitChange("orders");
     isInitialOrdersLoad = false;
   }, (err) => {
     console.warn("Realtime orders listener fallback:", err.message);
@@ -249,18 +239,10 @@ export function initRealtimeListeners() {
 
   // 2. Live Products Listener (Admin changes show live on User UI)
   onSnapshot(collection(db, "products"), (snapshot) => {
-    if (snapshot.empty) {
-      const localProducts = (window.Store && window.Store.getProducts()) || [];
-      localProducts.forEach(p => syncProductToFirebase(p));
-      return;
-    }
-
     const cloudProducts = [];
     snapshot.forEach(docSnap => cloudProducts.push(docSnap.data()));
-    if (cloudProducts.length > 0) {
-      localStorage.setItem("noor_products", JSON.stringify(cloudProducts));
-      if (window.Store) window.Store.emitChange("products");
-    }
+    localStorage.setItem("noor_products", JSON.stringify(cloudProducts));
+    if (window.Store) window.Store.emitChange("products");
   }, (err) => {
     console.warn("Realtime products listener fallback:", err.message);
   });
@@ -281,13 +263,11 @@ export function initRealtimeListeners() {
 
   // 4. Live Categories Listener
   onSnapshot(collection(db, "categories"), (snapshot) => {
-    if (!snapshot.empty) {
-      const cloudCats = [];
-      snapshot.forEach(docSnap => cloudCats.push(docSnap.data()));
-      if (cloudCats.length > 0) {
-        localStorage.setItem("noor_categories", JSON.stringify(cloudCats));
-        if (window.Store) window.Store.emitChange("categories");
-      }
+    const cloudCats = [];
+    snapshot.forEach(docSnap => cloudCats.push(docSnap.data()));
+    if (cloudCats.length > 0) {
+      localStorage.setItem("noor_categories", JSON.stringify(cloudCats));
+      if (window.Store) window.Store.emitChange("categories");
     }
   }, (err) => {
     console.warn("Realtime categories listener fallback:", err.message);
@@ -295,28 +275,20 @@ export function initRealtimeListeners() {
 
   // 5. Live Coupons Listener
   onSnapshot(collection(db, "coupons"), (snapshot) => {
-    if (!snapshot.empty) {
-      const cloudCoupons = [];
-      snapshot.forEach(docSnap => cloudCoupons.push(docSnap.data()));
-      if (cloudCoupons.length > 0) {
-        localStorage.setItem("noor_coupons", JSON.stringify(cloudCoupons));
-        if (window.Store) window.Store.emitChange("coupons");
-      }
-    }
+    const cloudCoupons = [];
+    snapshot.forEach(docSnap => cloudCoupons.push(docSnap.data()));
+    localStorage.setItem("noor_coupons", JSON.stringify(cloudCoupons));
+    if (window.Store) window.Store.emitChange("coupons");
   }, (err) => {
     console.warn("Realtime coupons listener fallback:", err.message);
   });
 
   // 6. Live Reviews Listener (Verified Buyer Reviews)
   onSnapshot(collection(db, "reviews"), (snapshot) => {
-    if (!snapshot.empty) {
-      const cloudReviews = [];
-      snapshot.forEach(docSnap => cloudReviews.push(docSnap.data()));
-      if (cloudReviews.length > 0) {
-        localStorage.setItem("noor_product_reviews", JSON.stringify(cloudReviews));
-        if (window.Store) window.Store.emitChange("reviews");
-      }
-    }
+    const cloudReviews = [];
+    snapshot.forEach(docSnap => cloudReviews.push(docSnap.data()));
+    localStorage.setItem("noor_product_reviews", JSON.stringify(cloudReviews));
+    if (window.Store) window.Store.emitChange("reviews");
   }, (err) => {
     console.warn("Realtime reviews listener fallback:", err.message);
   });
