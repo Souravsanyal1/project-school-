@@ -21,7 +21,9 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut as firebaseSignOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -301,9 +303,46 @@ export async function loginAdminWithFirebase(email, password) {
   }
 }
 
+export async function loginWithGoogle() {
+  try {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    console.log("⚡ [Firebase Google Auth] Success:", user.displayName, user.email);
+
+    const profile = {
+      uid: user.uid,
+      name: user.displayName || "Google Patron",
+      email: user.email || "",
+      photoURL: user.photoURL || "",
+      phone: user.phoneNumber || "",
+      provider: "google",
+      lastLogin: new Date().toISOString()
+    };
+    localStorage.setItem("noor_google_user", JSON.stringify(profile));
+
+    if (window.Store) {
+      window.Store.emitChange("user_profile");
+    }
+
+    return { success: true, user: profile };
+  } catch (err) {
+    console.warn("Google Auth popup attempt:", err.code, err.message);
+    return {
+      success: false,
+      code: err.code || "auth/google-error",
+      error: err.message || "Google Sign-In failed or was cancelled."
+    };
+  }
+}
+
 export async function logoutAdminFromFirebase() {
   try {
     await firebaseSignOut(auth);
+    localStorage.removeItem("noor_google_user");
+    sessionStorage.removeItem("noor_admin_auth");
+    if (window.Store) window.Store.emitChange("user_profile");
     console.log("⚡ [Firebase Auth] Logged out from Firebase");
   } catch (err) {
     console.warn("Firebase Auth logout fallback:", err.message);
@@ -322,6 +361,7 @@ onAuthStateChanged(auth, (user) => {
 window.FirebaseAuth = {
   auth,
   loginAdminWithFirebase,
+  loginWithGoogle,
   logoutAdminFromFirebase
 };
 

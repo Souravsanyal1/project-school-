@@ -178,6 +178,27 @@ function handleAdminLogin(e) {
   }
 }
 
+// Option 3: Handle Google Admin Sign In
+async function handleAdminGoogleLogin() {
+  if (!window.FirebaseAuth || !window.FirebaseAuth.loginWithGoogle) {
+    showToast("Firebase Google Auth initializing. Please retry in a second.", "warning");
+    return;
+  }
+
+  showToast("Opening Google Authentication popup...", "info");
+  const result = await window.FirebaseAuth.loginWithGoogle();
+  if (result.success) {
+    isAdminLoggedIn = true;
+    sessionStorage.setItem("noor_admin_auth", "true");
+    const modal = document.getElementById("admin-login-modal");
+    if (modal) modal.classList.remove("active");
+    showToast(`✓ Welcome Admin (${result.user.name || result.user.email})!`, "success");
+    showAdminDashboard();
+  } else {
+    showToast(result.error || "Google Sign-In was cancelled or failed", "error");
+  }
+}
+
 // Dedicated admin.html Email Login with Firebase Auth
 async function handleDedicatedEmailLogin(e) {
   e.preventDefault();
