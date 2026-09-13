@@ -221,18 +221,18 @@
         </div>
       </section>
 
-      <!-- Andalusian Archive Banner -->
-      <section class="relative w-full py-32 overflow-hidden flex items-center justify-center">
-        <div class="absolute inset-0 z-0 bg-cover bg-fixed bg-center" style="background-image: url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1600&q=85')"></div>
-        <div class="absolute inset-0 z-10 bg-slate-950/80 backdrop-blur-[2px]"></div>
-        <div class="relative z-20 max-w-4xl mx-auto px-gutter text-center flex flex-col items-center space-y-5">
-          <span class="font-label-md text-amber-400 font-bold uppercase tracking-[0.3em] bg-amber-500/20 px-4 py-1 rounded border border-amber-500/40">The Royal Archive</span>
-          <h2 class="font-display-lg text-white font-extrabold drop-shadow">The Heritage of Andalusian Craft</h2>
-          <p class="font-body-lg text-slate-200 max-w-2xl font-normal leading-relaxed">
+      <!-- Andalusian Archive Banner (Dynamic Background from Admin) -->
+      <section class="relative w-full py-28 sm:py-32 overflow-hidden flex items-center justify-center bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-t border-b border-secondary/30">
+        <div id="archive-banner-bg" class="absolute inset-0 z-0 bg-cover bg-fixed bg-center transition-all duration-700" style="display: none;"></div>
+        <div class="absolute inset-0 z-10 bg-slate-950/80 backdrop-blur-[1px]"></div>
+        <div class="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center space-y-5">
+          <span id="archive-badge-display" class="font-label-md text-amber-400 font-bold uppercase tracking-[0.3em] bg-amber-500/20 px-4 py-1 rounded border border-amber-500/40">The Royal Archive</span>
+          <h2 id="archive-title-display" class="font-display-lg text-white font-extrabold drop-shadow">The Heritage of Andalusian Craft</h2>
+          <p id="archive-desc-display" class="font-body-lg text-slate-200 max-w-2xl font-normal leading-relaxed">
             A limited release honoring the golden age of Islamic craftsmanship. Each piece is individually numbered and accompanied by a certificate of authenticity.
           </p>
           <div class="pt-4">
-            <button class="btn-gold px-10 py-4 font-bold uppercase tracking-widest rounded-lg shadow-2xl" onclick="switchView('shop')">
+            <button id="archive-btn-display" class="btn-gold px-8 sm:px-10 py-3.5 sm:py-4 font-bold uppercase tracking-widest rounded-lg shadow-2xl" onclick="switchView('shop')">
               <span class="material-symbols-outlined text-[18px]">explore</span>
               Discover The Archive
             </button>
@@ -1413,6 +1413,55 @@
                   <div>
                     <label class="uppercase text-secondary block mb-1">Hero Short Description</label>
                     <textarea name="heroDescription" rows="2" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs"></textarea>
+                  </div>
+                </div>
+
+                <!-- Archive Banner Customizer -->
+                <div class="md:col-span-2 p-4 bg-black/60 border border-secondary/40 rounded-lg space-y-3">
+                  <h4 class="font-headline-sm text-amber-400 uppercase text-xs tracking-wider flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">photo_library</span>
+                    আন্দালুসিয়ান ব্যানার ছবি ও লেখা (Archive Banner Background & Texts)
+                  </h4>
+                  <div>
+                    <label class="uppercase text-secondary block mb-1">Archive Background Image URL (খালি রাখলে ব্যাকগ্রাউন্ড ডার্ক থাকবে)</label>
+                    <input type="url" name="archiveBgImage" id="admin-archive-img-input" oninput="updateArchivePreview(this.value)" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="https://... (বা খালি রাখুন)">
+                  </div>
+                  <!-- Preset Buttons -->
+                  <div>
+                    <label class="text-[11px] text-secondary-fixed block mb-1.5 font-semibold">⚡ ১-ক্লিকে ব্যাকগ্রাউন্ড পছন্দ করুন / রিমুভ করুন:</label>
+                    <div class="flex flex-wrap gap-2">
+                      <button type="button" class="px-3 py-1.5 bg-red-900/60 hover:bg-red-700 text-white rounded text-[11px] transition-colors" onclick="setArchivePreset('')">
+                        🚫 ছবি রিমুভ করুন (Dark Obsidian)
+                      </button>
+                      <button type="button" class="px-3 py-1.5 bg-white/10 hover:bg-amber-600 text-white rounded text-[11px] transition-colors" onclick="setArchivePreset('https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1600&q=85')">
+                        🕌 গোল্ডেন ইসলামিক আর্চ
+                      </button>
+                      <button type="button" class="px-3 py-1.5 bg-white/10 hover:bg-amber-600 text-white rounded text-[11px] transition-colors" onclick="setArchivePreset('https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1600&q=85')">
+                        ✨ রয়্যাল টেক্সটাইল
+                      </button>
+                    </div>
+                  </div>
+                  <!-- Live Preview -->
+                  <div class="pt-2">
+                    <span class="text-[10px] text-slate-400 block mb-1">Live Archive Banner Preview:</span>
+                    <div class="w-full h-28 rounded border border-secondary/30 overflow-hidden bg-black flex items-center justify-center text-slate-500 text-xs">
+                      <img id="admin-archive-preview-img" src="" class="w-full h-full object-cover hidden">
+                      <span id="admin-archive-no-img">ডার্ক ব্যাকগ্রাউন্ড সক্রিয় (No Photo)</span>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                    <div>
+                      <label class="uppercase text-secondary block mb-1">Banner Title</label>
+                      <input type="text" name="archiveTitle" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs">
+                    </div>
+                    <div>
+                      <label class="uppercase text-secondary block mb-1">Badge Text</label>
+                      <input type="text" name="archiveBadge" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="uppercase text-secondary block mb-1">Banner Description</label>
+                    <textarea name="archiveDesc" rows="2" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs"></textarea>
                   </div>
                 </div>
 

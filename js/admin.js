@@ -776,6 +776,32 @@ function setHeroPreset(url) {
   }
 }
 
+// Archive Banner Customization Helpers
+function updateArchivePreview(url) {
+  const preview = document.getElementById("admin-archive-preview-img");
+  const noImg = document.getElementById("admin-archive-no-img");
+  if (preview && noImg) {
+    if (url && url.trim()) {
+      preview.src = url.trim();
+      preview.classList.remove("hidden");
+      noImg.classList.add("hidden");
+    } else {
+      preview.src = "";
+      preview.classList.add("hidden");
+      noImg.classList.remove("hidden");
+    }
+  }
+}
+
+function setArchivePreset(url) {
+  const input = document.getElementById("admin-archive-img-input");
+  if (input) {
+    input.value = url;
+    updateArchivePreview(url);
+    showToast(url ? "Archive preset selected! Click 'Save All Settings' to apply." : "Archive image cleared (Dark background set).", "success");
+  }
+}
+
 // 6. Settings Tab
 function loadAdminSettingsForm() {
   const settings = Store.getSettings();
@@ -811,6 +837,16 @@ function loadAdminSettingsForm() {
   if (form.heroTitle) form.heroTitle.value = settings.heroTitle || "Elegance Rooted in Faith";
   if (form.heroSubtitle) form.heroSubtitle.value = settings.heroSubtitle || "✨ Flagship Collection 2026 • ৳ BDT";
   if (form.heroDescription) form.heroDescription.value = settings.heroDescription || "Uncompromising craftsmanship blending timeless Islamic heritage with contemporary global luxury standards. Base currency in ৳ (BDT) with nationwide fast delivery.";
+
+  // Archive banner settings
+  if (form.archiveBgImage) {
+    const archImg = settings.archiveBgImage || "";
+    form.archiveBgImage.value = archImg;
+    updateArchivePreview(archImg);
+  }
+  if (form.archiveTitle) form.archiveTitle.value = settings.archiveTitle || "The Heritage of Andalusian Craft";
+  if (form.archiveBadge) form.archiveBadge.value = settings.archiveBadge || "The Royal Archive";
+  if (form.archiveDesc) form.archiveDesc.value = settings.archiveDesc || "A limited release honoring the golden age of Islamic craftsmanship. Each piece is individually numbered and accompanied by a certificate of authenticity.";
 }
 
 function handleSaveSettingsSubmit(e) {
@@ -837,6 +873,10 @@ function handleSaveSettingsSubmit(e) {
     heroTitle: form.heroTitle ? form.heroTitle.value.trim() : "Elegance Rooted in Faith",
     heroSubtitle: form.heroSubtitle ? form.heroSubtitle.value.trim() : "✨ Flagship Collection 2026 • ৳ BDT",
     heroDescription: form.heroDescription ? form.heroDescription.value.trim() : "Uncompromising craftsmanship blending timeless Islamic heritage with contemporary global luxury standards. Base currency in ৳ (BDT) with nationwide fast delivery.",
+    archiveBgImage: form.archiveBgImage ? form.archiveBgImage.value.trim() : "",
+    archiveTitle: form.archiveTitle ? form.archiveTitle.value.trim() : "The Heritage of Andalusian Craft",
+    archiveBadge: form.archiveBadge ? form.archiveBadge.value.trim() : "The Royal Archive",
+    archiveDesc: form.archiveDesc ? form.archiveDesc.value.trim() : "A limited release honoring the golden age of Islamic craftsmanship. Each piece is individually numbered and accompanied by a certificate of authenticity.",
     address: form.address.value.trim(),
     insideDhakaDelivery: Number(form.insideDhakaDelivery.value) || 80,
     outsideDhakaDelivery: Number(form.outsideDhakaDelivery.value) || 150,

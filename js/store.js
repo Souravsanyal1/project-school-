@@ -9,7 +9,7 @@ class DataStore {
   }
 
   init() {
-    const DATA_VERSION = "v9_custom_brand_logo_mobile_fix";
+    const DATA_VERSION = "v10_archive_banner_customizer";
     const currentVersion = localStorage.getItem("noor_data_version");
 
     if (currentVersion !== DATA_VERSION) {

@@ -122,6 +122,28 @@ function applyStoreSettings() {
   const heroDescEl = document.getElementById("hero-desc-display");
   if (heroDescEl && settings.heroDescription) heroDescEl.textContent = settings.heroDescription;
 
+  // Dynamic Archive Banner Section
+  const archiveBg = document.getElementById("archive-banner-bg");
+  if (archiveBg) {
+    if (settings.archiveBgImage && settings.archiveBgImage.trim()) {
+      archiveBg.style.backgroundImage = `url('${settings.archiveBgImage.trim()}')`;
+      archiveBg.style.display = "block";
+    } else {
+      archiveBg.style.backgroundImage = "none";
+      archiveBg.style.display = "none";
+    }
+  }
+  const archiveBadgeEl = document.getElementById("archive-badge-display");
+  if (archiveBadgeEl) archiveBadgeEl.textContent = settings.archiveBadge || "The Royal Archive";
+  const archiveTitleEl = document.getElementById("archive-title-display");
+  if (archiveTitleEl) archiveTitleEl.textContent = settings.archiveTitle || "The Heritage of Andalusian Craft";
+  const archiveDescEl = document.getElementById("archive-desc-display");
+  if (archiveDescEl) archiveDescEl.textContent = settings.archiveDesc || "A limited release honoring the golden age of Islamic craftsmanship. Each piece is individually numbered and accompanied by a certificate of authenticity.";
+  const archiveBtnEl = document.getElementById("archive-btn-display");
+  if (archiveBtnEl) {
+    archiveBtnEl.innerHTML = `<span class="material-symbols-outlined text-[18px]">explore</span> ${settings.archiveBtnText || "Discover The Archive"}`;
+  }
+
   const insideFeeEl = document.getElementById("inside-dhaka-fee-label");
   const outsideFeeEl = document.getElementById("outside-dhaka-fee-label");
   if (insideFeeEl) insideFeeEl.textContent = `৳${settings.insideDhakaDelivery}`;
