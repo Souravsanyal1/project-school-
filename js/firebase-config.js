@@ -1,6 +1,7 @@
 /**
- * Firebase SDK Integration & Configuration
+ * Firebase Real-Time Cloud Synchronization Engine
  * Project: insaf-collection-gazipur-zone
+ * Live Bidirectional Realtime Sync for Orders, Products, Categories, Settings & VIP Codes
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -12,6 +13,7 @@ import {
   setDoc, 
   getDoc, 
   getDocs, 
+  deleteDoc,
   onSnapshot 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -25,55 +27,246 @@ const firebaseConfig = {
   measurementId: "G-QQ37VQ563G"
 };
 
-// Initialize Firebase App
+// Initialize Firebase App & Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Optional Analytics initialization if supported
+// Analytics
 isSupported().then(supported => {
-  if (supported) {
-    getAnalytics(app);
-  }
+  if (supported) getAnalytics(app);
 }).catch(() => {});
 
-// Attach globally for real-time cloud sync & offline fallback
-window.FirebaseDB = {
-  app,
-  db,
-  collection,
-  doc,
-  setDoc,
-  getDoc,
-  getDocs,
-  onSnapshot
-};
+// Global Web Audio Chime for Realtime New Orders
+export function playNewOrderChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+    
+    // Note 1
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = "sine";
+    osc1.frequency.setValueAtTime(587.33, now); // D5
+    gain1.gain.setValueAtTime(0.3, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.35);
 
-// Cloud Realtime Synchronization Bridge
+    // Note 2
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(880, now + 0.15); // A5
+    gain2.gain.setValueAtTime(0.4, now + 0.15);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.15);
+    osc2.stop(now + 0.6);
+  } catch {
+    // Audio context not allowed until user interaction
+  }
+}
+
+// Global Cloud Sync Methods
 export async function syncOrderToFirebase(order) {
   try {
     await setDoc(doc(db, "orders", order.orderId), order);
-    console.log("Order synced with Firebase Cloud Firestore:", order.orderId);
+    console.log("⚡ [Realtime Cloud] Order synced:", order.orderId);
   } catch (err) {
-    console.warn("Firestore sync offline fallback:", err.message);
+    console.warn("Firestore offline order fallback:", err.message);
+  }
+}
+
+export async function updateOrderStatusInFirebase(orderId, status, currentStep) {
+  try {
+    const orderRef = doc(db, "orders", orderId);
+    await setDoc(orderRef, { status, currentStep, updatedAt: new Date().toISOString() }, { merge: true });
+    console.log(`⚡ [Realtime Cloud] Order ${orderId} updated to ${status}`);
+  } catch (err) {
+    console.warn("Firestore order update fallback:", err.message);
   }
 }
 
 export async function syncProductToFirebase(product) {
   try {
     await setDoc(doc(db, "products", product.id), product);
-    console.log("Product synced with Firebase Cloud Firestore:", product.id);
+    console.log("⚡ [Realtime Cloud] Product synced:", product.id);
   } catch (err) {
     console.warn("Firestore product sync fallback:", err.message);
+  }
+}
+
+export async function deleteProductFromFirebase(productId) {
+  try {
+    await deleteDoc(doc(db, "products", productId));
+    console.log("⚡ [Realtime Cloud] Product deleted:", productId);
+  } catch (err) {
+    console.warn("Firestore delete product fallback:", err.message);
   }
 }
 
 export async function syncSettingsToFirebase(settings) {
   try {
     await setDoc(doc(db, "settings", "global_settings"), settings);
-    console.log("Settings synced with Firebase Cloud Firestore");
+    console.log("⚡ [Realtime Cloud] Settings synced successfully");
   } catch (err) {
     console.warn("Firestore settings sync fallback:", err.message);
   }
 }
 
-console.log("Firebase initialized for insaf-collection-gazipur-zone");
+export async function syncCategoryToFirebase(cat) {
+  try {
+    await setDoc(doc(db, "categories", cat.id), cat);
+    console.log("⚡ [Realtime Cloud] Category synced:", cat.id);
+  } catch (err) {
+    console.warn("Firestore category sync fallback:", err.message);
+  }
+}
+
+export async function deleteCategoryFromFirebase(catId) {
+  try {
+    await deleteDoc(doc(db, "categories", catId));
+    console.log("⚡ [Realtime Cloud] Category deleted:", catId);
+  } catch (err) {
+    console.warn("Firestore delete category fallback:", err.message);
+  }
+}
+
+export async function syncCouponToFirebase(coupon) {
+  try {
+    await setDoc(doc(db, "coupons", coupon.code), coupon);
+    console.log("⚡ [Realtime Cloud] VIP Coupon synced:", coupon.code);
+  } catch (err) {
+    console.warn("Firestore coupon sync fallback:", err.message);
+  }
+}
+
+export async function deleteCouponFromFirebase(code) {
+  try {
+    await deleteDoc(doc(db, "coupons", code));
+    console.log("⚡ [Realtime Cloud] VIP Coupon deleted:", code);
+  } catch (err) {
+    console.warn("Firestore delete coupon fallback:", err.message);
+  }
+}
+
+// -----------------------------------------------------------
+// Realtime Snapshot Listeners (Live Bidirectional Sync)
+// -----------------------------------------------------------
+let isInitialOrdersLoad = true;
+
+export function initRealtimeListeners() {
+  // 1. Live Orders Listener
+  onSnapshot(collection(db, "orders"), (snapshot) => {
+    if (snapshot.empty && isInitialOrdersLoad) {
+      // Seed default orders to cloud if first time
+      const localOrders = (window.Store && window.Store.getOrders()) || [];
+      localOrders.forEach(o => syncOrderToFirebase(o));
+      isInitialOrdersLoad = false;
+      return;
+    }
+
+    const cloudOrders = [];
+    snapshot.forEach(docSnap => cloudOrders.push(docSnap.data()));
+
+    if (cloudOrders.length > 0) {
+      // Check if new order arrived while app is open
+      const previousOrdersCount = (window.Store && window.Store.getOrders().length) || 0;
+      if (!isInitialOrdersLoad && cloudOrders.length > previousOrdersCount) {
+        playNewOrderChime();
+        if (window.showToast) {
+          showToast("🔔 নতুন কমিশন অর্ডার এসেছে! (New Realtime Order)", "success");
+        }
+      }
+
+      // Sort by date descending
+      cloudOrders.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+      localStorage.setItem("noor_orders", JSON.stringify(cloudOrders));
+      if (window.Store) window.Store.emitChange("orders");
+    }
+    isInitialOrdersLoad = false;
+  }, (err) => {
+    console.warn("Realtime orders listener fallback:", err.message);
+  });
+
+  // 2. Live Products Listener
+  onSnapshot(collection(db, "products"), (snapshot) => {
+    if (snapshot.empty) {
+      const localProducts = (window.Store && window.Store.getProducts()) || [];
+      localProducts.forEach(p => syncProductToFirebase(p));
+      return;
+    }
+
+    const cloudProducts = [];
+    snapshot.forEach(docSnap => cloudProducts.push(docSnap.data()));
+    if (cloudProducts.length > 0) {
+      localStorage.setItem("noor_products", JSON.stringify(cloudProducts));
+      if (window.Store) window.Store.emitChange("products");
+    }
+  }, (err) => {
+    console.warn("Realtime products listener fallback:", err.message);
+  });
+
+  // 3. Live Global Settings Listener
+  onSnapshot(doc(db, "settings", "global_settings"), (docSnap) => {
+    if (docSnap.exists()) {
+      const cloudSettings = docSnap.data();
+      localStorage.setItem("noor_settings", JSON.stringify(cloudSettings));
+      if (window.Store) window.Store.emitChange("settings");
+    } else {
+      const localSettings = (window.Store && window.Store.getSettings()) || {};
+      syncSettingsToFirebase(localSettings);
+    }
+  }, (err) => {
+    console.warn("Realtime settings listener fallback:", err.message);
+  });
+
+  // 4. Live Categories Listener
+  onSnapshot(collection(db, "categories"), (snapshot) => {
+    if (!snapshot.empty) {
+      const cloudCats = [];
+      snapshot.forEach(docSnap => cloudCats.push(docSnap.data()));
+      if (cloudCats.length > 0) {
+        localStorage.setItem("noor_categories", JSON.stringify(cloudCats));
+        if (window.Store) window.Store.emitChange("categories");
+      }
+    }
+  }, (err) => {
+    console.warn("Realtime categories listener fallback:", err.message);
+  });
+
+  // 5. Live Coupons Listener
+  onSnapshot(collection(db, "coupons"), (snapshot) => {
+    if (!snapshot.empty) {
+      const cloudCoupons = [];
+      snapshot.forEach(docSnap => cloudCoupons.push(docSnap.data()));
+      if (cloudCoupons.length > 0) {
+        localStorage.setItem("noor_coupons", JSON.stringify(cloudCoupons));
+        if (window.Store) window.Store.emitChange("coupons");
+      }
+    }
+  }, (err) => {
+    console.warn("Realtime coupons listener fallback:", err.message);
+  });
+}
+
+// Attach to window
+window.FirebaseRealtime = {
+  syncOrderToFirebase,
+  updateOrderStatusInFirebase,
+  syncProductToFirebase,
+  deleteProductFromFirebase,
+  syncSettingsToFirebase,
+  syncCategoryToFirebase,
+  deleteCategoryFromFirebase,
+  syncCouponToFirebase,
+  deleteCouponFromFirebase,
+  playNewOrderChime
+};
+
+// Start realtime listeners automatically
+initRealtimeListeners();
+console.log("⚡ Full Realtime System Activated for insaf-collection-gazipur-zone");

@@ -76,9 +76,12 @@
        TOP ANNOUNCEMENT BAR
        ========================================================== -->
   <div class="bg-primary text-on-primary py-2 px-gutter text-center border-b border-secondary/30 relative z-50 text-xs tracking-wider">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-2 mx-auto">
-        <span class="material-symbols-outlined text-secondary-fixed text-[16px]">stars</span>
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-400 text-[10px] font-bold tracking-wider uppercase">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Live Realtime
+        </span>
         <span class="site-announcement-display font-medium">✨ বিশেষ অফার! প্রতিটি অর্ডারে আকর্ষণীয় উপহার ও সারা দেশে ডেলিভারি সুবিধা।</span>
       </div>
       <div class="hidden md:flex items-center gap-2 text-secondary-fixed">
@@ -1091,12 +1094,18 @@
       <main class="flex-1 p-6 lg:p-10 bg-[#161616] overflow-y-auto">
         
         <!-- Topbar -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-black p-6 border border-secondary/20 mb-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-black p-6 border border-secondary/20 mb-8 rounded-xl shadow-lg">
           <div>
-            <h2 class="font-headline-lg text-white">Sovereign Management Suite</h2>
-            <p class="text-xs text-secondary tracking-widest uppercase">Base Currency: <strong>৳ (BDT)</strong> | Live LocalStorage Database</p>
+            <div class="flex items-center gap-3">
+              <h2 class="font-headline-lg text-white font-bold">Sovereign Management Suite</h2>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-400 text-xs font-bold tracking-wider uppercase">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Cloud Realtime Active
+              </span>
+            </div>
+            <p class="text-xs text-secondary tracking-widest uppercase mt-1">Base Currency: <strong>৳ (BDT)</strong> | Live Firebase Firestore Database</p>
           </div>
-          <button class="px-5 py-2.5 bg-secondary text-on-secondary hover:bg-white hover:text-black transition-colors font-label-md uppercase text-xs tracking-wider" onclick="exportDatabaseData()">
+          <button class="px-5 py-2.5 bg-secondary text-on-secondary hover:bg-white hover:text-black transition-colors font-label-md uppercase text-xs tracking-wider font-bold rounded shadow-md" onclick="exportDatabaseData()">
             Export Backup JSON
           </button>
         </div>

@@ -42,6 +42,9 @@ class DataStore {
   saveSettings(settings) {
     localStorage.setItem("noor_settings", JSON.stringify(settings));
     this.emitChange("settings");
+    if (window.FirebaseRealtime?.syncSettingsToFirebase) {
+      window.FirebaseRealtime.syncSettingsToFirebase(settings);
+    }
   }
 
   // --- Products ---
@@ -73,6 +76,9 @@ class DataStore {
     }
     localStorage.setItem("noor_products", JSON.stringify(products));
     this.emitChange("products");
+    if (window.FirebaseRealtime?.syncProductToFirebase) {
+      window.FirebaseRealtime.syncProductToFirebase(productData);
+    }
     return productData;
   }
 
@@ -81,6 +87,9 @@ class DataStore {
     products = products.filter(p => p.id !== id);
     localStorage.setItem("noor_products", JSON.stringify(products));
     this.emitChange("products");
+    if (window.FirebaseRealtime?.deleteProductFromFirebase) {
+      window.FirebaseRealtime.deleteProductFromFirebase(id);
+    }
   }
 
   // --- Categories ---
@@ -104,6 +113,9 @@ class DataStore {
     }
     localStorage.setItem("noor_categories", JSON.stringify(cats));
     this.emitChange("categories");
+    if (window.FirebaseRealtime?.syncCategoryToFirebase) {
+      window.FirebaseRealtime.syncCategoryToFirebase(cat);
+    }
   }
 
   deleteCategory(catId) {
@@ -111,6 +123,9 @@ class DataStore {
     let cats = this.getCategories().filter(c => c.id !== catId);
     localStorage.setItem("noor_categories", JSON.stringify(cats));
     this.emitChange("categories");
+    if (window.FirebaseRealtime?.deleteCategoryFromFirebase) {
+      window.FirebaseRealtime.deleteCategoryFromFirebase(catId);
+    }
   }
 
   // --- Coupons ---
@@ -129,12 +144,18 @@ class DataStore {
     else coupons.push(coupon);
     localStorage.setItem("noor_coupons", JSON.stringify(coupons));
     this.emitChange("coupons");
+    if (window.FirebaseRealtime?.syncCouponToFirebase) {
+      window.FirebaseRealtime.syncCouponToFirebase(coupon);
+    }
   }
 
   deleteCoupon(code) {
     let coupons = this.getCoupons().filter(c => c.code.toUpperCase() !== code.toUpperCase());
     localStorage.setItem("noor_coupons", JSON.stringify(coupons));
     this.emitChange("coupons");
+    if (window.FirebaseRealtime?.deleteCouponFromFirebase) {
+      window.FirebaseRealtime.deleteCouponFromFirebase(code);
+    }
   }
 
   validateCoupon(code, subtotal) {
@@ -197,6 +218,9 @@ class DataStore {
     orders.unshift(newOrder);
     localStorage.setItem("noor_orders", JSON.stringify(orders));
     this.emitChange("orders");
+    if (window.FirebaseRealtime?.syncOrderToFirebase) {
+      window.FirebaseRealtime.syncOrderToFirebase(newOrder);
+    }
     return newOrder;
   }
 
@@ -205,15 +229,20 @@ class DataStore {
     const idx = orders.findIndex(o => o.orderId === orderId);
     if (idx !== -1) {
       orders[idx].status = status;
-      if (status === "Pending") orders[idx].currentStep = 1;
-      else if (status === "Processing" || status === "Crafting") orders[idx].currentStep = 2;
-      else if (status === "Confirmed" || status === "Inspecting") orders[idx].currentStep = 3;
-      else if (status === "Shipped" || status === "Dispatched") orders[idx].currentStep = 4;
-      else if (status === "Delivered" || status === "Completed") orders[idx].currentStep = 5;
-      else if (status === "Cancelled") orders[idx].currentStep = 0;
+      let step = 2;
+      if (status === "Pending") step = 1;
+      else if (status === "Processing" || status === "Crafting") step = 2;
+      else if (status === "Confirmed" || status === "Inspecting") step = 3;
+      else if (status === "Shipped" || status === "Dispatched") step = 4;
+      else if (status === "Delivered" || status === "Completed") step = 5;
+      else if (status === "Cancelled") step = 0;
+      orders[idx].currentStep = step;
 
       localStorage.setItem("noor_orders", JSON.stringify(orders));
       this.emitChange("orders");
+      if (window.FirebaseRealtime?.updateOrderStatusInFirebase) {
+        window.FirebaseRealtime.updateOrderStatusInFirebase(orderId, status, step);
+      }
       return true;
     }
     return false;
