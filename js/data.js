@@ -32,14 +32,14 @@ const DEFAULT_SETTINGS = {
 const DEFAULT_CATEGORIES = [
   { 
     id: "all", 
-    name: "সকল কালেকশন (All Masterpieces)", 
+    name: "সকল (All)", 
     icon: "diamond", 
     slug: "all", 
-    tag: "Curated Collection" 
+    tag: "All Collection" 
   },
   { 
     id: "apparel", 
-    name: "আবায়া ও থোব (Abaya & Apparel)", 
+    name: "আবায়া ও থোব (Abayas)", 
     icon: "styler", 
     slug: "apparel", 
     tag: "01 / Wardrobe", 
@@ -47,7 +47,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "prayer", 
-    name: "রয়েল জায়নামাজ (Prayer Rugs)", 
+    name: "জায়নামাজ (Prayer Rugs)", 
     icon: "folded_hands", 
     slug: "prayer", 
     tag: "02 / Worship", 
@@ -55,7 +55,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "books", 
-    name: "কুরআন ও ইসলামিক বই (Quran & Books)", 
+    name: "কুরআন ও বই (Quran)", 
     icon: "menu_book", 
     slug: "books", 
     tag: "03 / Knowledge", 
@@ -63,7 +63,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "tasbih", 
-    name: "হ্যান্ডক্রাফটেড তাসবিহ (Tasbih)", 
+    name: "তাসবিহ (Tasbih)", 
     icon: "adjust", 
     slug: "tasbih", 
     tag: "04 / Remembrance", 
@@ -71,7 +71,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "fragrance", 
-    name: "খাঁটি আতর ও উদ (Attar & Oud)", 
+    name: "আতর ও উদ (Attar & Oud)", 
     icon: "sanitizer", 
     slug: "fragrance", 
     tag: "05 / Scent", 
@@ -79,7 +79,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "gifts", 
-    name: "লাক্সারি গিফট বক্স (Gift Hampers)", 
+    name: "গিফট বক্স (Gifts)", 
     icon: "featured_seasonal_and_gifts", 
     slug: "gifts", 
     tag: "06 / Gifting", 
@@ -87,7 +87,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "fashion", 
-    name: "মডেস্ট সিল্ক হিজাব (Modest Fashion)", 
+    name: "সিল্ক হিজাব (Hijabs)", 
     icon: "apparel", 
     slug: "fashion", 
     tag: "07 / Style", 
@@ -95,7 +95,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "living", 
-    name: "ক্যালিগ্রাফি ও ডেকোর (Home Sanctuary)", 
+    name: "ডেকোর (Decor)", 
     icon: "home", 
     slug: "living", 
     tag: "08 / Living", 

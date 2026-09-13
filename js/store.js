@@ -9,7 +9,7 @@ class DataStore {
   }
 
   init() {
-    const DATA_VERSION = "v6_custom_hero_clean_orders";
+    const DATA_VERSION = "v7_compact_categories";
     const currentVersion = localStorage.getItem("noor_data_version");
 
     if (currentVersion !== DATA_VERSION) {

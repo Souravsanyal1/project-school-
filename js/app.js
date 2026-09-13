@@ -149,8 +149,9 @@ function renderCategories() {
 
   if (shopFilterContainer) {
     shopFilterContainer.innerHTML = categories.map(cat => `
-      <button class="px-5 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all ${currentCategory === cat.id ? 'bg-slate-900 text-white border-2 border-amber-500 shadow-lg scale-105' : 'bg-white text-slate-700 hover:text-amber-700 hover:border-amber-400 border border-slate-300 shadow-sm'}" onclick="setCategoryFilter('${cat.id}')">
-        ${cat.name}
+      <button class="category-filter-btn ${currentCategory === cat.id ? 'active' : 'inactive'}" onclick="setCategoryFilter('${cat.id}')">
+        <span class="material-symbols-outlined text-[15px]">${cat.icon || 'diamond'}</span>
+        <span>${cat.name}</span>
       </button>
     `).join("");
   }
