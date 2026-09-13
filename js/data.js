@@ -32,14 +32,14 @@ const DEFAULT_SETTINGS = {
 const DEFAULT_CATEGORIES = [
   { 
     id: "all", 
-    name: "সকল (All)", 
+    name: "সকল কালেকশন", 
     icon: "diamond", 
     slug: "all", 
     tag: "All Collection" 
   },
   { 
     id: "apparel", 
-    name: "আবায়া ও থোব (Abayas)", 
+    name: "আবায়া ও পোশাক", 
     icon: "styler", 
     slug: "apparel", 
     tag: "01 / Wardrobe", 
@@ -47,7 +47,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "prayer", 
-    name: "জায়নামাজ (Prayer Rugs)", 
+    name: "জায়নামাজ", 
     icon: "folded_hands", 
     slug: "prayer", 
     tag: "02 / Worship", 
@@ -55,7 +55,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "books", 
-    name: "কুরআন ও বই (Quran)", 
+    name: "কুরআন ও বই", 
     icon: "menu_book", 
     slug: "books", 
     tag: "03 / Knowledge", 
@@ -63,7 +63,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "tasbih", 
-    name: "তাসবিহ (Tasbih)", 
+    name: "তাসবিহ", 
     icon: "adjust", 
     slug: "tasbih", 
     tag: "04 / Remembrance", 
@@ -71,7 +71,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "fragrance", 
-    name: "আতর ও উদ (Attar & Oud)", 
+    name: "আতর ও উদ", 
     icon: "sanitizer", 
     slug: "fragrance", 
     tag: "05 / Scent", 
@@ -79,7 +79,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "gifts", 
-    name: "গিফট বক্স (Gifts)", 
+    name: "গিফট বক্স", 
     icon: "featured_seasonal_and_gifts", 
     slug: "gifts", 
     tag: "06 / Gifting", 
@@ -87,7 +87,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "fashion", 
-    name: "সিল্ক হিজাব (Hijabs)", 
+    name: "হিজাব ও স্কার্ফ", 
     icon: "apparel", 
     slug: "fashion", 
     tag: "07 / Style", 
@@ -95,7 +95,7 @@ const DEFAULT_CATEGORIES = [
   },
   { 
     id: "living", 
-    name: "ডেকোর (Decor)", 
+    name: "ইসলামিক ডেকোর", 
     icon: "home", 
     slug: "living", 
     tag: "08 / Living", 

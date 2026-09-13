@@ -148,12 +148,15 @@ function renderCategories() {
   }
 
   if (shopFilterContainer) {
-    shopFilterContainer.innerHTML = categories.map(cat => `
-      <button class="category-filter-btn ${currentCategory === cat.id ? 'active' : 'inactive'}" onclick="setCategoryFilter('${cat.id}')">
-        <span class="material-symbols-outlined text-[15px]">${cat.icon || 'diamond'}</span>
-        <span>${cat.name}</span>
-      </button>
-    `).join("");
+    shopFilterContainer.innerHTML = categories.map(cat => {
+      const cleanName = (cat.name || cat.id).replace(/\s*\([^)]*\)/g, "").trim() || cat.name;
+      return `
+        <button type="button" class="category-filter-btn ${currentCategory === cat.id ? 'active' : 'inactive'}" onclick="setCategoryFilter('${cat.id}')">
+          <span class="material-symbols-outlined text-[16px]">${cat.icon || 'diamond'}</span>
+          <span class="whitespace-nowrap">${cleanName}</span>
+        </button>
+      `;
+    }).join("");
   }
 }
 
