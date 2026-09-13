@@ -242,3 +242,17 @@ const DEFAULT_COUPONS = [
 ];
 
 const DEFAULT_ORDERS = [];
+
+const DEFAULT_ADDRESSES = [
+  {
+    id: "addr-1",
+    title: "Home / প্রধান বাসস্থান",
+    name: "Princess Yasmin Al-Sabah",
+    phone: "+8801712345678",
+    street: "Villa 42, Road 11, Gulshan 2",
+    city: "Dhaka - 1212",
+    deliveryArea: "inside",
+    isDefault: true
+  }
+];
+

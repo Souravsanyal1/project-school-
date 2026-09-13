@@ -525,6 +525,21 @@
         <!-- Left: Form Steps (7 Cols) -->
         <div class="lg:col-span-7 space-y-space-md">
           
+          <!-- Quick Saved Address Selector -->
+          <div id="checkout-saved-addresses-wrapper" class="bg-surface-container-low p-4 border border-secondary/30 rounded-none space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]">bookmark</span> Quick Select Saved Address
+              </span>
+              <button type="button" class="text-[11px] text-secondary hover:underline font-bold" onclick="openUserAddressModal()">
+                + Add New
+              </button>
+            </div>
+            <div id="checkout-saved-addresses-pills" class="flex flex-wrap gap-2 pt-1">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
           <!-- Step 1: Customer Information -->
           <div class="bg-surface-container-lowest p-space-md shadow-sm space-y-space-sm relative border border-secondary/20">
             <div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
@@ -785,20 +800,18 @@
 
             <!-- TAB 3: ADDRESSES -->
             <div id="member-tab-addresses" class="space-y-space-md hidden">
-              <div class="flex justify-between items-center bg-surface-container-low p-6 border border-secondary/20">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-surface-container-low p-6 border border-secondary/20">
                 <div>
                   <h2 class="font-headline-lg text-on-surface">Saved Delivery Residences</h2>
-                  <p class="text-body-sm text-on-surface-variant">Manage your primary residences and shipping destinations.</p>
+                  <p class="text-body-sm text-on-surface-variant">Manage your primary residences and shipping destinations (ডেলিভারি ঠিকানা)।</p>
                 </div>
+                <button type="button" class="px-5 py-2.5 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-all font-headline-sm uppercase text-xs flex items-center gap-2 shadow-sm" onclick="openUserAddressModal()">
+                  <span class="material-symbols-outlined text-[18px]">add_location_alt</span>
+                  <span>Add New Residence</span>
+                </button>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-surface-container-lowest p-6 border border-secondary/30 relative">
-                  <span class="px-3 py-1 bg-secondary text-on-secondary font-label-md uppercase text-[10px] tracking-wider absolute top-4 right-4">Default Residence</span>
-                  <h3 class="font-headline-sm text-on-surface mt-6">Princess Yasmin Al-Sabah</h3>
-                  <p class="text-body-sm text-on-surface-variant">Villa 42, Road 11, Gulshan 2</p>
-                  <p class="text-body-sm text-on-surface-variant">Dhaka - 1212, Bangladesh</p>
-                  <p class="text-body-sm text-secondary pt-2">Phone: +8801712345678</p>
-                </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="member-addresses-grid">
+                <!-- Dynamically rendered addresses -->
               </div>
             </div>
 
@@ -967,6 +980,98 @@
   <div class="center-modal-overlay" id="order-success-modal">
     <div class="center-modal-box p-8 max-w-lg">
       <div id="order-success-content"></div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================
+       USER ADDRESS MODAL (ADD / EDIT RESIDENCE)
+       ========================================================== -->
+  <div class="center-modal-overlay" id="user-address-modal" onclick="if(event.target === this) closeUserAddressModal()">
+    <div class="center-modal-box p-6 md:p-8 max-w-lg">
+      <div class="flex justify-between items-center pb-4 border-b border-secondary/20 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-secondary/15 text-secondary flex items-center justify-center">
+            <span class="material-symbols-outlined text-[22px]">location_on</span>
+          </div>
+          <div>
+            <h3 class="font-headline-sm uppercase tracking-wider text-on-surface" id="user-address-modal-title">Add Delivery Residence</h3>
+            <p class="text-xs text-on-surface-variant">নতুন ডেলিভারি ঠিকানা যোগ অথবা পরিবর্তন করুন</p>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" onclick="closeUserAddressModal()">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <form id="user-address-form" onsubmit="handleUserAddressSubmit(event)" class="space-y-4">
+        <input type="hidden" id="user-addr-id" value="" />
+
+        <div>
+          <label class="text-label-md uppercase text-on-surface-variant block mb-1">Address Type / ধরণ *</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="p-2.5 border border-outline-variant flex items-center justify-center gap-1.5 cursor-pointer hover:border-secondary text-xs font-semibold rounded transition-colors text-on-surface">
+              <input type="radio" name="userAddrLabel" value="Home / বাসা" checked onchange="document.getElementById('user-addr-title-custom').value = this.value" />
+              <span>🏠 Home</span>
+            </label>
+            <label class="p-2.5 border border-outline-variant flex items-center justify-center gap-1.5 cursor-pointer hover:border-secondary text-xs font-semibold rounded transition-colors text-on-surface">
+              <input type="radio" name="userAddrLabel" value="Office / অফিস" onchange="document.getElementById('user-addr-title-custom').value = this.value" />
+              <span>🏢 Office</span>
+            </label>
+            <label class="p-2.5 border border-outline-variant flex items-center justify-center gap-1.5 cursor-pointer hover:border-secondary text-xs font-semibold rounded transition-colors text-on-surface">
+              <input type="radio" name="userAddrLabel" value="Other / অন্যান্য" onchange="document.getElementById('user-addr-title-custom').value = this.value" />
+              <span>📍 Other</span>
+            </label>
+          </div>
+          <input type="text" id="user-addr-title-custom" class="w-full mt-2 px-3 py-2 bg-surface border border-outline-variant text-body-sm focus:border-secondary outline-none transition-colors" placeholder="Label name (e.g. Home, Office, Villa)" value="Home / বাসা" required />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-label-md uppercase text-on-surface-variant block">Recipient Full Name *</label>
+            <input type="text" id="user-addr-name" class="w-full px-3 py-2.5 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" placeholder="e.g. Mohammad Ali" required />
+          </div>
+          <div class="space-y-1">
+            <label class="text-label-md uppercase text-on-surface-variant block">Contact Telephone *</label>
+            <input type="tel" id="user-addr-phone" class="w-full px-3 py-2.5 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" placeholder="017XXXXXXXX" required />
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-label-md uppercase text-on-surface-variant block">Street Address / House & Road *</label>
+          <textarea id="user-addr-street" rows="2" class="w-full px-3 py-2.5 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" placeholder="House 12, Road 4, Sector 3, Uttara / Gulshan" required></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-label-md uppercase text-on-surface-variant block">City / District / Area *</label>
+            <input type="text" id="user-addr-city" class="w-full px-3 py-2.5 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" placeholder="Dhaka / Gazipur" required />
+          </div>
+          <div class="space-y-1">
+            <label class="text-label-md uppercase text-on-surface-variant block">Delivery Zone *</label>
+            <select id="user-addr-zone" class="w-full px-3 py-2.5 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors">
+              <option value="inside">Inside Dhaka (৳80)</option>
+              <option value="outside">Outside Dhaka / Gazipur (৳150)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <label class="flex items-center gap-2 cursor-pointer text-body-sm text-on-surface select-none">
+            <input type="checkbox" id="user-addr-default" class="accent-secondary w-4 h-4 cursor-pointer" />
+            <span>Set as Default Residence (ডিফল্ট ঠিকানা হিসেবে সেট করুন)</span>
+          </label>
+        </div>
+
+        <div class="flex gap-3 pt-4 border-t border-secondary/20">
+          <button type="button" class="flex-1 py-3 bg-surface-container-high text-on-surface font-label-md uppercase tracking-wider hover:bg-surface-container-highest transition-colors" onclick="closeUserAddressModal()">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-3 bg-primary text-on-primary font-label-md uppercase tracking-wider hover:bg-secondary hover:text-on-secondary transition-colors font-bold shadow-md">
+            Save Residence
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 

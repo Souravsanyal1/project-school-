@@ -336,6 +336,77 @@ class DataStore {
     return list.includes(productId);
   }
 
+  // --- User Addresses (Saved Delivery Residences) ---
+  getAddresses() {
+    try {
+      const list = JSON.parse(localStorage.getItem("noor_addresses"));
+      if (Array.isArray(list) && list.length > 0) {
+        return list;
+      }
+      return typeof DEFAULT_ADDRESSES !== "undefined" ? DEFAULT_ADDRESSES : [];
+    } catch {
+      return typeof DEFAULT_ADDRESSES !== "undefined" ? DEFAULT_ADDRESSES : [];
+    }
+  }
+
+  getAddressById(id) {
+    const addresses = this.getAddresses();
+    return addresses.find(a => a.id === id) || null;
+  }
+
+  getDefaultAddress() {
+    const list = this.getAddresses();
+    return list.find(a => a.isDefault) || list[0] || null;
+  }
+
+  saveAddress(addressData) {
+    let list = this.getAddresses();
+    if (addressData.isDefault) {
+      list.forEach(a => a.isDefault = false);
+    }
+    if (addressData.id) {
+      const idx = list.findIndex(a => a.id === addressData.id);
+      if (idx !== -1) {
+        list[idx] = { ...list[idx], ...addressData };
+      } else {
+        list.unshift(addressData);
+      }
+    } else {
+      addressData.id = "addr-" + Date.now();
+      if (list.length === 0) {
+        addressData.isDefault = true;
+      }
+      list.unshift(addressData);
+    }
+    // Ensure at least one address is marked default
+    if (!list.some(a => a.isDefault) && list.length > 0) {
+      list[0].isDefault = true;
+    }
+    localStorage.setItem("noor_addresses", JSON.stringify(list));
+    this.emitChange("addresses");
+    return addressData;
+  }
+
+  deleteAddress(id) {
+    let list = this.getAddresses();
+    const wasDefault = list.find(a => a.id === id)?.isDefault;
+    list = list.filter(a => a.id !== id);
+    if (wasDefault && list.length > 0) {
+      list[0].isDefault = true;
+    }
+    localStorage.setItem("noor_addresses", JSON.stringify(list));
+    this.emitChange("addresses");
+  }
+
+  setDefaultAddress(id) {
+    let list = this.getAddresses();
+    list.forEach(a => {
+      a.isDefault = (a.id === id);
+    });
+    localStorage.setItem("noor_addresses", JSON.stringify(list));
+    this.emitChange("addresses");
+  }
+
   // Reset & Backup
   resetToDefault() {
     localStorage.setItem("noor_settings", JSON.stringify(DEFAULT_SETTINGS));
@@ -343,6 +414,7 @@ class DataStore {
     localStorage.setItem("noor_categories", JSON.stringify(DEFAULT_CATEGORIES));
     localStorage.setItem("noor_coupons", JSON.stringify(DEFAULT_COUPONS));
     localStorage.setItem("noor_orders", JSON.stringify(DEFAULT_ORDERS));
+    localStorage.setItem("noor_addresses", JSON.stringify(DEFAULT_ADDRESSES));
     localStorage.setItem("noor_cart", JSON.stringify([]));
     localStorage.setItem("noor_wishlist", JSON.stringify(["prod-1", "prod-2", "prod-3"]));
     this.emitChange("all");
@@ -354,7 +426,8 @@ class DataStore {
       products: this.getProducts(),
       categories: this.getCategories(),
       coupons: this.getCoupons(),
-      orders: this.getOrders()
+      orders: this.getOrders(),
+      addresses: this.getAddresses()
     }, null, 2);
   }
 
@@ -366,6 +439,7 @@ class DataStore {
       if (data.categories) localStorage.setItem("noor_categories", JSON.stringify(data.categories));
       if (data.coupons) localStorage.setItem("noor_coupons", JSON.stringify(data.coupons));
       if (data.orders) localStorage.setItem("noor_orders", JSON.stringify(data.orders));
+      if (data.addresses) localStorage.setItem("noor_addresses", JSON.stringify(data.addresses));
       this.emitChange("all");
       return { success: true };
     } catch (err) {

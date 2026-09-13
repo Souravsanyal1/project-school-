@@ -35,6 +35,8 @@ function initApp() {
   renderShopProducts();
   updateCartUI();
   updateWishlistUI();
+  renderMemberAddresses();
+  renderCheckoutAddressPicker();
   setupEventListeners();
 
   // Load initial view or product
@@ -51,7 +53,13 @@ function initApp() {
     renderShopProducts();
     updateCartUI();
     updateWishlistUI();
-    if (activeView === "member") renderMemberOrders();
+    if (activeView === "member") {
+      renderMemberOrders();
+      renderMemberAddresses();
+    }
+    if (activeView === "checkout") {
+      renderCheckoutAddressPicker();
+    }
   });
 }
 
@@ -79,9 +87,11 @@ function switchView(viewName, scroll = true) {
 
   if (viewName === "checkout") {
     renderCheckoutSummary();
+    renderCheckoutAddressPicker();
     updatePaymentInstruction();
   } else if (viewName === "member") {
     renderMemberOrders();
+    renderMemberAddresses();
   }
 
   if (scroll) {
@@ -1006,6 +1016,225 @@ function switchMemberTab(tabId) {
       if (navBtn) navBtn.className = "w-full flex items-center justify-between px-4 py-3 hover:bg-surface-container-high text-on-surface font-headline-sm transition-all text-left";
     }
   });
+
+  if (tabId === "addresses") {
+    renderMemberAddresses();
+  }
+}
+
+// ==========================================
+// USER ADDRESS MANAGEMENT FUNCTIONS
+// ==========================================
+function renderMemberAddresses() {
+  const container = document.getElementById("member-addresses-grid");
+  if (!container) return;
+
+  const addresses = Store.getAddresses();
+  if (!addresses || addresses.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full py-12 text-center bg-surface-container-lowest border border-dashed border-secondary/30 p-8 space-y-4">
+        <div class="w-12 h-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center mx-auto">
+          <span class="material-symbols-outlined text-[28px]">home_pin</span>
+        </div>
+        <h4 class="font-headline-sm text-on-surface">No Saved Addresses Found</h4>
+        <p class="text-body-sm text-on-surface-variant max-w-md mx-auto">You have not added any delivery residence yet. Add your home or office address for fast, 1-click checkout.</p>
+        <button type="button" class="px-6 py-2.5 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm uppercase text-xs inline-flex items-center gap-2 shadow-sm" onclick="openUserAddressModal()">
+          <span class="material-symbols-outlined text-[16px]">add</span> Add First Residence
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = addresses.map(addr => `
+    <div class="bg-surface-container-lowest p-6 border ${addr.isDefault ? 'border-secondary shadow-md' : 'border-secondary/30'} relative flex flex-col justify-between group shadow-sm transition-all hover:border-secondary">
+      <div>
+        <div class="flex justify-between items-start mb-3 gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs px-2.5 py-0.5 bg-surface-container-high text-secondary font-bold uppercase tracking-wider border border-secondary/30">
+              ${addr.title || 'Residence'}
+            </span>
+            <span class="text-[10px] px-2 py-0.5 bg-surface-container text-on-surface-variant uppercase">
+              ${addr.deliveryArea === 'outside' ? 'Outside Dhaka (৳150)' : 'Inside Dhaka (৳80)'}
+            </span>
+          </div>
+          ${addr.isDefault ? `
+            <span class="px-2.5 py-1 bg-secondary text-on-secondary font-label-md uppercase text-[10px] tracking-wider font-bold">
+              Default Residence
+            </span>
+          ` : `
+            <button type="button" class="text-[11px] text-secondary hover:underline font-bold uppercase tracking-wider" onclick="makeAddressDefault('${addr.id}')">
+              Set as Default
+            </button>
+          `}
+        </div>
+
+        <h3 class="font-headline-sm text-on-surface mt-2 font-bold">${addr.name}</h3>
+        <p class="text-body-sm text-on-surface-variant mt-1 leading-relaxed">${addr.street}</p>
+        <p class="text-body-sm text-on-surface-variant font-medium">${addr.city}</p>
+        <p class="text-body-sm text-secondary pt-2 flex items-center gap-1.5 font-mono">
+          <span class="material-symbols-outlined text-[16px]">call</span>
+          <span>${addr.phone}</span>
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3 pt-4 mt-4 border-t border-secondary/15">
+        <button type="button" class="text-xs text-primary hover:text-secondary font-bold flex items-center gap-1 transition-colors" onclick="openUserAddressModal('${addr.id}')">
+          <span class="material-symbols-outlined text-[15px]">edit</span> Edit
+        </button>
+        <button type="button" class="text-xs text-error/80 hover:text-error font-bold flex items-center gap-1 transition-colors ml-auto" onclick="deleteUserAddress('${addr.id}')">
+          <span class="material-symbols-outlined text-[15px]">delete</span> Delete
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function openUserAddressModal(addressId = null) {
+  const modal = document.getElementById("user-address-modal");
+  const form = document.getElementById("user-address-form");
+  const titleEl = document.getElementById("user-address-modal-title");
+  if (!modal || !form) return;
+
+  form.reset();
+
+  if (addressId) {
+    const addr = Store.getAddressById(addressId);
+    if (addr) {
+      if (titleEl) titleEl.textContent = "Edit Delivery Residence";
+      document.getElementById("user-addr-id").value = addr.id;
+      document.getElementById("user-addr-title-custom").value = addr.title || "Home / বাসা";
+      document.getElementById("user-addr-name").value = addr.name || "";
+      document.getElementById("user-addr-phone").value = addr.phone || "";
+      document.getElementById("user-addr-street").value = addr.street || "";
+      document.getElementById("user-addr-city").value = addr.city || "";
+      document.getElementById("user-addr-zone").value = addr.deliveryArea || "inside";
+      document.getElementById("user-addr-default").checked = !!addr.isDefault;
+
+      const radio = form.querySelector(`input[name="userAddrLabel"][value="${addr.title}"]`);
+      if (radio) radio.checked = true;
+    }
+  } else {
+    if (titleEl) titleEl.textContent = "Add Delivery Residence";
+    document.getElementById("user-addr-id").value = "";
+    document.getElementById("user-addr-title-custom").value = "Home / বাসা";
+    document.getElementById("user-addr-name").value = "";
+    document.getElementById("user-addr-phone").value = "";
+    document.getElementById("user-addr-street").value = "";
+    document.getElementById("user-addr-city").value = "Dhaka";
+    document.getElementById("user-addr-zone").value = "inside";
+    document.getElementById("user-addr-default").checked = Store.getAddresses().length === 0;
+  }
+
+  modal.classList.add("active");
+}
+
+function closeUserAddressModal() {
+  const modal = document.getElementById("user-address-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+function handleUserAddressSubmit(e) {
+  if (e) e.preventDefault();
+  const id = document.getElementById("user-addr-id")?.value || "";
+  const title = document.getElementById("user-addr-title-custom")?.value.trim() || "Home";
+  const name = document.getElementById("user-addr-name")?.value.trim() || "";
+  const phone = document.getElementById("user-addr-phone")?.value.trim() || "";
+  const street = document.getElementById("user-addr-street")?.value.trim() || "";
+  const city = document.getElementById("user-addr-city")?.value.trim() || "";
+  const deliveryArea = document.getElementById("user-addr-zone")?.value || "inside";
+  const isDefault = document.getElementById("user-addr-default")?.checked || false;
+
+  if (!name || !phone || !street || !city) {
+    showToast("Please fill in all required address fields", "error");
+    return;
+  }
+
+  const addrData = {
+    title,
+    name,
+    phone,
+    street,
+    city,
+    deliveryArea,
+    isDefault
+  };
+
+  if (id) {
+    addrData.id = id;
+  }
+
+  Store.saveAddress(addrData);
+  showToast(id ? "Residence updated successfully!" : "New residence added successfully!", "success");
+  closeUserAddressModal();
+  renderMemberAddresses();
+  renderCheckoutAddressPicker();
+}
+
+function makeAddressDefault(id) {
+  Store.setDefaultAddress(id);
+  showToast("Default residence updated!", "success");
+  renderMemberAddresses();
+  renderCheckoutAddressPicker();
+}
+
+function deleteUserAddress(id) {
+  if (confirm("Are you sure you want to remove this delivery address?")) {
+    Store.deleteAddress(id);
+    showToast("Residence removed", "success");
+    renderMemberAddresses();
+    renderCheckoutAddressPicker();
+  }
+}
+
+// Checkout Address Quick Picker
+function renderCheckoutAddressPicker() {
+  const wrapper = document.getElementById("checkout-saved-addresses-wrapper");
+  const container = document.getElementById("checkout-saved-addresses-pills");
+  if (!wrapper || !container) return;
+
+  const addresses = Store.getAddresses();
+  if (!addresses || addresses.length === 0) {
+    wrapper.style.display = "none";
+    return;
+  }
+
+  wrapper.style.display = "block";
+  container.innerHTML = addresses.map(addr => `
+    <button type="button" class="px-3 py-1.5 bg-surface border ${addr.isDefault ? 'border-secondary text-secondary font-bold ring-1 ring-secondary/30' : 'border-outline-variant text-on-surface hover:border-secondary'} text-xs rounded transition-all flex items-center gap-1.5 shadow-sm" onclick="selectCheckoutAddress('${addr.id}')">
+      <span class="material-symbols-outlined text-[15px]">${addr.isDefault ? 'verified' : 'location_on'}</span>
+      <span>${addr.title} (${addr.name.split(" ")[0]})</span>
+    </button>
+  `).join("");
+}
+
+function selectCheckoutAddress(id) {
+  const addr = Store.getAddressById(id);
+  if (!addr) return;
+
+  const nameParts = addr.name.split(" ");
+  const firstName = nameParts[0] || "";
+  const lastName = nameParts.slice(1).join(" ") || "";
+
+  const firstNameInput = document.getElementById("checkout-first-name");
+  const lastNameInput = document.getElementById("checkout-last-name");
+  const phoneInput = document.getElementById("checkout-phone");
+  const streetInput = document.getElementById("checkout-street");
+  const cityInput = document.getElementById("checkout-city");
+
+  if (firstNameInput) firstNameInput.value = firstName;
+  if (lastNameInput) lastNameInput.value = lastName;
+  if (phoneInput) phoneInput.value = addr.phone;
+  if (streetInput) streetInput.value = addr.street;
+  if (cityInput) cityInput.value = addr.city;
+
+  const deliveryRadio = document.querySelector(`input[name="checkoutDelivery"][value="${addr.deliveryArea || 'inside'}"]`);
+  if (deliveryRadio) {
+    deliveryRadio.checked = true;
+  }
+
+  renderCheckoutSummary();
+  showToast(`Autofilled with ${addr.title} (${addr.name})`, "success");
 }
 
 // Wishlist Functionality
