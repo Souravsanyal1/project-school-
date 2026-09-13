@@ -1185,20 +1185,34 @@ function closeOrderSuccessModal() {
 }
 
 // Member Portal & Live 5-Step Order Tracking
+// Member Portal & Live 5-Step Order Tracking
 function renderMemberOrders() {
-  const orders = Store.getOrders();
+  const allOrders = Store.getOrders();
   const container = document.getElementById("member-orders-container");
   if (!container) return;
 
   const settings = Store.getSettings();
   const curr = settings.currency || "৳";
 
-  if (orders.length === 0) {
-    container.innerHTML = `<p class="text-body-sm text-on-surface-variant p-6">No recent commissions found.</p>`;
+  // Filter out cancelled orders so they are completely removed from user tracking view
+  const activeOrders = allOrders.filter(o => o.status !== "Cancelled");
+
+  if (activeOrders.length === 0) {
+    container.innerHTML = `
+      <div class="bg-surface-container-low p-12 text-center text-slate-500 border border-secondary/20 rounded-xl space-y-3">
+        <span class="material-symbols-outlined text-[54px] text-amber-500/70">local_mall</span>
+        <h3 class="font-headline-md text-on-surface font-bold text-lg">আপনার কোনো সক্রিয় অর্ডার নেই</h3>
+        <p class="text-body-sm text-on-surface-variant max-w-md mx-auto">নতুন কোনো পণ্য অর্ডার করলে তার ৫-ধাপের লাইভ ট্র্যাকিং এখানে প্রদর্শিত হবে।</p>
+        <button class="btn-black px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-3 inline-flex items-center gap-2" onclick="switchView('shop')">
+          <span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+          কালেকশন দেখুন
+        </button>
+      </div>
+    `;
     return;
   }
 
-  const latest = orders[0];
+  const latest = activeOrders[0];
   const step = latest.currentStep || 2;
 
   container.innerHTML = `
@@ -1208,11 +1222,11 @@ function renderMemberOrders() {
       
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 pb-6 border-b border-secondary/10">
         <div>
-          <span class="font-label-md text-secondary uppercase tracking-widest block mb-1">Order #${latest.orderId}</span>
+          <span class="font-label-md text-secondary uppercase tracking-widest block mb-1">অর্ডার #${latest.orderId}</span>
           <h3 class="font-headline-md text-on-surface">${latest.items.map(i => i.name).join(" & ")}</h3>
         </div>
         <div class="flex items-center gap-3">
-          <span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label-md uppercase tracking-wider">${latest.status}</span>
+          <span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label-md uppercase tracking-wider font-bold">${latest.status}</span>
           <span class="text-body-sm text-on-surface-variant">${latest.date}</span>
         </div>
       </div>
@@ -1230,9 +1244,9 @@ function renderMemberOrders() {
                 <span class="material-symbols-outlined text-[20px]">check</span>
               </div>
               <div>
-                <span class="font-label-md text-secondary uppercase block mb-1">Step 01</span>
-                <h4 class="font-headline-sm text-on-surface">Order Placed</h4>
-                <p class="text-body-sm text-on-surface-variant">Confirmed</p>
+                <span class="font-label-md text-secondary uppercase block mb-1">ধাপ ০১</span>
+                <h4 class="font-headline-sm text-on-surface font-semibold">অর্ডার রিসিভড</h4>
+                <p class="text-body-sm text-on-surface-variant">কনফার্মড</p>
               </div>
             </div>
 
@@ -1242,9 +1256,9 @@ function renderMemberOrders() {
                 <span class="material-symbols-outlined text-[20px]">handyman</span>
               </div>
               <div>
-                <span class="font-label-md text-secondary uppercase block mb-1">Step 02</span>
-                <h4 class="font-headline-sm text-on-surface">Artisanal Crafting</h4>
-                <p class="text-body-sm text-on-surface-variant">Atelier Tailoring</p>
+                <span class="font-label-md text-secondary uppercase block mb-1">ধাপ ০২</span>
+                <h4 class="font-headline-sm text-on-surface font-semibold">কারুশিল্প ও টেলারিং</h4>
+                <p class="text-body-sm text-on-surface-variant">প্রসেসিং</p>
               </div>
             </div>
 
@@ -1254,9 +1268,9 @@ function renderMemberOrders() {
                 <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">verified</span>
               </div>
               <div>
-                <span class="font-label-md text-secondary uppercase block mb-1">Step 03</span>
-                <h4 class="font-headline-sm text-on-surface ${step === 3 ? 'font-bold' : ''}">Quality Inspection</h4>
-                <p class="text-body-sm text-secondary">${step === 3 ? 'In Progress' : 'Inspected'}</p>
+                <span class="font-label-md text-secondary uppercase block mb-1">ধাপ ০৩</span>
+                <h4 class="font-headline-sm text-on-surface font-semibold ${step === 3 ? 'font-bold' : ''}">মান পরীক্ষা</h4>
+                <p class="text-body-sm text-secondary">${step === 3 ? 'চলমান' : 'যাচাই সম্পন্ন'}</p>
               </div>
             </div>
 
@@ -1266,9 +1280,9 @@ function renderMemberOrders() {
                 <span class="material-symbols-outlined text-[20px]">local_shipping</span>
               </div>
               <div>
-                <span class="font-label-md text-on-surface-variant uppercase block mb-1">Step 04</span>
-                <h4 class="font-headline-sm text-on-surface">Dispatched</h4>
-                <p class="text-body-sm text-on-surface-variant">Courier En Route</p>
+                <span class="font-label-md text-on-surface-variant uppercase block mb-1">ধাপ ০৪</span>
+                <h4 class="font-headline-sm text-on-surface font-semibold">কুরিয়ারে হস্তান্তর</h4>
+                <p class="text-body-sm text-on-surface-variant">ডেলিভারির পথে</p>
               </div>
             </div>
 
@@ -1278,9 +1292,9 @@ function renderMemberOrders() {
                 <span class="material-symbols-outlined text-[20px]">home</span>
               </div>
               <div>
-                <span class="font-label-md text-on-surface-variant uppercase block mb-1">Step 05</span>
-                <h4 class="font-headline-sm text-on-surface">Delivered</h4>
-                <p class="text-body-sm text-on-surface-variant">White-Glove Handover</p>
+                <span class="font-label-md text-on-surface-variant uppercase block mb-1">ধাপ ০৫</span>
+                <h4 class="font-headline-sm text-on-surface font-semibold">ডেলিভারি সম্পন্ন</h4>
+                <p class="text-body-sm text-on-surface-variant">গ্রাহকের নিকট হস্তান্তর</p>
               </div>
             </div>
           </div>
@@ -1292,54 +1306,54 @@ function renderMemberOrders() {
           <img src="${latest.items[0]?.image || ''}" class="w-14 h-14 object-cover bg-surface-container border border-secondary/20 shrink-0">
           <div>
             <span class="font-headline-sm text-on-surface block">${latest.items.map(i => i.name).join(", ")}</span>
-            <span class="text-body-sm text-on-surface-variant">Total Bill: <strong>${curr}${Number(latest.total).toLocaleString()}</strong></span>
-            ${latest.status === 'Cancelled' ? `<span class="text-xs text-error font-bold block mt-1">❌ Cancelled: ${latest.cancelReason || 'Cancelled by customer'}</span>` : ''}
+            <span class="text-body-sm text-on-surface-variant">মোট বিল: <strong>${curr}${Number(latest.total).toLocaleString()}</strong></span>
           </div>
         </div>
         <div class="flex flex-wrap gap-2.5">
-          ${latest.status !== 'Cancelled' && latest.status !== 'Delivered' ? `
-            <button class="px-4 py-2 bg-error/10 text-error hover:bg-error hover:text-white transition-colors font-headline-sm text-xs uppercase rounded border border-error/30 flex items-center gap-1.5" onclick="handleUserCancelOrder('${latest.orderId}')">
-              <span class="material-symbols-outlined text-[16px]">cancel</span> Cancel Order / বাতিল
+          ${latest.status !== 'Delivered' ? `
+            <button class="px-4 py-2 bg-error/10 text-error hover:bg-error hover:text-white transition-colors font-headline-sm text-xs uppercase rounded border border-error/30 flex items-center gap-1.5 font-bold" onclick="handleUserCancelOrder('${latest.orderId}')">
+              <span class="material-symbols-outlined text-[16px]">cancel</span> অর্ডার বাতিল করুন
             </button>
           ` : ''}
           <button class="px-4 py-2 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm text-xs uppercase" onclick="printInvoice('${latest.orderId}')">
-            View Invoice
+            ইনভয়েস দেখুন
           </button>
           <button class="px-4 py-2 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm text-xs uppercase" onclick="toggleWhatsAppPopup()">
-            Contact Concierge
+            সহায়তা নিন
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Past Orders List -->
-    <div class="bg-surface-container-low p-6 border border-secondary/20 space-y-4">
-      <h3 class="font-headline-sm uppercase text-on-surface tracking-wider mb-4">Past Commissions & Orders</h3>
-      ${orders.map(o => `
-        <div class="p-4 bg-surface-container-lowest border ${o.status === 'Cancelled' ? 'border-error/30' : 'border-secondary/10'} flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div class="flex items-center gap-4">
-            <img src="${o.items[0]?.image || ''}" class="w-12 h-12 object-cover bg-surface-container border border-secondary/20 shrink-0">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-label-md text-secondary uppercase">Order #${o.orderId}</span>
-                ${o.status === 'Cancelled' ? `<span class="px-2 py-0.5 bg-error/15 text-error text-[10px] font-bold uppercase rounded border border-error/30">Cancelled</span>` : ''}
+    <!-- Past Orders List (Active non-cancelled orders) -->
+    ${activeOrders.length > 1 ? `
+      <div class="bg-surface-container-low p-6 border border-secondary/20 space-y-4 mt-6">
+        <h3 class="font-headline-sm uppercase text-on-surface tracking-wider mb-4">অন্যান্য অর্ডারসমূহ</h3>
+        ${activeOrders.slice(1).map(o => `
+          <div class="p-4 bg-surface-container-lowest border border-secondary/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="flex items-center gap-4">
+              <img src="${o.items[0]?.image || ''}" class="w-12 h-12 object-cover bg-surface-container border border-secondary/20 shrink-0">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-label-md text-secondary uppercase font-bold">অর্ডার #${o.orderId}</span>
+                  <span class="px-2 py-0.5 bg-secondary/15 text-secondary text-[10px] font-bold uppercase rounded">${o.status}</span>
+                </div>
+                <h4 class="font-headline-sm text-on-surface">${o.items.map(i => i.name).join(", ")}</h4>
+                <p class="text-body-sm text-on-surface-variant">${o.date} • মোট বিল: ${curr}${Number(o.total).toLocaleString()}</p>
               </div>
-              <h4 class="font-headline-sm text-on-surface">${o.items.map(i => i.name).join(", ")}</h4>
-              <p class="text-body-sm text-on-surface-variant">${o.date} • Total: ${curr}${Number(o.total).toLocaleString()}</p>
-              ${o.status === 'Cancelled' ? `<p class="text-xs text-error mt-0.5">⚠️ Reason: ${o.cancelReason || 'Cancelled'}</p>` : ''}
+            </div>
+            <div class="flex items-center gap-2.5">
+              ${o.status !== 'Delivered' ? `
+                <button class="px-3 py-1.5 bg-error/10 text-error hover:bg-error hover:text-white text-xs uppercase font-bold transition-colors border border-error/30 rounded flex items-center gap-1" onclick="handleUserCancelOrder('${o.orderId}')">
+                  <span class="material-symbols-outlined text-[14px]">cancel</span> বাতিল
+                </button>
+              ` : ''}
+              <button class="px-3 py-1.5 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary text-xs uppercase transition-colors" onclick="printInvoice('${o.orderId}')">ইনভয়েস</button>
             </div>
           </div>
-          <div class="flex items-center gap-2.5">
-            ${o.status !== 'Cancelled' && o.status !== 'Delivered' ? `
-              <button class="px-3 py-1.5 bg-error/10 text-error hover:bg-error hover:text-white text-xs uppercase font-bold transition-colors border border-error/30 rounded flex items-center gap-1" onclick="handleUserCancelOrder('${o.orderId}')">
-                <span class="material-symbols-outlined text-[14px]">cancel</span> Cancel
-              </button>
-            ` : ''}
-            <button class="px-3 py-1.5 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary text-xs uppercase transition-colors" onclick="printInvoice('${o.orderId}')">Invoice</button>
-          </div>
-        </div>
-      `).join("")}
-    </div>
+        `).join("")}
+      </div>
+    ` : ''}
   `;
 }
 
