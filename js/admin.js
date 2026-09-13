@@ -329,6 +329,26 @@ function switchAdminTab(tabName) {
   if (tabName === "settings") loadAdminSettingsForm();
 }
 
+function formatAdminBagItems(items = []) {
+  if (!items || items.length === 0) {
+    return '<span style="color:#94a3b8; font-size:0.75rem;">Bag empty</span>';
+  }
+  return `
+    <div style="display:flex; flex-direction:column; gap:6px; max-width:220px;">
+      ${items.slice(0, 2).map(it => `
+        <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
+          <img src="${it.image || 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=100&q=80'}" style="width:28px; height:34px; object-fit:cover; border-radius:3px; border:1px solid rgba(115,92,0,0.3); flex-shrink:0;" alt="">
+          <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <strong style="display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#1a1c1c;" title="${it.name}">${it.name}</strong>
+            <span style="color:#747878; font-size:0.72rem;">${it.quantity}x ${it.color && it.color !== 'Default' ? '• ' + it.color : ''} ${it.size && it.size !== 'Standard' ? '• ' + it.size : ''}</span>
+          </div>
+        </div>
+      `).join("")}
+      ${items.length > 2 ? `<span style="font-size:0.72rem; color:#735c00; font-weight:700;">+${items.length - 2} more masterpiece(s)</span>` : ''}
+    </div>
+  `;
+}
+
 // 1. Dashboard Tab
 function renderAdminDashboardStats() {
   const orders = Store.getOrders();
@@ -348,16 +368,26 @@ function renderAdminDashboardStats() {
   document.getElementById("admin-stat-pending").textContent = pendingOrders;
   document.getElementById("admin-stat-products").textContent = totalProducts;
 
+  // Update sidebar badges
+  document.querySelectorAll(".admin-products-badge").forEach(el => {
+    el.textContent = totalProducts;
+  });
+  document.querySelectorAll(".admin-orders-badge").forEach(el => {
+    el.textContent = pendingOrders > 0 ? pendingOrders : totalOrders;
+    el.style.display = totalOrders > 0 ? "inline-flex" : "none";
+  });
+
   const recentOrdersTbody = document.getElementById("admin-recent-orders-tbody");
   if (recentOrdersTbody) {
     const recent = orders.slice(0, 5);
     if (recent.length === 0) {
-      recentOrdersTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:2rem;">No commissions recorded yet.</td></tr>`;
+      recentOrdersTbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:2rem;">No commissions recorded yet.</td></tr>`;
     } else {
       recentOrdersTbody.innerHTML = recent.map(o => `
         <tr>
           <td><strong class="text-secondary font-mono">${o.orderId}</strong></td>
           <td><strong>${o.customerName}</strong><br><small style="color:#747878;">${o.phone}</small></td>
+          <td>${formatAdminBagItems(o.items)}</td>
           <td><strong class="text-primary">${curr}${Number(o.total).toLocaleString()}</strong></td>
           <td><span class="status-badge status-${o.status}">${o.status}</span></td>
           <td>${o.date}</td>
@@ -535,8 +565,10 @@ function renderAdminOrdersTable(filterStatus = "all") {
       <td><strong class="text-secondary font-mono">${o.orderId}</strong><br><small style="color:#747878;">${o.date}</small></td>
       <td>
         <strong>${o.customerName}</strong><br>
-        <span style="font-size:0.8rem; color:#735c00;"><i class="fas fa-phone mr-1"></i> ${o.phone}</span>
+        <span style="font-size:0.8rem; color:#735c00;"><i class="fas fa-phone mr-1"></i> ${o.phone}</span><br>
+        <small style="color:#747878; display:block; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${o.address}">${o.address}</small>
       </td>
+      <td>${formatAdminBagItems(o.items)}</td>
       <td>
         <span style="text-transform:uppercase; font-weight:700; font-size:0.8rem;">${o.paymentMethod}</span><br>
         <small style="color:#747878;">Trx: ${o.trxId}</small>
