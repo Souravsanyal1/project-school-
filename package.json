@@ -1,0 +1,24 @@
+{
+  "name": "school-project",
+  "version": "1.0.0",
+  "description": "A modern, responsive e-commerce web application with **Bangladeshi Taka (৳ BDT)** as base currency, full-control interactive **Admin Panel**, and floating **WhatsApp** customer support widget.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Souravsanyal1/project-school-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Souravsanyal1/project-school-/issues"
+  },
+  "homepage": "https://github.com/Souravsanyal1/project-school-#readme",
+  "dependencies": {
+    "firebase": "^12.19.0"
+  }
+}
