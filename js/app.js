@@ -99,6 +99,19 @@ function applyStoreSettings() {
   document.querySelectorAll(".site-address-display").forEach(el => el.textContent = settings.address);
   document.querySelectorAll(".site-announcement-display").forEach(el => el.textContent = settings.announcement);
 
+  // Dynamic Hero Section
+  const heroBg = document.getElementById("hero-bg-container");
+  if (heroBg) {
+    const heroImgUrl = settings.heroBgImage || "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1600&q=85";
+    heroBg.style.backgroundImage = `url('${heroImgUrl}')`;
+  }
+  const heroTitleEl = document.getElementById("hero-title-display");
+  if (heroTitleEl && settings.heroTitle) heroTitleEl.textContent = settings.heroTitle;
+  const heroSubEl = document.getElementById("hero-subtitle-display");
+  if (heroSubEl && settings.heroSubtitle) heroSubEl.textContent = settings.heroSubtitle;
+  const heroDescEl = document.getElementById("hero-desc-display");
+  if (heroDescEl && settings.heroDescription) heroDescEl.textContent = settings.heroDescription;
+
   const insideFeeEl = document.getElementById("inside-dhaka-fee-label");
   const outsideFeeEl = document.getElementById("outside-dhaka-fee-label");
   if (insideFeeEl) insideFeeEl.textContent = `৳${settings.insideDhakaDelivery}`;

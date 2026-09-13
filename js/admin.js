@@ -658,6 +658,23 @@ function deleteCouponClick(code) {
   }
 }
 
+// Hero Image Customization Helpers
+function updateHeroPreview(url) {
+  const preview = document.getElementById("admin-hero-preview-img");
+  if (preview && url) {
+    preview.src = url;
+  }
+}
+
+function setHeroPreset(url) {
+  const input = document.getElementById("admin-hero-img-input");
+  if (input) {
+    input.value = url;
+    updateHeroPreview(url);
+    showToast("Hero preset image selected! Click 'Save All Settings' to apply.", "success");
+  }
+}
+
 // 6. Settings Tab
 function loadAdminSettingsForm() {
   const settings = Store.getSettings();
@@ -668,7 +685,7 @@ function loadAdminSettingsForm() {
   form.tagline.value = settings.tagline || "";
   form.contactPhone.value = settings.contactPhone || "";
   form.whatsappNumber.value = settings.whatsappNumber || "";
-  form.whatsappDefaultMsg.value = settings.whatsappDefaultMsg || "";
+  if (form.whatsappDefaultMsg) form.whatsappDefaultMsg.value = settings.whatsappDefaultMsg || "";
   form.contactEmail.value = settings.contactEmail || "";
   form.address.value = settings.address || "";
   form.insideDhakaDelivery.value = settings.insideDhakaDelivery || 80;
@@ -680,6 +697,16 @@ function loadAdminSettingsForm() {
   if (form.adminPassword) form.adminPassword.value = settings.adminPassword || "admin123";
   form.adminPin.value = settings.adminPin || "admin123";
   form.announcement.value = settings.announcement || "";
+
+  // Hero section settings
+  if (form.heroBgImage) {
+    const heroImg = settings.heroBgImage || "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1600&q=85";
+    form.heroBgImage.value = heroImg;
+    updateHeroPreview(heroImg);
+  }
+  if (form.heroTitle) form.heroTitle.value = settings.heroTitle || "Elegance Rooted in Faith";
+  if (form.heroSubtitle) form.heroSubtitle.value = settings.heroSubtitle || "✨ Flagship Collection 2026 • ৳ BDT";
+  if (form.heroDescription) form.heroDescription.value = settings.heroDescription || "Uncompromising craftsmanship blending timeless Islamic heritage with contemporary global luxury standards. Base currency in ৳ (BDT) with nationwide fast delivery.";
 }
 
 function handleSaveSettingsSubmit(e) {
@@ -698,6 +725,10 @@ function handleSaveSettingsSubmit(e) {
     adminEmail: form.adminEmail ? form.adminEmail.value.trim().toLowerCase() : "admin@gmail.com",
     adminPassword: form.adminPassword ? form.adminPassword.value.trim() : "admin123",
     adminPin: form.adminPin.value.trim() || "admin123",
+    heroBgImage: form.heroBgImage ? form.heroBgImage.value.trim() : "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1600&q=85",
+    heroTitle: form.heroTitle ? form.heroTitle.value.trim() : "Elegance Rooted in Faith",
+    heroSubtitle: form.heroSubtitle ? form.heroSubtitle.value.trim() : "✨ Flagship Collection 2026 • ৳ BDT",
+    heroDescription: form.heroDescription ? form.heroDescription.value.trim() : "Uncompromising craftsmanship blending timeless Islamic heritage with contemporary global luxury standards. Base currency in ৳ (BDT) with nationwide fast delivery.",
     address: form.address.value.trim(),
     insideDhakaDelivery: Number(form.insideDhakaDelivery.value) || 80,
     outsideDhakaDelivery: Number(form.outsideDhakaDelivery.value) || 150,
@@ -708,7 +739,7 @@ function handleSaveSettingsSubmit(e) {
   };
 
   Store.saveSettings(newSettings);
-  showToast("All flagship settings saved successfully!", "success");
+  showToast("All flagship settings & hero banner saved successfully!", "success");
 }
 
 // 7. Backup & Reset

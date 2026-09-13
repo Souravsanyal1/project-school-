@@ -16,6 +16,10 @@ const DEFAULT_SETTINGS = {
   adminEmail: "admin@gmail.com",
   adminPassword: "admin123",
   adminPin: "admin123",
+  heroBgImage: "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1600&q=85",
+  heroTitle: "Elegance Rooted in Faith",
+  heroSubtitle: "✨ Flagship Collection 2026 • ৳ BDT",
+  heroDescription: "Uncompromising craftsmanship blending timeless Islamic heritage with contemporary global luxury standards. Base currency in ৳ (BDT) with nationwide fast delivery.",
   address: "House 12, Road 4, Gulshan-2, Dhaka - 1212, Bangladesh",
   insideDhakaDelivery: 80,
   outsideDhakaDelivery: 150,
@@ -229,47 +233,4 @@ const DEFAULT_COUPONS = [
   { code: "WELCOME500", discountFixed: 500, minSpend: 2000, active: true }
 ];
 
-const DEFAULT_ORDERS = [
-  {
-    orderId: "NR-89240-DXB",
-    customerName: "Princess Yasmin Al-Sabah",
-    phone: "01712345678",
-    address: "Villa 42, Road 11, Gulshan 2, Dhaka",
-    deliveryArea: "inside",
-    deliveryFee: 80,
-    paymentMethod: "bkash",
-    trxId: "9K7X82LM1",
-    items: [
-      { id: "prod-1", name: "The Medina Cashmere Abaya", price: 14500, quantity: 1, image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85" }
-    ],
-    subtotal: 14500,
-    discount: 2175,
-    couponCode: "NOORVIP",
-    total: 12405,
-    status: "Processing",
-    currentStep: 3,
-    date: "2026-09-12 14:32",
-    notes: "Signature keepsake packaging required."
-  },
-  {
-    orderId: "NR-78102-DHK",
-    customerName: "Tariq Mahmud",
-    phone: "01898765432",
-    address: "House 18, Block D, Bashundhara R/A, Dhaka",
-    deliveryArea: "inside",
-    deliveryFee: 80,
-    paymentMethod: "cod",
-    trxId: "N/A (Cash on Delivery)",
-    items: [
-      { id: "prod-2", name: "The Royal Velvet Prayer Mat", price: 6800, quantity: 1, image: "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1200&q=85" }
-    ],
-    subtotal: 6800,
-    discount: 500,
-    couponCode: "WELCOME500",
-    total: 6380,
-    status: "Shipped",
-    currentStep: 4,
-    date: "2026-09-11 11:20",
-    notes: "Call before arrival."
-  }
-];
+const DEFAULT_ORDERS = [];

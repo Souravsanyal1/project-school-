@@ -9,16 +9,16 @@ class DataStore {
   }
 
   init() {
-    const DATA_VERSION = "v4_auth_email_pass";
+    const DATA_VERSION = "v6_custom_hero_clean_orders";
     const currentVersion = localStorage.getItem("noor_data_version");
 
     if (currentVersion !== DATA_VERSION) {
-      // Refresh default products, categories and settings with crystal-clear high-res assets
+      // Refresh default products, categories and settings with crystal-clear high-res assets & clean slate
       localStorage.setItem("noor_settings", JSON.stringify(DEFAULT_SETTINGS));
       localStorage.setItem("noor_products", JSON.stringify(DEFAULT_PRODUCTS));
       localStorage.setItem("noor_categories", JSON.stringify(DEFAULT_CATEGORIES));
       localStorage.setItem("noor_coupons", JSON.stringify(DEFAULT_COUPONS));
-      localStorage.setItem("noor_orders", JSON.stringify(DEFAULT_ORDERS));
+      localStorage.setItem("noor_orders", JSON.stringify([]));
       localStorage.setItem("noor_data_version", DATA_VERSION);
     }
 
