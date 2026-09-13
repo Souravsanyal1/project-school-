@@ -560,26 +560,6 @@
         switchAdminTab("dashboard");
       }
     });
-
-    function handleDedicatedAdminLogin(e) {
-      e.preventDefault();
-      const pin = document.getElementById("dedicated-admin-pin").value.trim();
-      const settings = Store.getSettings();
-      if (pin === (settings.adminPin || "admin123")) {
-        sessionStorage.setItem("noor_admin_auth", "true");
-        document.getElementById("admin-auth-screen").style.display = "none";
-        document.getElementById("admin-main-interface").classList.remove("hidden");
-        showToast("Welcome to NOOR Sovereign Admin Suite", "success");
-        switchAdminTab("dashboard");
-      } else {
-        showToast("Invalid PIN code! (Default: admin123)", "error");
-      }
-    }
-
-    function dedicatedAdminLogout() {
-      sessionStorage.removeItem("noor_admin_auth");
-      location.reload();
-    }
   </script>
 </body>
 </html>

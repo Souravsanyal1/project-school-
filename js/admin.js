@@ -105,26 +105,57 @@ function togglePassVisibility(inputId) {
   }
 }
 
-// Option 1: Handle Email & Password Login
-function handleAdminEmailLogin(e) {
+/// Option 1: Handle Email & Password Login with Firebase Auth
+async function handleAdminEmailLogin(e) {
   e.preventDefault();
+  const form = e.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
   const emailInput = document.getElementById("admin-email-input");
   const passInput = document.getElementById("admin-pass-input");
-  const settings = Store.getSettings();
 
   const enteredEmail = emailInput ? emailInput.value.trim().toLowerCase() : "";
   const enteredPass = passInput ? passInput.value.trim() : "";
-  const correctEmail = (settings.adminEmail || "admin@gmail.com").toLowerCase();
-  const correctPass = settings.adminPassword || "admin123";
 
-  if ((enteredEmail === correctEmail || enteredEmail === "admin@noor.com.bd") && enteredPass === correctPass) {
-    isAdminLoggedIn = true;
-    sessionStorage.setItem("noor_admin_auth", "true");
-    document.getElementById("admin-login-modal").classList.remove("active");
-    showToast("Welcome! Logged in as Sovereign Admin", "success");
-    showAdminDashboard();
-  } else {
-    showToast("Incorrect Gmail or Password! (Default: admin@gmail.com / admin123)", "error");
+  if (!enteredEmail || !enteredPass) {
+    showToast("Please enter Admin Gmail and Password", "error");
+    return;
+  }
+
+  const originalBtnText = submitBtn ? submitBtn.innerHTML : "";
+  if (submitBtn) {
+    submitBtn.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">progress_activity</span> Authenticating with Firebase...`;
+    submitBtn.disabled = true;
+  }
+
+  try {
+    let result = { success: false };
+    if (window.FirebaseAuth && window.FirebaseAuth.loginAdminWithFirebase) {
+      result = await window.FirebaseAuth.loginAdminWithFirebase(enteredEmail, enteredPass);
+    } else {
+      const settings = Store.getSettings();
+      const validEmail = (settings.adminEmail || "admin@gmail.com").toLowerCase();
+      const validPass = settings.adminPassword || "admin123";
+      if ((enteredEmail === validEmail || enteredEmail === "admin@noor.com.bd") && enteredPass === validPass) {
+        result = { success: true };
+      }
+    }
+
+    if (result.success) {
+      isAdminLoggedIn = true;
+      sessionStorage.setItem("noor_admin_auth", "true");
+      document.getElementById("admin-login-modal").classList.remove("active");
+      showToast("🔥 Firebase Auth: Welcome Sovereign Admin!", "success");
+      showAdminDashboard();
+    } else {
+      showToast(result.error || "Incorrect Gmail or Password in Firebase Auth!", "error");
+    }
+  } catch (err) {
+    showToast("Authentication error: " + err.message, "error");
+  } finally {
+    if (submitBtn) {
+      submitBtn.innerHTML = originalBtnText;
+      submitBtn.disabled = false;
+    }
   }
 }
 
@@ -140,31 +171,62 @@ function handleAdminLogin(e) {
     sessionStorage.setItem("noor_admin_auth", "true");
     document.getElementById("admin-login-modal").classList.remove("active");
     if (pinInput) pinInput.value = "";
-    showToast("Welcome to NOOR Sovereign Admin Panel", "success");
+    showToast("Welcome to Sovereign Admin Panel", "success");
     showAdminDashboard();
   } else {
     showToast("Invalid Security PIN! (Default: admin123)", "error");
   }
 }
 
-// Dedicated admin.html Email Login
-function handleDedicatedEmailLogin(e) {
+// Dedicated admin.html Email Login with Firebase Auth
+async function handleDedicatedEmailLogin(e) {
   e.preventDefault();
+  const form = e.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
   const email = document.getElementById("dedicated-admin-email").value.trim().toLowerCase();
   const pass = document.getElementById("dedicated-admin-pass").value.trim();
-  const settings = Store.getSettings();
-  const correctEmail = (settings.adminEmail || "admin@gmail.com").toLowerCase();
-  const correctPass = settings.adminPassword || "admin123";
 
-  if ((email === correctEmail || email === "admin@noor.com.bd") && pass === correctPass) {
-    isAdminLoggedIn = true;
-    sessionStorage.setItem("noor_admin_auth", "true");
-    document.getElementById("admin-auth-screen").classList.add("hidden");
-    document.getElementById("admin-main-interface").classList.remove("hidden");
-    showToast("Welcome to NOOR Admin Portal", "success");
-    switchAdminTab("dashboard");
-  } else {
-    showToast("Incorrect Gmail or Password! (Default: admin@gmail.com / admin123)", "error");
+  if (!email || !pass) {
+    showToast("Please enter Admin Gmail and Password", "error");
+    return;
+  }
+
+  const originalBtnText = submitBtn ? submitBtn.innerHTML : "";
+  if (submitBtn) {
+    submitBtn.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">progress_activity</span> Authenticating with Firebase...`;
+    submitBtn.disabled = true;
+  }
+
+  try {
+    let result = { success: false };
+    if (window.FirebaseAuth && window.FirebaseAuth.loginAdminWithFirebase) {
+      result = await window.FirebaseAuth.loginAdminWithFirebase(email, pass);
+    } else {
+      const settings = Store.getSettings();
+      const validEmail = (settings.adminEmail || "admin@gmail.com").toLowerCase();
+      const validPass = settings.adminPassword || "admin123";
+      if ((email === validEmail || email === "admin@noor.com.bd") && pass === validPass) {
+        result = { success: true };
+      }
+    }
+
+    if (result.success) {
+      isAdminLoggedIn = true;
+      sessionStorage.setItem("noor_admin_auth", "true");
+      document.getElementById("admin-auth-screen").classList.add("hidden");
+      document.getElementById("admin-main-interface").classList.remove("hidden");
+      showToast("🔥 Firebase Auth: Welcome to Admin Portal", "success");
+      switchAdminTab("dashboard");
+    } else {
+      showToast(result.error || "Incorrect Gmail or Password in Firebase Auth!", "error");
+    }
+  } catch (err) {
+    showToast("Authentication error: " + err.message, "error");
+  } finally {
+    if (submitBtn) {
+      submitBtn.innerHTML = originalBtnText;
+      submitBtn.disabled = false;
+    }
   }
 }
 
@@ -180,7 +242,7 @@ function handleDedicatedAdminLogin(e) {
     sessionStorage.setItem("noor_admin_auth", "true");
     document.getElementById("admin-auth-screen").classList.add("hidden");
     document.getElementById("admin-main-interface").classList.remove("hidden");
-    showToast("Access Granted!", "success");
+    showToast("Access Granted via Security PIN", "success");
     switchAdminTab("dashboard");
   } else {
     showToast("Invalid PIN Code! (Default: admin123)", "error");
@@ -197,10 +259,22 @@ function closeAdminLogin() {
 function adminLogout() {
   isAdminLoggedIn = false;
   sessionStorage.removeItem("noor_admin_auth");
+  if (window.FirebaseAuth && window.FirebaseAuth.logoutAdminFromFirebase) {
+    window.FirebaseAuth.logoutAdminFromFirebase();
+  }
   document.getElementById("admin-portal-view").classList.remove("active");
-  document.getElementById("storefront-view").style.display = "block";
-  history.replaceState(null, null, window.location.pathname);
+  if (window.location.hash === "#admin-master-panel") {
+    history.replaceState(null, null, window.location.pathname);
+  }
   showToast("Logged out of Sovereign Admin Panel", "warning");
+}
+
+function dedicatedAdminLogout() {
+  sessionStorage.removeItem("noor_admin_auth");
+  if (window.FirebaseAuth && window.FirebaseAuth.logoutAdminFromFirebase) {
+    window.FirebaseAuth.logoutAdminFromFirebase();
+  }
+  location.reload();
 }
 
 function exitAdminPortal() {
