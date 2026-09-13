@@ -220,16 +220,17 @@ function renderCategories() {
   const customCategories = categories.filter(c => c.id !== "all");
 
   if (categoriesSection) {
-    if (customCategories.length === 0) {
-      categoriesSection.style.display = "none";
-    } else {
-      categoriesSection.style.display = "block";
-    }
+    categoriesSection.style.display = "block";
   }
 
   if (homeGrid) {
     if (customCategories.length === 0) {
-      homeGrid.innerHTML = "";
+      homeGrid.innerHTML = `
+        <div class="col-span-full text-center py-16 px-6 bg-slate-900/60 rounded-2xl border border-slate-800 text-slate-300 shadow-sm">
+          <span class="material-symbols-outlined text-[44px] text-amber-400 mb-2">category</span>
+          <p class="text-base font-semibold text-white">নতুন ক্যাটাগরি যুক্ত করা হলে এখানে প্রদর্শিত হবে।</p>
+        </div>
+      `;
     } else {
       homeGrid.innerHTML = customCategories.map(cat => `
         <div class="group relative h-96 rounded-xl overflow-hidden flex flex-col justify-end p-6 border border-slate-200 shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer bg-slate-900" onclick="filterByCategoryAndShop('${cat.id}')">
