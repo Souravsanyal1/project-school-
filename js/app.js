@@ -1102,12 +1102,17 @@ function showOrderSuccessModal(order) {
       </div>
     </div>
 
-    <div class="flex gap-4">
-      <button class="flex-1 py-3 bg-secondary text-on-secondary font-label-md uppercase tracking-wider hover:bg-primary transition-colors" onclick="printInvoice('${order.orderId}')">
-        <i class="fas fa-print mr-2"></i> Print Invoice
+    <div class="flex flex-col sm:flex-row gap-3 mt-5">
+      <button class="flex-1 py-3 bg-secondary text-on-secondary font-label-md uppercase tracking-wider hover:bg-primary transition-colors flex items-center justify-center gap-2 rounded-sm" onclick="printInvoice('${order.orderId}')">
+        <i class="fas fa-print"></i> Print Invoice
       </button>
-      <button class="flex-1 py-3 bg-primary text-on-primary font-label-md uppercase tracking-wider hover:bg-secondary hover:text-on-secondary transition-colors" onclick="closeOrderSuccessModal(); switchView('member');">
-        Track in Portal
+      <button class="flex-1 py-3 bg-primary text-on-primary font-label-md uppercase tracking-wider hover:bg-secondary hover:text-on-secondary transition-colors flex items-center justify-center gap-2 rounded-sm" onclick="closeOrderSuccessModal(); switchView('member');">
+        <span class="material-symbols-outlined text-[18px]">local_shipping</span> Track in Portal
+      </button>
+    </div>
+    <div class="mt-3">
+      <button type="button" class="w-full py-2.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-md uppercase tracking-wider text-xs transition-colors border border-outline-variant/30 flex items-center justify-center gap-2 rounded-sm cursor-pointer" onclick="closeOrderSuccessModal()">
+        <span class="material-symbols-outlined text-[16px]">close</span> Close / বন্ধ করুন
       </button>
     </div>
   `;

@@ -1164,8 +1164,11 @@
   <!-- ==========================================================
        ORDER SUCCESS MODAL
        ========================================================== -->
-  <div class="center-modal-overlay" id="order-success-modal">
-    <div class="center-modal-box p-8 max-w-lg">
+  <div class="center-modal-overlay" id="order-success-modal" onclick="if(event.target === this) closeOrderSuccessModal()">
+    <div class="center-modal-box p-6 md:p-8 max-w-lg relative">
+      <button type="button" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-container-high hover:bg-secondary hover:text-white flex items-center justify-center text-on-surface transition-colors cursor-pointer z-10" onclick="closeOrderSuccessModal()" title="Close / বন্ধ করুন">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
       <div id="order-success-content"></div>
     </div>
   </div>
