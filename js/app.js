@@ -1231,15 +1231,21 @@ function renderMemberOrders() {
         <div class="flex items-center gap-4">
           <img src="${latest.items[0]?.image || ''}" class="w-14 h-14 object-cover bg-surface-container border border-secondary/20 shrink-0">
           <div>
-            <span class="font-headline-sm text-on-surface block">${latest.items[0]?.name || ''}</span>
+            <span class="font-headline-sm text-on-surface block">${latest.items.map(i => i.name).join(", ")}</span>
             <span class="text-body-sm text-on-surface-variant">Total Bill: <strong>${curr}${Number(latest.total).toLocaleString()}</strong></span>
+            ${latest.status === 'Cancelled' ? `<span class="text-xs text-error font-bold block mt-1">❌ Cancelled: ${latest.cancelReason || 'Cancelled by customer'}</span>` : ''}
           </div>
         </div>
-        <div class="flex gap-3">
-          <button class="px-4 py-2 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm text-body-sm uppercase" onclick="printInvoice('${latest.orderId}')">
+        <div class="flex flex-wrap gap-2.5">
+          ${latest.status !== 'Cancelled' && latest.status !== 'Delivered' ? `
+            <button class="px-4 py-2 bg-error/10 text-error hover:bg-error hover:text-white transition-colors font-headline-sm text-xs uppercase rounded border border-error/30 flex items-center gap-1.5" onclick="handleUserCancelOrder('${latest.orderId}')">
+              <span class="material-symbols-outlined text-[16px]">cancel</span> Cancel Order / বাতিল
+            </button>
+          ` : ''}
+          <button class="px-4 py-2 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm text-xs uppercase" onclick="printInvoice('${latest.orderId}')">
             View Invoice
           </button>
-          <button class="px-4 py-2 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm text-body-sm uppercase" onclick="toggleWhatsAppPopup()">
+          <button class="px-4 py-2 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm text-xs uppercase" onclick="toggleWhatsAppPopup()">
             Contact Concierge
           </button>
         </div>
@@ -1250,24 +1256,44 @@ function renderMemberOrders() {
     <div class="bg-surface-container-low p-6 border border-secondary/20 space-y-4">
       <h3 class="font-headline-sm uppercase text-on-surface tracking-wider mb-4">Past Commissions & Orders</h3>
       ${orders.map(o => `
-        <div class="p-4 bg-surface-container-lowest border border-secondary/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="p-4 bg-surface-container-lowest border ${o.status === 'Cancelled' ? 'border-error/30' : 'border-secondary/10'} flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div class="flex items-center gap-4">
             <img src="${o.items[0]?.image || ''}" class="w-12 h-12 object-cover bg-surface-container border border-secondary/20 shrink-0">
             <div>
-              <span class="font-label-md text-secondary uppercase">Order #${o.orderId}</span>
+              <div class="flex items-center gap-2">
+                <span class="font-label-md text-secondary uppercase">Order #${o.orderId}</span>
+                ${o.status === 'Cancelled' ? `<span class="px-2 py-0.5 bg-error/15 text-error text-[10px] font-bold uppercase rounded border border-error/30">Cancelled</span>` : ''}
+              </div>
               <h4 class="font-headline-sm text-on-surface">${o.items.map(i => i.name).join(", ")}</h4>
               <p class="text-body-sm text-on-surface-variant">${o.date} • Total: ${curr}${Number(o.total).toLocaleString()}</p>
+              ${o.status === 'Cancelled' ? `<p class="text-xs text-error mt-0.5">⚠️ Reason: ${o.cancelReason || 'Cancelled'}</p>` : ''}
             </div>
           </div>
-          <div class="flex items-center gap-3">
-            <span class="px-3 py-1 bg-surface-container text-on-surface font-label-md uppercase">${o.status}</span>
-            <button class="px-3 py-1 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary text-body-sm uppercase transition-colors" onclick="printInvoice('${o.orderId}')">Invoice</button>
+          <div class="flex items-center gap-2.5">
+            ${o.status !== 'Cancelled' && o.status !== 'Delivered' ? `
+              <button class="px-3 py-1.5 bg-error/10 text-error hover:bg-error hover:text-white text-xs uppercase font-bold transition-colors border border-error/30 rounded flex items-center gap-1" onclick="handleUserCancelOrder('${o.orderId}')">
+                <span class="material-symbols-outlined text-[14px]">cancel</span> Cancel
+              </button>
+            ` : ''}
+            <button class="px-3 py-1.5 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary text-xs uppercase transition-colors" onclick="printInvoice('${o.orderId}')">Invoice</button>
           </div>
         </div>
       `).join("")}
     </div>
   `;
 }
+
+function handleUserCancelOrder(orderId) {
+  const order = Store.getOrders().find(o => o.orderId === orderId);
+  if (!order) return;
+  const confirmCancel = confirm(`আপনি কি নিশ্চিত যে আপনি অর্ডার #${orderId} বাতিল (Cancel) করতে চান?`);
+  if (!confirmCancel) return;
+  const reason = prompt("অর্ডার বাতিলের কারণ উল্লেখ করুন (Optional):", "Change of mind / মনের পরিবর্তন") || "Customer requested cancellation";
+  Store.cancelOrder(orderId, reason, "Customer / ইউজার");
+  showToast(`✓ অর্ডার #${orderId} বাতিল করা হয়েছে।`, "success");
+  renderMemberOrders();
+}
+window.handleUserCancelOrder = handleUserCancelOrder;
 
 function switchMemberTab(tabId) {
   const tabs = ["orders", "wishlist", "addresses", "rewards", "profile"];

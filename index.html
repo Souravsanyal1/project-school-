@@ -1382,6 +1382,12 @@
             </span>
             <span class="admin-orders-badge px-2 py-0.5 bg-secondary text-on-secondary text-[10px] font-bold rounded-full">0</span>
           </button>
+          <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center justify-between hover:bg-white/10 transition-colors" data-tab="rejected" onclick="switchAdminTab('rejected')">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-[18px] text-error">cancel</span> Rejected & Cancelled
+            </span>
+            <span class="admin-rejected-badge px-2 py-0.5 bg-error text-white text-[10px] font-bold rounded-full" style="display:none;">0</span>
+          </button>
           <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="categories" onclick="switchAdminTab('categories')">
             <span class="material-symbols-outlined text-[18px] text-secondary">category</span> Categories
           </button>
@@ -1505,7 +1511,7 @@
                 <option value="Confirmed">3. Quality Inspection</option>
                 <option value="Shipped">4. Dispatched</option>
                 <option value="Delivered">5. Delivered</option>
-                <option value="Cancelled">Cancelled</option>
+                <option value="Cancelled">❌ Cancelled / Rejected</option>
               </select>
             </div>
             <div class="overflow-x-auto">
@@ -1520,8 +1526,37 @@
                     <th>5-Step Status Update</th>
                     <th>Action</th>
                   </tr>
-                </thead>
                 <tbody id="admin-orders-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.5 REJECTED & CANCELLED ORDERS TAB -->
+        <div class="admin-tab-pane" id="admin-tab-rejected" style="display: none;">
+          <div class="bg-black p-6 border border-error/30 rounded">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 pb-4 border-b border-error/20">
+              <div>
+                <h3 class="font-headline-sm text-white uppercase tracking-wider flex items-center gap-2">
+                  <span class="material-symbols-outlined text-error text-[22px]">cancel</span> Rejected Products & Cancelled Orders
+                </h3>
+                <p class="text-xs text-slate-400">ক্রেতা অথবা এডমিন কর্তৃক বাতিলকৃত সকল অর্ডার ও পণ্যের রেকর্ড</p>
+              </div>
+              <span class="px-3 py-1 bg-error/15 text-error text-xs font-bold uppercase rounded border border-error/30" id="admin-rejected-count-tag">0 Cancelled</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="data-table bg-white text-black">
+                <thead>
+                  <tr>
+                    <th>Ref / Date</th>
+                    <th>Patron Info</th>
+                    <th>Rejected Items (বাতিল পণ্য)</th>
+                    <th>Cancelled By & Reason</th>
+                    <th>Total (৳)</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-rejected-orders-tbody"></tbody>
               </table>
             </div>
           </div>

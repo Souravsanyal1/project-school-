@@ -324,6 +324,7 @@ function switchAdminTab(tabName) {
   if (tabName === "dashboard") renderAdminDashboardStats();
   if (tabName === "products") renderAdminProductsTable();
   if (tabName === "orders") renderAdminOrdersTable();
+  if (tabName === "rejected") renderAdminRejectedOrdersTable();
   if (tabName === "categories") renderAdminCategoriesTable();
   if (tabName === "coupons") renderAdminCouponsTable();
   if (tabName === "settings") loadAdminSettingsForm();
@@ -361,6 +362,7 @@ function renderAdminDashboardStats() {
     .reduce((sum, o) => sum + (o.total || 0), 0);
   const totalOrders = orders.length;
   const pendingOrders = orders.filter(o => o.status === "Pending" || o.status === "Processing").length;
+  const cancelledOrders = orders.filter(o => o.status === "Cancelled").length;
   const totalProducts = products.length;
 
   document.getElementById("admin-stat-sales").textContent = `${curr}${totalSales.toLocaleString()}`;
@@ -376,6 +378,15 @@ function renderAdminDashboardStats() {
     el.textContent = pendingOrders > 0 ? pendingOrders : totalOrders;
     el.style.display = totalOrders > 0 ? "inline-flex" : "none";
   });
+  document.querySelectorAll(".admin-rejected-badge").forEach(el => {
+    el.textContent = cancelledOrders;
+    el.style.display = cancelledOrders > 0 ? "inline-flex" : "none";
+  });
+
+  const rejectedTag = document.getElementById("admin-rejected-count-tag");
+  if (rejectedTag) {
+    rejectedTag.textContent = `${cancelledOrders} Cancelled / Rejected`;
+  }
 
   const recentOrdersTbody = document.getElementById("admin-recent-orders-tbody");
   if (recentOrdersTbody) {
@@ -714,8 +725,75 @@ function deleteOrderConfirm(orderId) {
     Store.deleteOrder(orderId);
     if (selectedAdminTrackerOrderId === orderId) selectedAdminTrackerOrderId = null;
     renderAdminOrdersTable();
+    renderAdminRejectedOrdersTable();
     renderAdminDashboardStats();
     showToast("Order removed", "success");
+  }
+}
+
+// 3.5 Rejected & Cancelled Orders Tab
+function renderAdminRejectedOrdersTable() {
+  const allOrders = Store.getOrders();
+  const rejectedOrders = allOrders.filter(o => o.status === "Cancelled");
+  const tbody = document.getElementById("admin-rejected-orders-tbody");
+  const rejectedTag = document.getElementById("admin-rejected-count-tag");
+  const settings = Store.getSettings();
+  const curr = settings.currency || "৳";
+
+  if (rejectedTag) {
+    rejectedTag.textContent = `${rejectedOrders.length} Cancelled / Rejected`;
+  }
+
+  if (!tbody) return;
+
+  if (rejectedOrders.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:3rem; color:#94a3b8;">No rejected or cancelled products / orders found.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rejectedOrders.map(o => `
+    <tr style="background: rgba(239, 68, 68, 0.03);">
+      <td>
+        <strong class="text-error font-mono">${o.orderId}</strong><br>
+        <small style="color:#747878;">${o.cancelledAt || o.date}</small>
+      </td>
+      <td>
+        <strong>${o.customerName}</strong><br>
+        <span style="font-size:0.8rem; color:#735c00;"><i class="fas fa-phone mr-1"></i> ${o.phone}</span><br>
+        <small style="color:#747878;">${o.email || 'N/A'}</small>
+      </td>
+      <td>${formatAdminBagItems(o.items)}</td>
+      <td>
+        <span class="px-2 py-0.5 bg-error/15 text-error text-[11px] font-bold uppercase rounded border border-error/30 inline-block mb-1">
+          ${o.cancelledBy || 'Customer'}
+        </span><br>
+        <span style="font-size:0.8rem; color:#ef4444; font-weight:600;">“${o.cancelReason || 'Customer requested cancellation'}”</span>
+      </td>
+      <td><strong class="text-error font-bold">${curr}${Number(o.total).toLocaleString()}</strong></td>
+      <td>
+        <div style="display:flex; gap:6px;">
+          <button class="px-3 py-1.5 bg-secondary text-on-secondary hover:bg-primary font-bold text-xs uppercase transition-colors rounded flex items-center gap-1" onclick="restoreOrderFromAdmin('${o.orderId}')" title="Restore Order / অর্ডার সক্রিয় করুন">
+            <span class="material-symbols-outlined text-[14px]">refresh</span> Restore
+          </button>
+          <button class="px-2.5 py-1.5 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary transition-colors rounded" onclick="openOrderDetailsModal('${o.orderId}')" title="View Details">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button class="px-2.5 py-1.5 bg-error/10 text-error hover:bg-error hover:text-on-error transition-colors rounded" onclick="deleteOrderConfirm('${o.orderId}')" title="Delete permanently">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function restoreOrderFromAdmin(orderId) {
+  if (confirm(`অর্ডার #${orderId} পুনরায় সক্রিয় (Restore/Re-activate) করতে চান?`)) {
+    Store.restoreOrder(orderId);
+    renderAdminRejectedOrdersTable();
+    renderAdminOrdersTable();
+    renderAdminDashboardStats();
+    showToast(`✓ Order #${orderId} restored to Processing!`, "success");
   }
 }
 

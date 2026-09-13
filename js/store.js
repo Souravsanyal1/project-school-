@@ -256,6 +256,48 @@ class DataStore {
     return false;
   }
 
+  cancelOrder(orderId, reason = "Customer requested cancellation", cancelledBy = "User") {
+    let orders = this.getOrders();
+    const idx = orders.findIndex(o => o.orderId === orderId);
+    if (idx !== -1) {
+      orders[idx].status = "Cancelled";
+      orders[idx].currentStep = 0;
+      orders[idx].cancelledBy = cancelledBy;
+      orders[idx].cancelReason = reason;
+      orders[idx].cancelledAt = new Date().toLocaleString("en-GB", {
+        year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
+      });
+      localStorage.setItem("noor_orders", JSON.stringify(orders));
+      this.emitChange("orders");
+      if (window.FirebaseRealtime?.syncOrderToFirebase) {
+        window.FirebaseRealtime.syncOrderToFirebase(orders[idx]);
+      }
+      return orders[idx];
+    }
+    return null;
+  }
+
+  restoreOrder(orderId) {
+    let orders = this.getOrders();
+    const idx = orders.findIndex(o => o.orderId === orderId);
+    if (idx !== -1) {
+      orders[idx].status = "Processing";
+      orders[idx].currentStep = 2;
+      delete orders[idx].cancelledBy;
+      delete orders[idx].cancelReason;
+      orders[idx].restoredAt = new Date().toLocaleString("en-GB", {
+        year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
+      });
+      localStorage.setItem("noor_orders", JSON.stringify(orders));
+      this.emitChange("orders");
+      if (window.FirebaseRealtime?.syncOrderToFirebase) {
+        window.FirebaseRealtime.syncOrderToFirebase(orders[idx]);
+      }
+      return orders[idx];
+    }
+    return null;
+  }
+
   deleteOrder(orderId) {
     let orders = this.getOrders().filter(o => o.orderId !== orderId);
     localStorage.setItem("noor_orders", JSON.stringify(orders));
