@@ -972,20 +972,66 @@
 
 
   <!-- ==========================================================
-       ADMIN LOGIN PIN MODAL
+       ADMIN AUTHENTICATION MODAL (GMAIL & PASSWORD / PIN)
        ========================================================== -->
   <div class="center-modal-overlay" id="admin-login-modal" onclick="if(event.target === this) closeAdminLogin()">
-    <div class="center-modal-box p-8 max-w-sm text-center">
-      <div class="w-14 h-14 rounded-full bg-primary text-secondary-fixed border border-secondary flex items-center justify-center mx-auto mb-4">
-        <span class="material-symbols-outlined text-[28px]">shield_person</span>
+    <div class="center-modal-box p-8 max-w-md text-center">
+      <div class="w-14 h-14 rounded-full bg-slate-950 text-amber-400 border border-amber-500/50 flex items-center justify-center mx-auto mb-3 shadow-lg">
+        <span class="material-symbols-outlined text-[28px]">admin_panel_settings</span>
       </div>
-      <h3 class="font-headline-sm uppercase tracking-wider text-on-surface mb-1">Sovereign Security PIN</h3>
-      <p class="text-body-sm text-on-surface-variant mb-6">Enter your security PIN to manage store catalog, orders, and payment numbers.</p>
+      <h3 class="font-headline-sm uppercase tracking-wider text-slate-900 font-bold mb-1">Sovereign Admin Login</h3>
+      <p class="text-xs text-slate-500 mb-5">লগইন করতে আপনার Gmail & Password অথবা Security PIN ব্যবহার করুন।</p>
+
+      <!-- Auth Mode Switcher Tabs -->
+      <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-lg mb-5 border border-slate-200">
+        <button type="button" id="tab-btn-email-auth" class="py-2 text-xs font-bold uppercase tracking-wider rounded-md transition-all bg-slate-900 text-white shadow-sm" onclick="switchAdminAuthMode('email')">
+          <i class="fas fa-envelope mr-1"></i> Gmail & Pass
+        </button>
+        <button type="button" id="tab-btn-pin-auth" class="py-2 text-xs font-bold uppercase tracking-wider rounded-md transition-all text-slate-600 hover:text-slate-900" onclick="switchAdminAuthMode('pin')">
+          <i class="fas fa-key mr-1"></i> Security PIN
+        </button>
+      </div>
       
-      <form onsubmit="handleAdminLogin(event)">
-        <input type="password" id="admin-pin-input" class="w-full p-3 bg-surface border border-outline-variant text-center tracking-[0.3em] font-mono text-lg focus:border-secondary outline-none mb-4" placeholder="••••••••" required>
-        <button type="submit" class="w-full py-3 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-label-md uppercase tracking-wider">
-          Access Admin Suite
+      <!-- Option 1: Gmail & Password Form -->
+      <form id="admin-email-login-form" onsubmit="handleAdminEmailLogin(event)" class="space-y-3.5 text-left">
+        <div>
+          <label class="text-[11px] uppercase tracking-wider text-slate-700 font-bold block mb-1">Admin Gmail / Email</label>
+          <div class="relative">
+            <input type="email" id="admin-email-input" class="w-full pl-10 pr-3 py-3 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:border-amber-500 outline-none transition-colors" placeholder="admin@gmail.com" value="admin@gmail.com" required>
+            <span class="material-symbols-outlined text-[18px] text-slate-400 absolute left-3 top-1/2 -translate-y-1/2">mail</span>
+          </div>
+        </div>
+        <div>
+          <label class="text-[11px] uppercase tracking-wider text-slate-700 font-bold block mb-1">Password</label>
+          <div class="relative">
+            <input type="password" id="admin-pass-input" class="w-full pl-10 pr-10 py-3 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:border-amber-500 outline-none transition-colors" placeholder="••••••••" value="admin123" required>
+            <span class="material-symbols-outlined text-[18px] text-slate-400 absolute left-3 top-1/2 -translate-y-1/2">lock</span>
+            <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700" onclick="togglePassVisibility('admin-pass-input')">
+              <span class="material-symbols-outlined text-[18px]">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="p-2.5 bg-amber-50 border border-amber-200/60 rounded-md text-[11px] text-amber-900">
+          🔑 ডিফল্ট জিমেইল: <strong class="font-mono text-amber-800">admin@gmail.com</strong> | পাসওয়ার্ড: <strong class="font-mono text-amber-800">admin123</strong>
+        </div>
+        <button type="submit" class="btn-gold w-full py-3.5 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg">
+          <span class="material-symbols-outlined text-[18px]">login</span>
+          লগইন করুন • Access Admin Suite
+        </button>
+      </form>
+
+      <!-- Option 2: Security PIN Form -->
+      <form id="admin-pin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-3.5 hidden">
+        <div>
+          <label class="text-[11px] uppercase tracking-wider text-slate-700 font-bold block mb-1 text-left">8-Digit Security PIN</label>
+          <input type="password" id="admin-pin-input" class="w-full p-3 bg-white border border-slate-300 rounded-lg text-center tracking-[0.3em] font-mono text-lg text-slate-900 focus:border-amber-500 outline-none" placeholder="••••••••">
+        </div>
+        <div class="p-2.5 bg-amber-50 border border-amber-200/60 rounded-md text-[11px] text-amber-900 text-left">
+          🔑 ডিফল্ট পিন: <strong class="font-mono text-amber-800">admin123</strong>
+        </div>
+        <button type="submit" class="btn-gold w-full py-3.5 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg">
+          <span class="material-symbols-outlined text-[18px]">key</span>
+          পিন দিয়ে প্রবেশ করুন • Verify PIN
         </button>
       </form>
     </div>
@@ -1287,6 +1333,14 @@
                 <div>
                   <label class="uppercase text-[#8c3494] block mb-1">Rocket Number</label>
                   <input type="text" name="rocketNumber" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
+                </div>
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Admin Login Gmail / Email *</label>
+                  <input type="email" name="adminEmail" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
+                </div>
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Admin Login Password *</label>
+                  <input type="text" name="adminPassword" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
                 </div>
                 <div>
                   <label class="uppercase text-secondary block mb-1">Security PIN (Default: admin123)</label>

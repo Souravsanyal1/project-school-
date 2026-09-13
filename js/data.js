@@ -13,13 +13,15 @@ const DEFAULT_SETTINGS = {
   whatsappNumber: "8801700000000",
   whatsappDefaultMsg: "Assalamu Alaikum, I would like to inquire about your luxury collection.",
   contactEmail: "concierge@noor.com.bd",
+  adminEmail: "admin@gmail.com",
+  adminPassword: "admin123",
+  adminPin: "admin123",
   address: "House 12, Road 4, Gulshan-2, Dhaka - 1212, Bangladesh",
   insideDhakaDelivery: 80,
   outsideDhakaDelivery: 150,
   bkashNumber: "01700000000 (Merchant/Send Money)",
   nagadNumber: "01800000000 (Merchant/Send Money)",
   rocketNumber: "01900000000-8 (Personal)",
-  adminPin: "admin123",
   announcement: "✨ বিশেষ রমজান ও সিজনাল অফার! প্রতিটি ক্রয়ে আকর্ষণীয় প্রিমিয়াম গিফট বক্স ও ফ্রি শিপিং।"
 };
 

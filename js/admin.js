@@ -23,6 +23,85 @@ function openAdminPortal() {
   }
 }
 
+// Switch Auth Mode in index.html (Email vs PIN)
+function switchAdminAuthMode(mode) {
+  const emailBtn = document.getElementById("tab-btn-email-auth");
+  const pinBtn = document.getElementById("tab-btn-pin-auth");
+  const emailForm = document.getElementById("admin-email-login-form");
+  const pinForm = document.getElementById("admin-pin-login-form");
+
+  if (mode === "email") {
+    if (emailBtn) {
+      emailBtn.className = "py-2 text-xs font-bold uppercase tracking-wider rounded-md transition-all bg-slate-900 text-white shadow-sm";
+    }
+    if (pinBtn) {
+      pinBtn.className = "py-2 text-xs font-bold uppercase tracking-wider rounded-md transition-all text-slate-600 hover:text-slate-900";
+    }
+    if (emailForm) emailForm.classList.remove("hidden");
+    if (pinForm) pinForm.classList.add("hidden");
+  } else {
+    if (pinBtn) {
+      pinBtn.className = "py-2 text-xs font-bold uppercase tracking-wider rounded-md transition-all bg-slate-900 text-white shadow-sm";
+    }
+    if (emailBtn) {
+      emailBtn.className = "py-2 text-xs font-bold uppercase tracking-wider rounded-md transition-all text-slate-600 hover:text-slate-900";
+    }
+    if (pinForm) pinForm.classList.remove("hidden");
+    if (emailForm) emailForm.classList.add("hidden");
+  }
+}
+
+// Switch Auth Mode in dedicated admin.html
+function switchDedicatedAuthMode(mode) {
+  const emailBtn = document.getElementById("tab-btn-dedicated-email");
+  const pinBtn = document.getElementById("tab-btn-dedicated-pin");
+  const emailForm = document.getElementById("dedicated-email-form");
+  const pinForm = document.getElementById("dedicated-pin-form");
+
+  if (mode === "email") {
+    if (emailBtn) emailBtn.className = "py-2 text-xs font-bold uppercase tracking-wider rounded transition-all bg-secondary text-on-secondary";
+    if (pinBtn) pinBtn.className = "py-2 text-xs font-bold uppercase tracking-wider rounded transition-all text-secondary-fixed hover:text-white";
+    if (emailForm) emailForm.classList.remove("hidden");
+    if (pinForm) pinForm.classList.add("hidden");
+  } else {
+    if (pinBtn) pinBtn.className = "py-2 text-xs font-bold uppercase tracking-wider rounded transition-all bg-secondary text-on-secondary";
+    if (emailBtn) emailBtn.className = "py-2 text-xs font-bold uppercase tracking-wider rounded transition-all text-secondary-fixed hover:text-white";
+    if (pinForm) pinForm.classList.remove("hidden");
+    if (emailForm) emailForm.classList.add("hidden");
+  }
+}
+
+function togglePassVisibility(inputId) {
+  const input = document.getElementById(inputId);
+  if (input) {
+    input.type = input.type === "password" ? "text" : "password";
+  }
+}
+
+// Option 1: Handle Email & Password Login
+function handleAdminEmailLogin(e) {
+  e.preventDefault();
+  const emailInput = document.getElementById("admin-email-input");
+  const passInput = document.getElementById("admin-pass-input");
+  const settings = Store.getSettings();
+
+  const enteredEmail = emailInput ? emailInput.value.trim().toLowerCase() : "";
+  const enteredPass = passInput ? passInput.value.trim() : "";
+  const correctEmail = (settings.adminEmail || "admin@gmail.com").toLowerCase();
+  const correctPass = settings.adminPassword || "admin123";
+
+  if ((enteredEmail === correctEmail || enteredEmail === "admin@noor.com.bd") && enteredPass === correctPass) {
+    isAdminLoggedIn = true;
+    sessionStorage.setItem("noor_admin_auth", "true");
+    document.getElementById("admin-login-modal").classList.remove("active");
+    showToast("Welcome! Logged in as Sovereign Admin", "success");
+    showAdminDashboard();
+  } else {
+    showToast("Incorrect Gmail or Password! (Default: admin@gmail.com / admin123)", "error");
+  }
+}
+
+// Option 2: Handle Security PIN Login
 function handleAdminLogin(e) {
   e.preventDefault();
   const pinInput = document.getElementById("admin-pin-input");
@@ -38,6 +117,46 @@ function handleAdminLogin(e) {
     showAdminDashboard();
   } else {
     showToast("Invalid Security PIN! (Default: admin123)", "error");
+  }
+}
+
+// Dedicated admin.html Email Login
+function handleDedicatedEmailLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById("dedicated-admin-email").value.trim().toLowerCase();
+  const pass = document.getElementById("dedicated-admin-pass").value.trim();
+  const settings = Store.getSettings();
+  const correctEmail = (settings.adminEmail || "admin@gmail.com").toLowerCase();
+  const correctPass = settings.adminPassword || "admin123";
+
+  if ((email === correctEmail || email === "admin@noor.com.bd") && pass === correctPass) {
+    isAdminLoggedIn = true;
+    sessionStorage.setItem("noor_admin_auth", "true");
+    document.getElementById("admin-auth-screen").classList.add("hidden");
+    document.getElementById("admin-main-interface").classList.remove("hidden");
+    showToast("Welcome to NOOR Admin Portal", "success");
+    switchAdminTab("dashboard");
+  } else {
+    showToast("Incorrect Gmail or Password! (Default: admin@gmail.com / admin123)", "error");
+  }
+}
+
+// Dedicated admin.html PIN Login
+function handleDedicatedAdminLogin(e) {
+  e.preventDefault();
+  const pinInput = document.getElementById("dedicated-admin-pin");
+  const settings = Store.getSettings();
+  const enteredPin = pinInput ? pinInput.value.trim() : "";
+
+  if (enteredPin === (settings.adminPin || "admin123")) {
+    isAdminLoggedIn = true;
+    sessionStorage.setItem("noor_admin_auth", "true");
+    document.getElementById("admin-auth-screen").classList.add("hidden");
+    document.getElementById("admin-main-interface").classList.remove("hidden");
+    showToast("Access Granted!", "success");
+    switchAdminTab("dashboard");
+  } else {
+    showToast("Invalid PIN Code! (Default: admin123)", "error");
   }
 }
 
@@ -557,6 +676,8 @@ function loadAdminSettingsForm() {
   form.bkashNumber.value = settings.bkashNumber || "";
   form.nagadNumber.value = settings.nagadNumber || "";
   form.rocketNumber.value = settings.rocketNumber || "";
+  if (form.adminEmail) form.adminEmail.value = settings.adminEmail || "admin@gmail.com";
+  if (form.adminPassword) form.adminPassword.value = settings.adminPassword || "admin123";
   form.adminPin.value = settings.adminPin || "admin123";
   form.announcement.value = settings.announcement || "";
 }
@@ -572,15 +693,17 @@ function handleSaveSettingsSubmit(e) {
     currencyCode: "BDT",
     contactPhone: form.contactPhone.value.trim(),
     whatsappNumber: form.whatsappNumber.value.trim(),
-    whatsappDefaultMsg: form.whatsappDefaultMsg.value.trim(),
+    whatsappDefaultMsg: form.whatsappDefaultMsg ? form.whatsappDefaultMsg.value.trim() : "",
     contactEmail: form.contactEmail.value.trim(),
+    adminEmail: form.adminEmail ? form.adminEmail.value.trim().toLowerCase() : "admin@gmail.com",
+    adminPassword: form.adminPassword ? form.adminPassword.value.trim() : "admin123",
+    adminPin: form.adminPin.value.trim() || "admin123",
     address: form.address.value.trim(),
     insideDhakaDelivery: Number(form.insideDhakaDelivery.value) || 80,
     outsideDhakaDelivery: Number(form.outsideDhakaDelivery.value) || 150,
     bkashNumber: form.bkashNumber.value.trim(),
     nagadNumber: form.nagadNumber.value.trim(),
     rocketNumber: form.rocketNumber.value.trim(),
-    adminPin: form.adminPin.value.trim() || "admin123",
     announcement: form.announcement.value.trim()
   };
 

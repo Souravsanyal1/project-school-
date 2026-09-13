@@ -9,7 +9,7 @@ class DataStore {
   }
 
   init() {
-    const DATA_VERSION = "v3_crystal_clear_hd";
+    const DATA_VERSION = "v4_auth_email_pass";
     const currentVersion = localStorage.getItem("noor_data_version");
 
     if (currentVersion !== DATA_VERSION) {

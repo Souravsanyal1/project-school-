@@ -57,27 +57,58 @@
        ADMIN AUTHENTICATION LOCK SCREEN
        ========================================================== -->
   <div id="admin-auth-screen" class="fixed inset-0 bg-[#0a0a0a] z-50 flex items-center justify-center p-4">
-    <div class="bg-[#161616] border border-secondary/40 p-8 max-w-md w-full text-center shadow-2xl">
-      <div class="w-16 h-16 rounded-full bg-black border border-secondary text-secondary-fixed flex items-center justify-center mx-auto mb-4">
+    <div class="bg-[#161616] border border-secondary/40 p-8 max-w-md w-full text-center shadow-2xl rounded-xl">
+      <div class="w-16 h-16 rounded-full bg-black border border-secondary text-secondary-fixed flex items-center justify-center mx-auto mb-4 shadow-md">
         <span class="material-symbols-outlined text-[32px]">shield_person</span>
       </div>
-      <h2 class="font-headline-lg text-white text-xl uppercase tracking-widest mb-1">Sovereign Admin Panel</h2>
+      <h2 class="font-headline-lg text-white text-xl uppercase tracking-widest mb-1 font-bold">NOOR Sovereign Admin</h2>
       <p class="text-xs text-secondary tracking-widest uppercase mb-6">Security Access Verification</p>
+
+      <!-- Auth Switcher Tabs -->
+      <div class="grid grid-cols-2 gap-2 p-1 bg-black/60 rounded-lg mb-6 border border-secondary/30">
+        <button type="button" id="tab-btn-dedicated-email" class="py-2 text-xs font-bold uppercase tracking-wider rounded transition-all bg-secondary text-on-secondary" onclick="switchDedicatedAuthMode('email')">
+          <i class="fas fa-envelope mr-1"></i> Gmail & Pass
+        </button>
+        <button type="button" id="tab-btn-dedicated-pin" class="py-2 text-xs font-bold uppercase tracking-wider rounded transition-all text-secondary-fixed hover:text-white" onclick="switchDedicatedAuthMode('pin')">
+          <i class="fas fa-key mr-1"></i> Security PIN
+        </button>
+      </div>
       
-      <form onsubmit="handleDedicatedAdminLogin(event)" class="space-y-4">
+      <!-- Option 1: Gmail & Pass Form -->
+      <form id="dedicated-email-form" onsubmit="handleDedicatedEmailLogin(event)" class="space-y-4 text-left">
         <div>
-          <input type="password" id="dedicated-admin-pin" class="w-full p-3.5 bg-black border border-secondary/40 text-center tracking-[0.3em] font-mono text-xl text-white focus:border-secondary outline-none" placeholder="••••••••" required autofocus>
-          <p class="text-[11px] text-on-surface-variant mt-2">Default PIN: <strong class="text-secondary font-mono">admin123</strong></p>
+          <label class="text-[11px] uppercase tracking-wider text-secondary-fixed block mb-1 font-semibold">Admin Gmail</label>
+          <input type="email" id="dedicated-admin-email" class="w-full p-3 bg-black border border-secondary/40 text-sm text-white focus:border-secondary outline-none rounded" placeholder="admin@gmail.com" value="admin@gmail.com" required>
         </div>
-        <button type="submit" class="w-full py-3.5 bg-secondary text-on-secondary hover:bg-white hover:text-black transition-colors font-label-md uppercase tracking-wider text-xs font-semibold">
+        <div>
+          <label class="text-[11px] uppercase tracking-wider text-secondary-fixed block mb-1 font-semibold">Password</label>
+          <input type="password" id="dedicated-admin-pass" class="w-full p-3 bg-black border border-secondary/40 text-sm text-white focus:border-secondary outline-none rounded" placeholder="••••••••" value="admin123" required>
+        </div>
+        <div class="p-2.5 bg-secondary/10 border border-secondary/30 rounded text-[11px] text-secondary-fixed text-center">
+          🔑 ডিফল্ট জিমেইল: <strong>admin@gmail.com</strong> | পাসওয়ার্ড: <strong>admin123</strong>
+        </div>
+        <button type="submit" class="w-full py-3.5 bg-secondary text-on-secondary hover:bg-white hover:text-black transition-colors font-label-md uppercase tracking-wider text-xs font-bold rounded shadow-lg">
           Unlock Admin Suite
         </button>
-        <div class="pt-2">
-          <a href="index.html" class="text-xs text-secondary-fixed underline hover:text-white transition-colors">
-            ← Return to Live Storefront
-          </a>
-        </div>
       </form>
+
+      <!-- Option 2: PIN Form -->
+      <form id="dedicated-pin-form" onsubmit="handleDedicatedAdminLogin(event)" class="space-y-4 text-left hidden">
+        <div>
+          <label class="text-[11px] uppercase tracking-wider text-secondary-fixed block mb-1 font-semibold">Security PIN</label>
+          <input type="password" id="dedicated-admin-pin" class="w-full p-3.5 bg-black border border-secondary/40 text-center tracking-[0.3em] font-mono text-xl text-white focus:border-secondary outline-none rounded" placeholder="••••••••">
+          <p class="text-[11px] text-secondary-fixed mt-2 text-center">Default PIN: <strong class="text-white font-mono">admin123</strong></p>
+        </div>
+        <button type="submit" class="w-full py-3.5 bg-secondary text-on-secondary hover:bg-white hover:text-black transition-colors font-label-md uppercase tracking-wider text-xs font-bold rounded shadow-lg">
+          Verify Security PIN
+        </button>
+      </form>
+
+      <div class="pt-4 border-t border-secondary/20 mt-4">
+        <a href="index.html" class="text-xs text-secondary-fixed underline hover:text-white transition-colors">
+          ← Return to Live Storefront
+        </a>
+      </div>
     </div>
   </div>
 
