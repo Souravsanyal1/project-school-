@@ -134,9 +134,23 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center !important;
   gap: 0.5rem !important;
   overflow-x: auto !important;
+  overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-x pinch-zoom !important;
   scroll-behavior: smooth !important;
   white-space: nowrap !important;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.category-filter-bar.dragging {
+  cursor: grabbing !important;
+  scroll-behavior: auto !important;
+}
+.category-filter-bar::-webkit-scrollbar {
+  display: none;
+  height: 0;
+  width: 0;
 }
 
 .category-filter-btn {
