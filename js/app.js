@@ -118,15 +118,17 @@ function renderCategories() {
 
   if (homeGrid) {
     homeGrid.innerHTML = categories.filter(c => c.id !== "all").map(cat => `
-      <div class="group relative h-96 overflow-hidden flex flex-col justify-end p-6 bg-surface-container-high transition-transform duration-500 hover:-translate-y-1 cursor-pointer" onclick="filterByCategoryAndShop('${cat.id}')">
-        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('${cat.image || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'}')"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent"></div>
+      <div class="group relative h-96 rounded-xl overflow-hidden flex flex-col justify-end p-6 border border-slate-200 shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer bg-slate-900" onclick="filterByCategoryAndShop('${cat.id}')">
+        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('${cat.image || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'}')"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
         <div class="relative z-10 flex flex-col justify-end">
-          <span class="font-label-md text-secondary-fixed uppercase tracking-widest mb-1">${cat.tag || cat.id}</span>
-          <h3 class="font-headline-md text-on-primary group-hover:text-secondary-fixed transition-colors">${cat.name}</h3>
-          <span class="font-body-sm text-inverse-primary mt-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            Discover <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-          </span>
+          <span class="font-label-md text-amber-400 font-bold uppercase tracking-widest text-xs mb-1 drop-shadow">${cat.tag || cat.id}</span>
+          <h3 class="font-headline-md text-white font-extrabold text-lg group-hover:text-amber-300 transition-colors drop-shadow-md">${cat.name}</h3>
+          <div class="mt-3 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+              Explore Collection <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </span>
+          </div>
         </div>
       </div>
     `).join("");
@@ -134,7 +136,7 @@ function renderCategories() {
 
   if (shopFilterContainer) {
     shopFilterContainer.innerHTML = categories.map(cat => `
-      <button class="px-5 py-2.5 rounded-full text-body-sm uppercase tracking-wider font-medium transition-all ${currentCategory === cat.id ? 'bg-primary text-on-primary border border-secondary shadow-md' : 'bg-surface-container-low text-on-surface-variant hover:text-secondary border border-outline-variant/40'}" onclick="setCategoryFilter('${cat.id}')">
+      <button class="px-5 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all ${currentCategory === cat.id ? 'bg-slate-900 text-white border-2 border-amber-500 shadow-lg scale-105' : 'bg-white text-slate-700 hover:text-amber-700 hover:border-amber-400 border border-slate-300 shadow-sm'}" onclick="setCategoryFilter('${cat.id}')">
         ${cat.name}
       </button>
     `).join("");
@@ -164,29 +166,30 @@ function renderFeaturedProducts() {
   const curr = settings.currency || "৳";
 
   container.innerHTML = products.map(product => `
-    <div class="group flex flex-col bg-surface border border-secondary/15 hover:border-secondary/40 transition-all duration-300">
-      <div class="relative aspect-[3/4] w-full overflow-hidden bg-surface-container cursor-pointer" onclick="openProductDetailPage('${product.id}')">
-        ${product.badge ? `<span class="absolute top-4 left-4 z-10 px-3 py-1 bg-primary text-on-primary font-label-md uppercase tracking-widest border border-secondary/30">${product.badge}</span>` : ''}
-        <button class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-on-surface hover:text-secondary transition-colors" onclick="event.stopPropagation(); toggleWishlist('${product.id}')">
-          <span class="material-symbols-outlined text-[20px]" style="${isWishlisted(product.id) ? "font-variation-settings: 'FILL' 1; color: #735c00;" : ''}">favorite</span>
+    <div class="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-amber-500 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+      <div class="relative aspect-[3/4] w-full overflow-hidden bg-slate-100 cursor-pointer" onclick="openProductDetailPage('${product.id}')">
+        ${product.badge ? `<span class="absolute top-4 left-4 z-10 px-3 py-1 bg-slate-950 text-amber-400 font-label-md font-bold uppercase tracking-wider rounded border border-amber-500/50 shadow-md text-xs">${product.badge}</span>` : ''}
+        <button class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:text-amber-600 shadow-md transition-colors" onclick="event.stopPropagation(); toggleWishlist('${product.id}')" title="Save to Wishlist">
+          <span class="material-symbols-outlined text-[20px]" style="${isWishlisted(product.id) ? "font-variation-settings: 'FILL' 1; color: #d97706;" : ''}">favorite</span>
         </button>
-        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('${product.image}')"></div>
+        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
       </div>
       <div class="p-6 flex flex-col flex-grow justify-between space-y-4">
         <div>
-          <div class="flex items-center gap-1 text-secondary mb-2">
+          <div class="flex items-center gap-1 text-amber-500 mb-2">
             ${getStarRatingIcons(product.rating || 5)}
-            <span class="font-body-sm text-on-surface-variant ml-2">(${product.reviewsCount || 20})</span>
+            <span class="font-body-sm text-slate-500 font-bold ml-2">(${product.reviewsCount || 20} Reviews)</span>
           </div>
-          <h3 class="font-headline-sm text-on-surface cursor-pointer hover:text-secondary transition-colors" onclick="openProductDetailPage('${product.id}')">${product.name}</h3>
-          <p class="font-body-sm text-on-surface-variant mt-1 line-clamp-2">${product.description || ''}</p>
+          <h3 class="font-headline-sm text-slate-900 font-extrabold text-lg cursor-pointer hover:text-amber-600 transition-colors" onclick="openProductDetailPage('${product.id}')">${product.name}</h3>
+          <p class="font-body-sm text-slate-600 font-normal mt-1.5 line-clamp-2 leading-relaxed">${product.description || ''}</p>
         </div>
-        <div class="flex items-center justify-between pt-4 border-t border-secondary/10">
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
           <div>
-            <span class="font-headline-md text-on-surface">${curr}${Number(product.price).toLocaleString()}</span>
-            ${product.regularPrice && product.regularPrice > product.price ? `<span class="text-body-sm text-on-surface-variant line-through block">${curr}${Number(product.regularPrice).toLocaleString()}</span>` : ''}
+            <span class="font-headline-md text-amber-700 font-extrabold text-xl">${curr}${Number(product.price).toLocaleString()}</span>
+            ${product.regularPrice && product.regularPrice > product.price ? `<span class="text-xs text-slate-400 line-through block font-medium">${curr}${Number(product.regularPrice).toLocaleString()}</span>` : ''}
           </div>
-          <button class="px-5 py-3 bg-primary text-on-primary font-label-md uppercase tracking-wider hover:bg-secondary hover:text-on-secondary transition-colors" onclick="addToBagDirect('${product.id}')">
+          <button class="btn-black px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg" onclick="addToBagDirect('${product.id}')">
+            <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
             Add to Bag
           </button>
         </div>
@@ -230,10 +233,10 @@ function renderShopProducts() {
 
   if (products.length === 0) {
     container.innerHTML = `
-      <div class="col-span-full text-center py-20 text-on-surface-variant">
-        <span class="material-symbols-outlined text-[48px] text-secondary/50 mb-3">inventory_2</span>
-        <h3 class="font-headline-md text-on-surface">No Masterpieces Found</h3>
-        <p class="text-body-md mt-2">Try adjusting your search criteria or selecting another category.</p>
+      <div class="col-span-full text-center py-20 text-slate-500 bg-white rounded-xl border border-slate-200">
+        <span class="material-symbols-outlined text-[54px] text-amber-500/60 mb-3">inventory_2</span>
+        <h3 class="font-headline-md text-slate-900 font-bold">No Masterpieces Found</h3>
+        <p class="text-body-md mt-2 text-slate-600">Try adjusting your search criteria or selecting another category.</p>
       </div>
     `;
     return;
@@ -243,29 +246,30 @@ function renderShopProducts() {
   const curr = settings.currency || "৳";
 
   container.innerHTML = products.map(product => `
-    <div class="group flex flex-col bg-surface border border-secondary/15 hover:border-secondary/40 transition-all duration-300">
-      <div class="relative aspect-[3/4] w-full overflow-hidden bg-surface-container cursor-pointer" onclick="openProductDetailPage('${product.id}')">
-        ${product.badge ? `<span class="absolute top-4 left-4 z-10 px-3 py-1 bg-primary text-on-primary font-label-md uppercase tracking-widest border border-secondary/30">${product.badge}</span>` : ''}
-        <button class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-on-surface hover:text-secondary transition-colors" onclick="event.stopPropagation(); toggleWishlist('${product.id}')">
-          <span class="material-symbols-outlined text-[20px]" style="${isWishlisted(product.id) ? "font-variation-settings: 'FILL' 1; color: #735c00;" : ''}">favorite</span>
+    <div class="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-amber-500 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+      <div class="relative aspect-[3/4] w-full overflow-hidden bg-slate-100 cursor-pointer" onclick="openProductDetailPage('${product.id}')">
+        ${product.badge ? `<span class="absolute top-4 left-4 z-10 px-3 py-1 bg-slate-950 text-amber-400 font-label-md font-bold uppercase tracking-wider rounded border border-amber-500/50 shadow-md text-xs">${product.badge}</span>` : ''}
+        <button class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:text-amber-600 shadow-md transition-colors" onclick="event.stopPropagation(); toggleWishlist('${product.id}')" title="Save to Wishlist">
+          <span class="material-symbols-outlined text-[20px]" style="${isWishlisted(product.id) ? "font-variation-settings: 'FILL' 1; color: #d97706;" : ''}">favorite</span>
         </button>
-        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('${product.image}')"></div>
+        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
       </div>
       <div class="p-6 flex flex-col flex-grow justify-between space-y-4">
         <div>
-          <div class="flex items-center gap-1 text-secondary mb-2">
+          <div class="flex items-center gap-1 text-amber-500 mb-2">
             ${getStarRatingIcons(product.rating || 5)}
-            <span class="font-body-sm text-on-surface-variant ml-2">(${product.reviewsCount || 24})</span>
+            <span class="font-body-sm text-slate-500 font-bold ml-2">(${product.reviewsCount || 24} Reviews)</span>
           </div>
-          <h3 class="font-headline-sm text-on-surface cursor-pointer hover:text-secondary transition-colors" onclick="openProductDetailPage('${product.id}')">${product.name}</h3>
-          <p class="font-body-sm text-on-surface-variant mt-1 line-clamp-2">${product.description || ''}</p>
+          <h3 class="font-headline-sm text-slate-900 font-extrabold text-lg cursor-pointer hover:text-amber-600 transition-colors" onclick="openProductDetailPage('${product.id}')">${product.name}</h3>
+          <p class="font-body-sm text-slate-600 font-normal mt-1.5 line-clamp-2 leading-relaxed">${product.description || ''}</p>
         </div>
-        <div class="flex items-center justify-between pt-4 border-t border-secondary/10">
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
           <div>
-            <span class="font-headline-md text-on-surface">${curr}${Number(product.price).toLocaleString()}</span>
-            ${product.regularPrice && product.regularPrice > product.price ? `<span class="text-body-sm text-on-surface-variant line-through block">${curr}${Number(product.regularPrice).toLocaleString()}</span>` : ''}
+            <span class="font-headline-md text-amber-700 font-extrabold text-xl">${curr}${Number(product.price).toLocaleString()}</span>
+            ${product.regularPrice && product.regularPrice > product.price ? `<span class="text-xs text-slate-400 line-through block font-medium">${curr}${Number(product.regularPrice).toLocaleString()}</span>` : ''}
           </div>
-          <button class="px-5 py-3 bg-primary text-on-primary font-label-md uppercase tracking-wider hover:bg-secondary hover:text-on-secondary transition-colors" onclick="addToBagDirect('${product.id}')">
+          <button class="btn-black px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg" onclick="addToBagDirect('${product.id}')">
+            <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
             Add to Bag
           </button>
         </div>

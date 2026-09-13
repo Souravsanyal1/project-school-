@@ -203,7 +203,7 @@ function openProductEditModal(productId = null) {
     modalTitle.textContent = "Add New Masterpiece (নতুন পণ্য)";
     form.productId.value = "";
     form.prodStock.value = "30";
-    form.prodImage.value = "https://lh3.googleusercontent.com/aida-public/AB6AXuBci9eA1b6uV_3Qbss9IK9fove2dTPOFnmzWm-QQV_duhsLEnC1WV-O9Gg2SCMtiX3xp7b99K5Yx58mBMRBxJS3cPrq6ztj_4Wtbj1em9LQm5g48eDsDtKW0BXOPw5yGb05JmteUzdVWXVHZUv7zQkX6f44vyhULlBAJ3z5C5CuZoewrjgDTU7-xRqEJFQ6n84TD909FLn542i3ts6NiTVQOeruvLuaPiZhxYmQb6yUfEuTOYhOrOs";
+    form.prodImage.value = "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85";
   }
 
   document.getElementById("admin-product-modal").classList.add("active");

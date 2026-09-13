@@ -9,22 +9,19 @@ class DataStore {
   }
 
   init() {
-    // Check if re-seeding is needed
-    if (!localStorage.getItem("noor_settings")) {
+    const DATA_VERSION = "v3_crystal_clear_hd";
+    const currentVersion = localStorage.getItem("noor_data_version");
+
+    if (currentVersion !== DATA_VERSION) {
+      // Refresh default products, categories and settings with crystal-clear high-res assets
       localStorage.setItem("noor_settings", JSON.stringify(DEFAULT_SETTINGS));
-    }
-    if (!localStorage.getItem("noor_products")) {
       localStorage.setItem("noor_products", JSON.stringify(DEFAULT_PRODUCTS));
-    }
-    if (!localStorage.getItem("noor_categories")) {
       localStorage.setItem("noor_categories", JSON.stringify(DEFAULT_CATEGORIES));
-    }
-    if (!localStorage.getItem("noor_coupons")) {
       localStorage.setItem("noor_coupons", JSON.stringify(DEFAULT_COUPONS));
-    }
-    if (!localStorage.getItem("noor_orders")) {
       localStorage.setItem("noor_orders", JSON.stringify(DEFAULT_ORDERS));
+      localStorage.setItem("noor_data_version", DATA_VERSION);
     }
+
     if (!localStorage.getItem("noor_cart")) {
       localStorage.setItem("noor_cart", JSON.stringify([]));
     }
