@@ -184,17 +184,22 @@ function openMobileSearch() {
 function renderCategories() {
   const categories = Store.getCategories();
   const homeGrid = document.getElementById("home-categories-grid");
+  const categoriesSection = document.getElementById("shop-categories-anchor");
   const shopFilterContainer = document.getElementById("shop-category-filters");
 
-  if (homeGrid) {
-    const customCategories = categories.filter(c => c.id !== "all");
+  const customCategories = categories.filter(c => c.id !== "all");
+
+  if (categoriesSection) {
     if (customCategories.length === 0) {
-      homeGrid.innerHTML = `
-        <div class="col-span-full text-center py-12 px-6 bg-slate-900/40 rounded-2xl border border-slate-800 text-slate-400">
-          <span class="material-symbols-outlined text-[42px] text-amber-400 mb-2">category</span>
-          <p class="text-base font-medium text-slate-300">এডমিন প্যানেল থেকে নতুন ক্যাটাগরি যুক্ত করা হলে এখানে প্রদর্শিত হবে।</p>
-        </div>
-      `;
+      categoriesSection.style.display = "none";
+    } else {
+      categoriesSection.style.display = "block";
+    }
+  }
+
+  if (homeGrid) {
+    if (customCategories.length === 0) {
+      homeGrid.innerHTML = "";
     } else {
       homeGrid.innerHTML = customCategories.map(cat => `
         <div class="group relative h-96 rounded-xl overflow-hidden flex flex-col justify-end p-6 border border-slate-200 shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer bg-slate-900" onclick="filterByCategoryAndShop('${cat.id}')">
@@ -242,20 +247,23 @@ function setCategoryFilter(catId) {
 // Render Featured Editions on Homepage
 function renderFeaturedProducts() {
   const container = document.getElementById("home-featured-grid");
+  const featuredSection = document.getElementById("home-featured-section");
   if (!container) return;
 
   const products = Store.getProducts().slice(0, 3);
   const settings = Store.getSettings();
   const curr = settings.currency || "৳";
 
+  if (featuredSection) {
+    if (products.length === 0) {
+      featuredSection.style.display = "none";
+    } else {
+      featuredSection.style.display = "block";
+    }
+  }
+
   if (products.length === 0) {
-    container.innerHTML = `
-      <div class="col-span-full text-center py-16 px-6 bg-white/70 rounded-2xl border border-dashed border-slate-300">
-        <span class="material-symbols-outlined text-[48px] text-amber-500/70 mb-2">inventory_2</span>
-        <h3 class="font-headline-sm text-slate-900 font-bold text-lg">বর্তমানে কোনো পণ্য তালিকাভুক্ত নেই</h3>
-        <p class="text-sm text-slate-600 mt-1">এডমিন প্যানেল থেকে নতুন পণ্য যোগ করা হলে এখানে স্বয়ংক্রিয়ভাবে প্রদর্শিত হবে।</p>
-      </div>
-    `;
+    container.innerHTML = "";
     return;
   }
 
