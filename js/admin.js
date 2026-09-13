@@ -607,17 +607,34 @@ function openOrderDetailsModal(orderId) {
       <div style="background:#f3f3f4; padding:16px; border:1px solid #e2e2e2;">
         <h4 style="margin-bottom:6px; color:#1a1c1c; text-transform:uppercase; font-size:12px; letter-spacing:1px;">Patron Information:</h4>
         <p><strong>Name:</strong> ${order.customerName}</p>
-        <p><strong>Phone:</strong> ${order.phone}</p>
+        <p><strong>Phone:</strong> <a href="tel:${order.phone}" style="color:#735c00; font-weight:700;">${order.phone}</a></p>
+        <p><strong>Email:</strong> ${order.email || 'N/A'}</p>
         <p><strong>Address:</strong> ${order.address}</p>
         ${order.notes ? `<p><strong>Notes:</strong> ${order.notes}</p>` : ''}
       </div>
       <div style="background:#f3f3f4; padding:16px; border:1px solid #e2e2e2;">
         <h4 style="margin-bottom:6px; color:#1a1c1c; text-transform:uppercase; font-size:12px; letter-spacing:1px;">Payment & Delivery:</h4>
         <p><strong>Method:</strong> ${order.paymentMethod.toUpperCase()}</p>
-        <p><strong>TrxID:</strong> ${order.trxId}</p>
+        <p><strong>TrxID:</strong> <strong style="color:#735c00;">${order.trxId}</strong></p>
         <p><strong>Delivery Zone:</strong> ${order.deliveryArea === 'inside' ? 'Inside Dhaka (৳' + settings.insideDhakaDelivery + ')' : 'Outside Dhaka (৳' + settings.outsideDhakaDelivery + ')'}</p>
         <p><strong>Courier Fee:</strong> ${curr}${Number(order.deliveryFee).toLocaleString()}</p>
       </div>
+    </div>
+
+    <!-- Live Status Updater in Modal -->
+    <div style="margin-bottom:16px; padding:12px 16px; background:#fff9e6; border:1px solid #735c00; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div>
+        <strong style="font-size:0.85rem; color:#735c00; text-transform:uppercase; letter-spacing:0.5px; display:block;">⚡ Live 5-Step Status (লাইভ অর্ডার আপডেট)</strong>
+        <span style="font-size:0.75rem; color:#747878;">স্ট্যাটাস পরিবর্তন করলে ইউজারের ড্যাশবোর্ডে সাথে সাথে রিয়েল-টাইম আপডেট হবে</span>
+      </div>
+      <select onchange="updateOrderStatusFromTable('${order.orderId}', this.value); openOrderDetailsModal('${order.orderId}');" style="padding:8px 12px; font-weight:700; font-size:0.85rem; border:1px solid #735c00; background:#fff; cursor:pointer;">
+        <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>1. Order Placed (অর্ডার গৃহীত)</option>
+        <option value="Processing" ${order.status === 'Processing' ? 'selected' : ''}>2. Artisanal Crafting (প্রস্তুত হচ্ছে)</option>
+        <option value="Confirmed" ${order.status === 'Confirmed' ? 'selected' : ''}>3. Quality Inspection (মান পরীক্ষা)</option>
+        <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>4. Dispatched (ডেলিভারিতে পাঠানো হয়েছে)</option>
+        <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>5. Delivered (ডেলিভারি সম্পন্ন)</option>
+        <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled (বাতিল)</option>
+      </select>
     </div>
 
     <h4 style="margin-bottom:8px; text-transform:uppercase; font-size:12px; color:#735c00; letter-spacing:1px;">Curated Items:</h4>
@@ -626,6 +643,7 @@ function openOrderDetailsModal(orderId) {
         <thead style="background:#f3f3f4;">
           <tr>
             <th style="padding:8px 12px; text-align:left;">Item</th>
+            <th style="padding:8px 12px; text-align:center;">Variant</th>
             <th style="padding:8px 12px; text-align:center;">Qty</th>
             <th style="padding:8px 12px; text-align:right;">Unit Price</th>
             <th style="padding:8px 12px; text-align:right;">Total</th>
@@ -634,10 +652,11 @@ function openOrderDetailsModal(orderId) {
         <tbody>
           ${order.items.map(item => `
             <tr style="border-top:1px solid #e2e2e2;">
-              <td style="padding:8px 12px;">${item.name}</td>
-              <td style="padding:8px 12px; text-align:center;">${item.quantity}</td>
+              <td style="padding:8px 12px;"><strong>${item.name}</strong></td>
+              <td style="padding:8px 12px; text-align:center; color:#747878; font-size:0.8rem;">${(item.color && item.color !== 'Default' ? item.color : '') + (item.size && item.size !== 'Standard' ? ' • ' + item.size : '') || 'Standard'}</td>
+              <td style="padding:8px 12px; text-align:center; font-weight:700;">${item.quantity}</td>
               <td style="padding:8px 12px; text-align:right;">${curr}${Number(item.price).toLocaleString()}</td>
-              <td style="padding:8px 12px; text-align:right;">${curr}${(item.price * item.quantity).toLocaleString()}</td>
+              <td style="padding:8px 12px; text-align:right; font-weight:700;">${curr}${(item.price * item.quantity).toLocaleString()}</td>
             </tr>
           `).join("")}
         </tbody>
@@ -646,7 +665,7 @@ function openOrderDetailsModal(orderId) {
 
     <div style="text-align:right; font-size:0.95rem; margin-bottom:1.5rem;">
       <p>Subtotal: <strong>${curr}${Number(order.subtotal).toLocaleString()}</strong></p>
-      ${order.discount ? `<p style="color:#735c00;">VIP Discount: <strong>-${curr}${Number(order.discount).toLocaleString()}</strong></p>` : ''}
+      ${order.discount ? `<p style="color:#735c00;">VIP Discount (${order.couponCode || 'Code'}): <strong>-${curr}${Number(order.discount).toLocaleString()}</strong></p>` : ''}
       <p>Courier Fee: <strong>${curr}${Number(order.deliveryFee).toLocaleString()}</strong></p>
       <h3 style="font-size:1.35rem; color:#1a1c1c; margin-top:4px;">Grand Total: <strong style="color:#735c00;">${curr}${Number(order.total).toLocaleString()}</strong></h3>
     </div>

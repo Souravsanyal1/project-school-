@@ -260,6 +260,9 @@ class DataStore {
     let orders = this.getOrders().filter(o => o.orderId !== orderId);
     localStorage.setItem("noor_orders", JSON.stringify(orders));
     this.emitChange("orders");
+    if (window.FirebaseRealtime?.deleteOrderFromFirebase) {
+      window.FirebaseRealtime.deleteOrderFromFirebase(orderId);
+    }
   }
 
   // --- Cart ---
@@ -392,6 +395,9 @@ class DataStore {
     }
     localStorage.setItem("noor_addresses", JSON.stringify(list));
     this.emitChange("addresses");
+    if (window.FirebaseRealtime?.syncAddressToFirebase) {
+      window.FirebaseRealtime.syncAddressToFirebase(addressData);
+    }
     return addressData;
   }
 
@@ -404,6 +410,9 @@ class DataStore {
     }
     localStorage.setItem("noor_addresses", JSON.stringify(list));
     this.emitChange("addresses");
+    if (window.FirebaseRealtime?.deleteAddressFromFirebase) {
+      window.FirebaseRealtime.deleteAddressFromFirebase(id);
+    }
   }
 
   setDefaultAddress(id) {
@@ -514,6 +523,9 @@ class DataStore {
     }
 
     this.emitChange("reviews");
+    if (window.FirebaseRealtime?.syncReviewToFirebase) {
+      window.FirebaseRealtime.syncReviewToFirebase(newRev);
+    }
     return newRev;
   }
 

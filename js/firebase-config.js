@@ -163,13 +163,58 @@ export async function deleteCouponFromFirebase(code) {
   }
 }
 
+export async function deleteOrderFromFirebase(orderId) {
+  try {
+    await deleteDoc(doc(db, "orders", orderId));
+    console.log("⚡ [Realtime Cloud] Order deleted:", orderId);
+  } catch (err) {
+    console.warn("Firestore delete order fallback:", err.message);
+  }
+}
+
+export async function syncReviewToFirebase(review) {
+  try {
+    await setDoc(doc(db, "reviews", review.id), review);
+    console.log("⚡ [Realtime Cloud] Review synced:", review.id);
+  } catch (err) {
+    console.warn("Firestore review sync fallback:", err.message);
+  }
+}
+
+export async function deleteReviewFromFirebase(reviewId) {
+  try {
+    await deleteDoc(doc(db, "reviews", reviewId));
+    console.log("⚡ [Realtime Cloud] Review deleted:", reviewId);
+  } catch (err) {
+    console.warn("Firestore delete review fallback:", err.message);
+  }
+}
+
+export async function syncAddressToFirebase(address) {
+  try {
+    await setDoc(doc(db, "addresses", address.id), address);
+    console.log("⚡ [Realtime Cloud] Address synced:", address.id);
+  } catch (err) {
+    console.warn("Firestore address sync fallback:", err.message);
+  }
+}
+
+export async function deleteAddressFromFirebase(addressId) {
+  try {
+    await deleteDoc(doc(db, "addresses", addressId));
+    console.log("⚡ [Realtime Cloud] Address deleted:", addressId);
+  } catch (err) {
+    console.warn("Firestore delete address fallback:", err.message);
+  }
+}
+
 // -----------------------------------------------------------
 // Realtime Snapshot Listeners (Live Bidirectional Sync)
 // -----------------------------------------------------------
 let isInitialOrdersLoad = true;
 
 export function initRealtimeListeners() {
-  // 1. Live Orders Listener
+  // 1. Live Orders Listener (User <-> Admin Bidirectional)
   onSnapshot(collection(db, "orders"), (snapshot) => {
     if (snapshot.empty && isInitialOrdersLoad) {
       // Seed default orders to cloud if first time
@@ -202,7 +247,7 @@ export function initRealtimeListeners() {
     console.warn("Realtime orders listener fallback:", err.message);
   });
 
-  // 2. Live Products Listener
+  // 2. Live Products Listener (Admin changes show live on User UI)
   onSnapshot(collection(db, "products"), (snapshot) => {
     if (snapshot.empty) {
       const localProducts = (window.Store && window.Store.getProducts()) || [];
@@ -220,7 +265,7 @@ export function initRealtimeListeners() {
     console.warn("Realtime products listener fallback:", err.message);
   });
 
-  // 3. Live Global Settings Listener
+  // 3. Live Global Settings Listener (Banners, Title, Delivery Fees)
   onSnapshot(doc(db, "settings", "global_settings"), (docSnap) => {
     if (docSnap.exists()) {
       const cloudSettings = docSnap.data();
@@ -260,6 +305,20 @@ export function initRealtimeListeners() {
     }
   }, (err) => {
     console.warn("Realtime coupons listener fallback:", err.message);
+  });
+
+  // 6. Live Reviews Listener (Verified Buyer Reviews)
+  onSnapshot(collection(db, "reviews"), (snapshot) => {
+    if (!snapshot.empty) {
+      const cloudReviews = [];
+      snapshot.forEach(docSnap => cloudReviews.push(docSnap.data()));
+      if (cloudReviews.length > 0) {
+        localStorage.setItem("noor_product_reviews", JSON.stringify(cloudReviews));
+        if (window.Store) window.Store.emitChange("reviews");
+      }
+    }
+  }, (err) => {
+    console.warn("Realtime reviews listener fallback:", err.message);
   });
 }
 
@@ -368,6 +427,7 @@ window.FirebaseAuth = {
 window.FirebaseRealtime = {
   syncOrderToFirebase,
   updateOrderStatusInFirebase,
+  deleteOrderFromFirebase,
   syncProductToFirebase,
   deleteProductFromFirebase,
   syncSettingsToFirebase,
@@ -375,6 +435,10 @@ window.FirebaseRealtime = {
   deleteCategoryFromFirebase,
   syncCouponToFirebase,
   deleteCouponFromFirebase,
+  syncReviewToFirebase,
+  deleteReviewFromFirebase,
+  syncAddressToFirebase,
+  deleteAddressFromFirebase,
   playNewOrderChime
 };
 
