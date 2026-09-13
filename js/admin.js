@@ -1,6 +1,7 @@
 /**
  * Admin Panel Controller & Management Suite
- * Full Control: Products, Orders, Categories, Coupons, Settings & Backup
+ * Luxury Obsidian & Gold Aesthetic
+ * Full Control: Products, Orders (5-Step Tracking), Categories, Coupons, Settings & Backup
  */
 
 let isAdminLoggedIn = false;
@@ -9,7 +10,7 @@ let currentAdminTab = "dashboard";
 // Initialize Admin Portal
 function openAdminPortal() {
   const settings = Store.getSettings();
-  const sessionAuth = sessionStorage.getItem("sh_admin_auth");
+  const sessionAuth = sessionStorage.getItem("noor_admin_auth");
 
   if (sessionAuth === "true") {
     isAdminLoggedIn = true;
@@ -27,13 +28,13 @@ function handleAdminLogin(e) {
 
   if (enteredPin === (settings.adminPin || "admin123")) {
     isAdminLoggedIn = true;
-    sessionStorage.setItem("sh_admin_auth", "true");
+    sessionStorage.setItem("noor_admin_auth", "true");
     document.getElementById("admin-login-modal").classList.remove("active");
     if (pinInput) pinInput.value = "";
-    showToast("অ্যাডমিন প্যানেলে স্বাগতম!", "success");
+    showToast("Welcome to NOOR Sovereign Admin Panel", "success");
     showAdminDashboard();
   } else {
-    showToast("ভুল পিন কোড! পুনরায় চেষ্টা করুন। (Default PIN: admin123)", "error");
+    showToast("Invalid Security PIN! (Default: admin123)", "error");
   }
 }
 
@@ -43,10 +44,10 @@ function closeAdminLogin() {
 
 function adminLogout() {
   isAdminLoggedIn = false;
-  sessionStorage.removeItem("sh_admin_auth");
+  sessionStorage.removeItem("noor_admin_auth");
   document.getElementById("admin-portal-view").classList.remove("active");
   document.getElementById("storefront-view").style.display = "block";
-  showToast("অ্যাডমিন প্যানেল থেকে লগআউট করা হয়েছে", "warning");
+  showToast("Logged out of Sovereign Admin Panel", "warning");
 }
 
 function exitAdminPortal() {
@@ -86,7 +87,6 @@ function renderAdminDashboardStats() {
   const settings = Store.getSettings();
   const curr = settings.currency || "৳";
 
-  // Metrics
   const totalSales = orders
     .filter(o => o.status !== "Cancelled")
     .reduce((sum, o) => sum + (o.total || 0), 0);
@@ -99,23 +99,22 @@ function renderAdminDashboardStats() {
   document.getElementById("admin-stat-pending").textContent = pendingOrders;
   document.getElementById("admin-stat-products").textContent = totalProducts;
 
-  // Recent Orders table in dashboard
   const recentOrdersTbody = document.getElementById("admin-recent-orders-tbody");
   if (recentOrdersTbody) {
     const recent = orders.slice(0, 5);
     if (recent.length === 0) {
-      recentOrdersTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#94a3b8;">কোনো অর্ডার নেই</td></tr>`;
+      recentOrdersTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:2rem;">No commissions recorded yet.</td></tr>`;
     } else {
       recentOrdersTbody.innerHTML = recent.map(o => `
         <tr>
-          <td><strong>${o.orderId}</strong></td>
-          <td>${escapeHtml(o.customerName)}<br><small style="color:#64748b;">${escapeHtml(o.phone)}</small></td>
-          <td>${curr}${Number(o.total).toLocaleString()}</td>
+          <td><strong class="text-secondary font-mono">${o.orderId}</strong></td>
+          <td><strong>${o.customerName}</strong><br><small style="color:#747878;">${o.phone}</small></td>
+          <td><strong class="text-primary">${curr}${Number(o.total).toLocaleString()}</strong></td>
           <td><span class="status-badge status-${o.status}">${o.status}</span></td>
           <td>${o.date}</td>
           <td>
-            <button class="btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="openOrderDetailsModal('${o.orderId}')">
-              <i class="fas fa-eye"></i>
+            <button class="px-3 py-1.5 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary text-xs uppercase transition-colors" onclick="openOrderDetailsModal('${o.orderId}')">
+              Review
             </button>
           </td>
         </tr>
@@ -133,33 +132,33 @@ function renderAdminProductsTable() {
   if (!tbody) return;
 
   if (products.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:#64748b;">কোনো পণ্য পাওয়া যায়নি</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:#747878;">No masterpieces in catalog</td></tr>`;
     return;
   }
 
   tbody.innerHTML = products.map(p => `
     <tr>
       <td>
-        <img src="${p.image}" alt="" style="width:45px; height:45px; object-fit:cover; border-radius:6px;" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'">
+        <img src="${p.image}" alt="" class="w-12 h-14 object-cover border border-secondary/20">
       </td>
       <td>
-        <strong>${escapeHtml(p.name)}</strong>
-        ${p.badge ? `<br><span class="badge badge-hot" style="font-size:0.65rem;">${escapeHtml(p.badge)}</span>` : ''}
+        <strong class="text-on-surface">${p.name}</strong>
+        ${p.badge ? `<br><span class="badge badge-hot text-[10px] mt-1">${p.badge}</span>` : ''}
       </td>
-      <td><span class="badge" style="background:#e0f2fe; color:#0284c7;">${getCategoryName(p.category)}</span></td>
+      <td><span class="badge bg-secondary/10 text-secondary uppercase font-semibold">${getCategoryName(p.category)}</span></td>
       <td>
         <strong>${curr}${Number(p.price).toLocaleString()}</strong>
-        ${p.regularPrice ? `<br><small style="text-decoration:line-through; color:#94a3b8;">${curr}${Number(p.regularPrice).toLocaleString()}</small>` : ''}
+        ${p.regularPrice ? `<br><small class="line-through text-on-surface-variant">${curr}${Number(p.regularPrice).toLocaleString()}</small>` : ''}
       </td>
-      <td>${p.stock || 0} টি</td>
+      <td>${p.stock || 0} units</td>
       <td>⭐ ${p.rating || 5} (${p.reviewsCount || 0})</td>
       <td>
         <div style="display:flex; gap:6px;">
-          <button class="btn-secondary" style="padding:6px 10px; font-size:0.8rem; background:#f1f5f9; color:#0284c7;" onclick="openProductEditModal('${p.id}')">
-            <i class="fas fa-edit"></i>
+          <button class="px-3 py-1 bg-surface-container border border-secondary/30 text-secondary hover:bg-secondary hover:text-on-secondary transition-colors text-xs" onclick="openProductEditModal('${p.id}')">
+            Edit
           </button>
-          <button class="btn-secondary" style="padding:6px 10px; font-size:0.8rem; background:#fee2e2; color:#ef4444;" onclick="deleteProductConfirm('${p.id}')">
-            <i class="fas fa-trash-alt"></i>
+          <button class="px-3 py-1 bg-error/10 text-error hover:bg-error hover:text-on-error transition-colors text-xs" onclick="deleteProductConfirm('${p.id}')">
+            Delete
           </button>
         </div>
       </td>
@@ -171,7 +170,6 @@ function openProductEditModal(productId = null) {
   const form = document.getElementById("admin-product-form");
   form.reset();
 
-  // Populate category options
   const catSelect = document.getElementById("prod-category-select");
   const categories = Store.getCategories().filter(c => c.id !== 'all');
   catSelect.innerHTML = categories.map(c => `
@@ -183,7 +181,7 @@ function openProductEditModal(productId = null) {
   if (productId) {
     const p = Store.getProductById(productId);
     if (!p) return;
-    modalTitle.textContent = "পণ্য সম্পাদন করুন (Edit Product)";
+    modalTitle.textContent = "Edit Masterpiece (পণ্য সম্পাদন)";
     form.productId.value = p.id;
     form.prodName.value = p.name || "";
     form.prodCategory.value = p.category || categories[0]?.id;
@@ -194,10 +192,10 @@ function openProductEditModal(productId = null) {
     form.prodImage.value = p.image || "";
     form.prodDescription.value = p.description || "";
   } else {
-    modalTitle.textContent = "নতুন পণ্য যুক্ত করুন (Add Product)";
+    modalTitle.textContent = "Add New Masterpiece (নতুন পণ্য)";
     form.productId.value = "";
-    form.prodStock.value = "50";
-    form.prodImage.value = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80";
+    form.prodStock.value = "30";
+    form.prodImage.value = "https://lh3.googleusercontent.com/aida-public/AB6AXuBci9eA1b6uV_3Qbss9IK9fove2dTPOFnmzWm-QQV_duhsLEnC1WV-O9Gg2SCMtiX3xp7b99K5Yx58mBMRBxJS3cPrq6ztj_4Wtbj1em9LQm5g48eDsDtKW0BXOPw5yGb05JmteUzdVWXVHZUv7zQkX6f44vyhULlBAJ3z5C5CuZoewrjgDTU7-xRqEJFQ6n84TD909FLn542i3ts6NiTVQOeruvLuaPiZhxYmQb6yUfEuTOYhOrOs";
   }
 
   document.getElementById("admin-product-modal").classList.add("active");
@@ -217,11 +215,11 @@ function handleSaveProductSubmit(e) {
   const regularPrice = form.prodRegularPrice.value ? Number(form.prodRegularPrice.value) : price;
   const stock = Number(form.prodStock.value) || 0;
   const badge = form.prodBadge.value.trim();
-  const image = form.prodImage.value.trim() || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80";
+  const image = form.prodImage.value.trim();
   const description = form.prodDescription.value.trim();
 
   if (!name || isNaN(price) || price <= 0) {
-    showToast("দয়া করে পণ্যের নাম ও সঠিক মূল্য দিন", "error");
+    showToast("Please provide valid product name and BDT price", "error");
     return;
   }
 
@@ -234,8 +232,8 @@ function handleSaveProductSubmit(e) {
     badge,
     image,
     description,
-    rating: 4.8,
-    reviewsCount: 15
+    rating: 5.0,
+    reviewsCount: 30
   };
 
   if (id) {
@@ -244,22 +242,25 @@ function handleSaveProductSubmit(e) {
     if (existing) {
       productData.rating = existing.rating;
       productData.reviewsCount = existing.reviewsCount;
+      productData.colors = existing.colors;
+      productData.sizes = existing.sizes;
+      productData.gallery = existing.gallery;
     }
   }
 
   Store.saveProduct(productData);
   closeProductEditModal();
   renderAdminProductsTable();
-  showToast(id ? "পণ্য সফলভাবে আপডেট করা হয়েছে!" : "নতুন পণ্য যুক্ত করা হয়েছে!", "success");
+  showToast(id ? "Masterpiece updated successfully!" : "New Masterpiece created successfully!", "success");
 }
 
 function deleteProductConfirm(productId) {
   const p = Store.getProductById(productId);
   if (!p) return;
-  if (confirm(`আপনি কি নিশ্চিতভাবে "${p.name}" পণ্যটি মুছে ফেলতে চান?`)) {
+  if (confirm(`Are you sure you want to delete "${p.name}"?`)) {
     Store.deleteProduct(productId);
     renderAdminProductsTable();
-    showToast("পণ্যটি মুছে ফেলা হয়েছে!", "success");
+    showToast("Product removed from catalog", "success");
   }
 }
 
@@ -276,41 +277,41 @@ function renderAdminOrdersTable(filterStatus = "all") {
   }
 
   if (orders.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:#64748b;">কোনো অর্ডার পাওয়া যায়নি</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:#747878;">No commissions found.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = orders.map(o => `
     <tr>
-      <td><strong>${o.orderId}</strong><br><small style="color:#64748b;">${o.date}</small></td>
+      <td><strong class="text-secondary font-mono">${o.orderId}</strong><br><small style="color:#747878;">${o.date}</small></td>
       <td>
-        <strong>${escapeHtml(o.customerName)}</strong><br>
-        <span style="font-size:0.8rem; color:#0284c7;"><i class="fas fa-phone"></i> ${escapeHtml(o.phone)}</span>
+        <strong>${o.customerName}</strong><br>
+        <span style="font-size:0.8rem; color:#735c00;"><i class="fas fa-phone mr-1"></i> ${o.phone}</span>
       </td>
       <td>
         <span style="text-transform:uppercase; font-weight:700; font-size:0.8rem;">${o.paymentMethod}</span><br>
-        <small style="color:#64748b;">Trx: ${escapeHtml(o.trxId)}</small>
+        <small style="color:#747878;">Trx: ${o.trxId}</small>
       </td>
       <td><strong>${curr}${Number(o.total).toLocaleString()}</strong></td>
       <td>
-        <select onchange="updateOrderStatusFromTable('${o.orderId}', this.value)" style="padding:4px 8px; border-radius:6px; font-size:0.8rem; font-weight:600; border:1px solid #cbd5e1;">
-          <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
-          <option value="Confirmed" ${o.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
-          <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>Processing</option>
-          <option value="Shipped" ${o.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
-          <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+        <select onchange="updateOrderStatusFromTable('${o.orderId}', this.value)" style="padding:6px 10px; border-radius:4px; font-size:0.82rem; font-weight:600; border:1px solid #c4c7c7; background:#fff;">
+          <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>1. Order Placed</option>
+          <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>2. Artisanal Crafting</option>
+          <option value="Confirmed" ${o.status === 'Confirmed' ? 'selected' : ''}>3. Quality Inspection</option>
+          <option value="Shipped" ${o.status === 'Shipped' ? 'selected' : ''}>4. Dispatched</option>
+          <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>5. Delivered</option>
           <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
         </select>
       </td>
       <td>
         <div style="display:flex; gap:6px;">
-          <button class="btn-secondary" style="padding:6px 10px; font-size:0.8rem; background:#f1f5f9;" onclick="openOrderDetailsModal('${o.orderId}')" title="বিস্তারিত">
+          <button class="px-2.5 py-1.5 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary transition-colors" onclick="openOrderDetailsModal('${o.orderId}')" title="Details">
             <i class="fas fa-eye"></i>
           </button>
-          <button class="btn-secondary" style="padding:6px 10px; font-size:0.8rem; background:#e0f2fe; color:#0284c7;" onclick="printInvoice('${o.orderId}')" title="রশিদ প্রিন্ট">
+          <button class="px-2.5 py-1.5 bg-primary text-on-primary hover:bg-secondary transition-colors" onclick="printInvoice('${o.orderId}')" title="Print Invoice">
             <i class="fas fa-print"></i>
           </button>
-          <button class="btn-secondary" style="padding:6px 10px; font-size:0.8rem; background:#fee2e2; color:#ef4444;" onclick="deleteOrderConfirm('${o.orderId}')" title="মুছে ফেলুন">
+          <button class="px-2.5 py-1.5 bg-error/10 text-error hover:bg-error hover:text-on-error transition-colors" onclick="deleteOrderConfirm('${o.orderId}')" title="Delete">
             <i class="fas fa-trash-alt"></i>
           </button>
         </div>
@@ -321,14 +322,14 @@ function renderAdminOrdersTable(filterStatus = "all") {
 
 function updateOrderStatusFromTable(orderId, newStatus) {
   Store.updateOrderStatus(orderId, newStatus);
-  showToast(`অর্ডার ${orderId} স্ট্যাটাস পরিবর্তন করা হয়েছে: ${newStatus}`, "success");
+  showToast(`Order ${orderId} status updated: ${newStatus}`, "success");
 }
 
 function deleteOrderConfirm(orderId) {
-  if (confirm(`আপনি কি নিশ্চিতভাবে অর্ডার "${orderId}" মুছে ফেলতে চান?`)) {
+  if (confirm(`Delete commission order "${orderId}" permanently?`)) {
     Store.deleteOrder(orderId);
     renderAdminOrdersTable();
-    showToast("অর্ডার মুছে ফেলা হয়েছে!", "success");
+    showToast("Order removed", "success");
   }
 }
 
@@ -344,46 +345,47 @@ function openOrderDetailsModal(orderId) {
   const content = document.getElementById("admin-order-details-content");
 
   content.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:12px; margin-bottom:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #735c00; padding-bottom:12px; margin-bottom:16px;">
       <div>
-        <h3 style="font-size:1.3rem; font-weight:800; color:var(--primary);">${order.orderId}</h3>
-        <span style="font-size:0.85rem; color:#64748b;">তারিখ: ${order.date}</span>
+        <span style="text-transform:uppercase; font-size:11px; letter-spacing:2px; color:#735c00;">Order Dossier</span>
+        <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-main);">${order.orderId}</h3>
+        <span style="font-size:0.85rem; color:#747878;">Date: ${order.date}</span>
       </div>
       <span class="status-badge status-${order.status}">${order.status}</span>
     </div>
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; font-size:0.88rem;">
-      <div style="background:#f8fafc; padding:12px; border-radius:8px;">
-        <h4 style="margin-bottom:6px; color:#1e293b;">গ্রাহকের তথ্য:</h4>
-        <p><strong>নাম:</strong> ${escapeHtml(order.customerName)}</p>
-        <p><strong>ফোন:</strong> ${escapeHtml(order.phone)}</p>
-        <p><strong>ঠিকানা:</strong> ${escapeHtml(order.address)}</p>
-        ${order.notes ? `<p><strong>নোট:</strong> ${escapeHtml(order.notes)}</p>` : ''}
+      <div style="background:#f3f3f4; padding:16px; border:1px solid #e2e2e2;">
+        <h4 style="margin-bottom:6px; color:#1a1c1c; text-transform:uppercase; font-size:12px; letter-spacing:1px;">Patron Information:</h4>
+        <p><strong>Name:</strong> ${order.customerName}</p>
+        <p><strong>Phone:</strong> ${order.phone}</p>
+        <p><strong>Address:</strong> ${order.address}</p>
+        ${order.notes ? `<p><strong>Notes:</strong> ${order.notes}</p>` : ''}
       </div>
-      <div style="background:#f8fafc; padding:12px; border-radius:8px;">
-        <h4 style="margin-bottom:6px; color:#1e293b;">পেমেন্ট ও ডেলিভারি:</h4>
-        <p><strong>পেমেন্ট পদ্ধতি:</strong> ${order.paymentMethod.toUpperCase()}</p>
-        <p><strong>TrxID:</strong> ${escapeHtml(order.trxId)}</p>
-        <p><strong>ডেলিভারি এরিয়া:</strong> ${order.deliveryArea === 'inside' ? 'ঢাকার ভিতরে' : 'ঢাকার বাহিরে'}</p>
-        <p><strong>ডেলিভারি চার্জ:</strong> ${curr}${Number(order.deliveryFee).toLocaleString()}</p>
+      <div style="background:#f3f3f4; padding:16px; border:1px solid #e2e2e2;">
+        <h4 style="margin-bottom:6px; color:#1a1c1c; text-transform:uppercase; font-size:12px; letter-spacing:1px;">Payment & Delivery:</h4>
+        <p><strong>Method:</strong> ${order.paymentMethod.toUpperCase()}</p>
+        <p><strong>TrxID:</strong> ${order.trxId}</p>
+        <p><strong>Delivery Zone:</strong> ${order.deliveryArea === 'inside' ? 'Inside Dhaka (৳' + settings.insideDhakaDelivery + ')' : 'Outside Dhaka (৳' + settings.outsideDhakaDelivery + ')'}</p>
+        <p><strong>Courier Fee:</strong> ${curr}${Number(order.deliveryFee).toLocaleString()}</p>
       </div>
     </div>
 
-    <h4 style="margin-bottom:8px;">অর্ডারকৃত পণ্যসমূহ:</h4>
-    <div style="border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; margin-bottom:16px;">
+    <h4 style="margin-bottom:8px; text-transform:uppercase; font-size:12px; color:#735c00; letter-spacing:1px;">Curated Items:</h4>
+    <div style="border:1px solid #e2e2e2; margin-bottom:16px;">
       <table style="width:100%; border-collapse:collapse; font-size:0.88rem;">
-        <thead style="background:#f8fafc;">
+        <thead style="background:#f3f3f4;">
           <tr>
-            <th style="padding:8px 12px; text-align:left;">পণ্য</th>
-            <th style="padding:8px 12px; text-align:center;">পরিমাণ</th>
-            <th style="padding:8px 12px; text-align:right;">একক মূল্য</th>
-            <th style="padding:8px 12px; text-align:right;">মোট</th>
+            <th style="padding:8px 12px; text-align:left;">Item</th>
+            <th style="padding:8px 12px; text-align:center;">Qty</th>
+            <th style="padding:8px 12px; text-align:right;">Unit Price</th>
+            <th style="padding:8px 12px; text-align:right;">Total</th>
           </tr>
         </thead>
         <tbody>
           ${order.items.map(item => `
-            <tr style="border-top:1px solid #e2e8f0;">
-              <td style="padding:8px 12px;">${escapeHtml(item.name)}</td>
+            <tr style="border-top:1px solid #e2e2e2;">
+              <td style="padding:8px 12px;">${item.name}</td>
               <td style="padding:8px 12px; text-align:center;">${item.quantity}</td>
               <td style="padding:8px 12px; text-align:right;">${curr}${Number(item.price).toLocaleString()}</td>
               <td style="padding:8px 12px; text-align:right;">${curr}${(item.price * item.quantity).toLocaleString()}</td>
@@ -394,18 +396,18 @@ function openOrderDetailsModal(orderId) {
     </div>
 
     <div style="text-align:right; font-size:0.95rem; margin-bottom:1.5rem;">
-      <p>সাবটোটাল: <strong>${curr}${Number(order.subtotal).toLocaleString()}</strong></p>
-      ${order.discount ? `<p style="color:#ef4444;">ডিসকাউন্ট: <strong>-${curr}${Number(order.discount).toLocaleString()}</strong></p>` : ''}
-      <p>ডেলিভারি চার্জ: <strong>${curr}${Number(order.deliveryFee).toLocaleString()}</strong></p>
-      <h3 style="font-size:1.25rem; color:var(--primary); margin-top:4px;">সর্বমোট: ${curr}${Number(order.total).toLocaleString()}</h3>
+      <p>Subtotal: <strong>${curr}${Number(order.subtotal).toLocaleString()}</strong></p>
+      ${order.discount ? `<p style="color:#735c00;">VIP Discount: <strong>-${curr}${Number(order.discount).toLocaleString()}</strong></p>` : ''}
+      <p>Courier Fee: <strong>${curr}${Number(order.deliveryFee).toLocaleString()}</strong></p>
+      <h3 style="font-size:1.35rem; color:#1a1c1c; margin-top:4px;">Grand Total: <strong style="color:#735c00;">${curr}${Number(order.total).toLocaleString()}</strong></h3>
     </div>
 
     <div style="display:flex; gap:10px;">
-      <button class="btn-primary" style="flex:1; justify-content:center;" onclick="printInvoice('${order.orderId}')">
-        <i class="fas fa-print"></i> রশিদ প্রিন্ট করুন
+      <button class="px-6 py-3 bg-secondary text-on-secondary uppercase text-xs font-semibold tracking-wider hover:bg-primary transition-colors flex-1" onclick="printInvoice('${order.orderId}')">
+        <i class="fas fa-print mr-1"></i> Print Official Receipt
       </button>
-      <button class="btn-secondary" style="flex:1; justify-content:center; background:#0f172a;" onclick="closeOrderDetailsModal()">
-        বন্ধ করুন
+      <button class="px-6 py-3 bg-primary text-on-primary uppercase text-xs font-semibold tracking-wider hover:bg-secondary transition-colors flex-1" onclick="closeOrderDetailsModal()">
+        Close
       </button>
     </div>
   `;
@@ -425,15 +427,15 @@ function renderAdminCategoriesTable() {
 
   tbody.innerHTML = categories.map(cat => `
     <tr>
-      <td><i class="fas ${cat.icon || 'fa-tag'}" style="font-size:1.2rem; color:var(--primary);"></i></td>
-      <td><strong>${escapeHtml(cat.name)}</strong></td>
+      <td><span class="material-symbols-outlined text-secondary">${cat.icon || 'diamond'}</span></td>
+      <td><strong>${cat.name}</strong></td>
       <td><code>${cat.id}</code></td>
       <td>
         ${cat.id !== 'all' ? `
-          <button class="btn-secondary" style="padding:4px 8px; font-size:0.75rem; background:#fee2e2; color:#ef4444;" onclick="deleteCategoryClick('${cat.id}')">
-            <i class="fas fa-trash-alt"></i>
+          <button class="px-3 py-1 bg-error/10 text-error hover:bg-error hover:text-on-error text-xs uppercase transition-colors" onclick="deleteCategoryClick('${cat.id}')">
+            Delete
           </button>
-        ` : '<span style="color:#94a3b8; font-size:0.75rem;">ডিফল্ট</span>'}
+        ` : '<span style="color:#747878; font-size:0.75rem;">Default</span>'}
       </td>
     </tr>
   `).join("");
@@ -443,21 +445,21 @@ function handleAddCategorySubmit(e) {
   e.preventDefault();
   const name = document.getElementById("new-cat-name").value.trim();
   const id = document.getElementById("new-cat-id").value.trim() || ("cat-" + Date.now());
-  const icon = document.getElementById("new-cat-icon").value.trim() || "fa-tag";
+  const icon = document.getElementById("new-cat-icon").value.trim() || "diamond";
 
   if (!name) return;
 
   Store.saveCategory({ id, name, icon });
   e.target.reset();
   renderAdminCategoriesTable();
-  showToast("নতুন ক্যাটাগরি তৈরি হয়েছে!", "success");
+  showToast("New category created successfully!", "success");
 }
 
 function deleteCategoryClick(catId) {
-  if (confirm("এই ক্যাটাগরিটি মুছে ফেলতে চান?")) {
+  if (confirm("Delete this category?")) {
     Store.deleteCategory(catId);
     renderAdminCategoriesTable();
-    showToast("ক্যাটাগরি মুছে ফেলা হয়েছে!", "success");
+    showToast("Category removed", "success");
   }
 }
 
@@ -470,19 +472,19 @@ function renderAdminCouponsTable() {
   if (!tbody) return;
 
   if (coupons.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:1.5rem; color:#64748b;">কোনো কুপন সক্রিয় নেই</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:1.5rem; color:#747878;">No active VIP codes</td></tr>`;
     return;
   }
 
   tbody.innerHTML = coupons.map(c => `
     <tr>
-      <td><strong style="color:var(--primary); letter-spacing:1px;">${escapeHtml(c.code)}</strong></td>
-      <td>${c.discountPercent ? `${c.discountPercent}% ছাড়` : `${curr}${c.discountFixed} ছাড়`}</td>
+      <td><strong class="text-secondary font-mono tracking-widest uppercase">${c.code}</strong></td>
+      <td>${c.discountPercent ? `${c.discountPercent}% Privilege Off` : `${curr}${c.discountFixed} Off`}</td>
       <td>${curr}${c.minSpend || 0}</td>
-      <td><span class="badge ${c.active ? 'badge-new' : 'badge-hot'}">${c.active ? 'সক্রিয়' : 'নিষ্ক্রিয়'}</span></td>
+      <td><span class="badge ${c.active ? 'badge-new' : 'badge-hot'}">${c.active ? 'Active' : 'Disabled'}</span></td>
       <td>
-        <button class="btn-secondary" style="padding:4px 8px; font-size:0.75rem; background:#fee2e2; color:#ef4444;" onclick="deleteCouponClick('${c.code}')">
-          <i class="fas fa-trash-alt"></i>
+        <button class="px-3 py-1 bg-error/10 text-error hover:bg-error hover:text-on-error text-xs uppercase transition-colors" onclick="deleteCouponClick('${c.code}')">
+          Delete
         </button>
       </td>
     </tr>
@@ -498,7 +500,7 @@ function handleAddCouponSubmit(e) {
   const minSpend = Number(form.couponMinSpend.value) || 0;
 
   if (!code || isNaN(val) || val <= 0) {
-    showToast("সঠিক কুপন কোড ও মান দিন", "error");
+    showToast("Please enter valid coupon code & discount amount", "error");
     return;
   }
 
@@ -510,7 +512,7 @@ function handleAddCouponSubmit(e) {
 
   if (type === "percent") {
     coupon.discountPercent = val;
-    coupon.maxDiscount = Number(form.couponMaxDiscount.value) || 500;
+    coupon.maxDiscount = Number(form.couponMaxDiscount.value) || 3000;
   } else {
     coupon.discountFixed = val;
   }
@@ -518,14 +520,14 @@ function handleAddCouponSubmit(e) {
   Store.saveCoupon(coupon);
   form.reset();
   renderAdminCouponsTable();
-  showToast(`কুপন ${code} সফলভাবে যুক্ত হয়েছে!`, "success");
+  showToast(`VIP Code ${code} registered successfully!`, "success");
 }
 
 function deleteCouponClick(code) {
-  if (confirm(`কুপন "${code}" মুছে ফেলতে চান?`)) {
+  if (confirm(`Delete VIP code "${code}"?`)) {
     Store.deleteCoupon(code);
     renderAdminCouponsTable();
-    showToast("কুপন মুছে ফেলা হয়েছে!", "success");
+    showToast("VIP Code removed", "success");
   }
 }
 
@@ -542,8 +544,8 @@ function loadAdminSettingsForm() {
   form.whatsappDefaultMsg.value = settings.whatsappDefaultMsg || "";
   form.contactEmail.value = settings.contactEmail || "";
   form.address.value = settings.address || "";
-  form.insideDhakaDelivery.value = settings.insideDhakaDelivery || 60;
-  form.outsideDhakaDelivery.value = settings.outsideDhakaDelivery || 120;
+  form.insideDhakaDelivery.value = settings.insideDhakaDelivery || 80;
+  form.outsideDhakaDelivery.value = settings.outsideDhakaDelivery || 150;
   form.bkashNumber.value = settings.bkashNumber || "";
   form.nagadNumber.value = settings.nagadNumber || "";
   form.rocketNumber.value = settings.rocketNumber || "";
@@ -565,8 +567,8 @@ function handleSaveSettingsSubmit(e) {
     whatsappDefaultMsg: form.whatsappDefaultMsg.value.trim(),
     contactEmail: form.contactEmail.value.trim(),
     address: form.address.value.trim(),
-    insideDhakaDelivery: Number(form.insideDhakaDelivery.value) || 60,
-    outsideDhakaDelivery: Number(form.outsideDhakaDelivery.value) || 120,
+    insideDhakaDelivery: Number(form.insideDhakaDelivery.value) || 80,
+    outsideDhakaDelivery: Number(form.outsideDhakaDelivery.value) || 150,
     bkashNumber: form.bkashNumber.value.trim(),
     nagadNumber: form.nagadNumber.value.trim(),
     rocketNumber: form.rocketNumber.value.trim(),
@@ -575,7 +577,7 @@ function handleSaveSettingsSubmit(e) {
   };
 
   Store.saveSettings(newSettings);
-  showToast("ওয়েবসাইটের সকল সেটিংস সফলভাবে সেভ করা হয়েছে!", "success");
+  showToast("All flagship settings saved successfully!", "success");
 }
 
 // 7. Backup & Reset
@@ -585,10 +587,10 @@ function exportDatabaseData() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `backup_school_store_${Date.now()}.json`;
+  a.download = `noor_flagship_backup_${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
-  showToast("ব্যাকআপ ফাইল ডাউনলোড সম্পন্ন হয়েছে!", "success");
+  showToast("Backup file exported successfully!", "success");
 }
 
 function importDatabaseData(e) {
@@ -599,19 +601,19 @@ function importDatabaseData(e) {
   reader.onload = function(evt) {
     const res = Store.importData(evt.target.result);
     if (res.success) {
-      showToast("ডাটা সফলভাবে রিস্টোর করা হয়েছে!", "success");
+      showToast("Data restored successfully!", "success");
       switchAdminTab(currentAdminTab);
     } else {
-      showToast("ডাটা ইম্পোর্ট ব্যর্থ: " + res.error, "error");
+      showToast("Import failed: " + res.error, "error");
     }
   };
   reader.readAsText(file);
 }
 
 function resetAllDataDemo() {
-  if (confirm("আপনি কি সমস্ত ডাটা মুছে দিয়ে প্রাথমিক ডেমো ডাটায় রিসেট করতে চান?")) {
+  if (confirm("Reset all catalog and orders to initial flagship demo state?")) {
     Store.resetToDefault();
-    showToast("ওয়েবসাইট সফলভাবে ডেমো ডাটায় রিসেট করা হয়েছে!", "success");
+    showToast("Reset completed!", "success");
     switchAdminTab("dashboard");
   }
 }

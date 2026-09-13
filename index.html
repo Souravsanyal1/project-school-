@@ -1,287 +1,889 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SchoolHub & Mega Store BD - সেরা অনলাইন শপ</title>
-  <meta name="description" content="বাংলাদেশি টাকায় (৳ BDT) প্রিমিয়াম কোয়ালিটি স্কুল আইটেম, বই, স্টেশনারি ও ইলেকট্রনিক্স অনলাইন শপ। বিকাশ, নগদ ও ক্যাশ অন ডেলিভারি সুবিধা সহ।">
-  
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NOOR Flagship - Elegance Rooted in Faith</title>
+  <meta name="description" content="Exclusive luxury Islamic lifestyle brand with Bangladeshi Taka (৳ BDT) base currency. Abayas, Prayer Essentials, Oud Fragrances, and Handcrafted Masterpieces.">
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Plus+Jakarta+Sans:wght@100..900&family=Hind+Siliguri:wght@400;500;600;700&display=swap"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- Tailwind CSS CDN & Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#000000",
+            "on-primary": "#ffffff",
+            "secondary": "#735c00",
+            "secondary-container": "#fed65b",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#745c00",
+            "secondary-fixed": "#ffe088",
+            "secondary-fixed-dim": "#e9c349",
+            "surface": "#f9f9f9",
+            "on-surface": "#1a1c1c",
+            "on-surface-variant": "#444748",
+            "surface-container-low": "#f3f3f4",
+            "surface-container": "#eeeeee",
+            "surface-container-high": "#e8e8e8",
+            "surface-container-highest": "#e2e2e2",
+            "surface-container-lowest": "#ffffff",
+            "outline": "#747878",
+            "outline-variant": "#c4c7c7",
+            "error": "#ba1a1a",
+            "inverse-primary": "#c8c6c5"
+          },
+          spacing: {
+            "gutter": "2rem",
+            "space-xl": "6rem",
+            "space-lg": "3.5rem",
+            "space-md": "2rem",
+            "space-sm": "1rem",
+            "space-xs": "0.5rem"
+          },
+          fontFamily: {
+            "body-sm": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "display-xl": ["Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css"/>
 </head>
-<body>
+<body class="bg-surface font-body-md text-on-surface">
 
   <!-- Toast Notification Container -->
   <div id="toast-container"></div>
 
   <!-- ==========================================================
-       1. STOREFRONT VIEW
+       TOP ANNOUNCEMENT BAR
+       ========================================================== -->
+  <div class="bg-primary text-on-primary py-2 px-gutter text-center border-b border-secondary/30 relative z-50 text-xs tracking-wider">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-2 mx-auto">
+        <span class="material-symbols-outlined text-secondary-fixed text-[16px]">stars</span>
+        <span class="site-announcement-display font-medium">✨ বিশেষ অফার! প্রতিটি অর্ডারে আকর্ষণীয় উপহার ও সারা দেশে ডেলিভারি সুবিধা।</span>
+      </div>
+      <div class="hidden md:flex items-center gap-2 text-secondary-fixed">
+        <span class="material-symbols-outlined text-[16px]">phone_in_talk</span>
+        <span class="site-phone-display">+8801700000000</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================
+       MAIN NAVIGATION HEADER
+       ========================================================== -->
+  <header class="sticky top-0 w-full z-40 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-secondary/20">
+    <div class="h-20 max-w-7xl mx-auto px-gutter flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-4 cursor-pointer" onclick="switchView('home')">
+        <div class="w-9 h-9 rounded-full bg-primary border border-secondary flex items-center justify-center text-secondary-fixed">
+          <span class="material-symbols-outlined text-[20px]">diamond</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-headline-md tracking-[0.25em] text-on-surface uppercase font-light site-name-display">NOOR</span>
+          <span class="text-[9px] text-secondary tracking-[0.3em] uppercase -mt-1 font-semibold">Flagship BD</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden lg:flex items-center space-x-8">
+        <a class="text-body-md text-secondary font-bold transition-colors cursor-pointer" data-nav-target="home" onclick="switchView('home')">Home</a>
+        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" data-nav-target="shop" onclick="switchView('shop')">Collection</a>
+        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" data-nav-target="pdp" onclick="switchView('pdp')">Masterpiece</a>
+        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" data-nav-target="member" onclick="switchView('member')">Member & Track</a>
+        <a class="text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" onclick="document.getElementById('heritage-section')?.scrollIntoView({behavior: 'smooth'})">Heritage</a>
+      </nav>
+
+      <!-- Header Action Icons -->
+      <div class="flex items-center space-x-5">
+        
+        <!-- Search Trigger / Input -->
+        <div class="relative hidden sm:block">
+          <input type="text" class="global-search-input pl-9 pr-4 py-1.5 bg-surface border border-outline-variant/60 text-xs w-44 lg:w-56 focus:w-64 focus:border-secondary outline-none transition-all" placeholder="Search collection...">
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant absolute left-2.5 top-1/2 -translate-y-1/2">search</span>
+        </div>
+
+        <!-- Wishlist Button -->
+        <button class="text-on-surface-variant hover:text-secondary transition-colors relative" onclick="switchView('member'); switchMemberTab('wishlist');" title="Curated Wishlist">
+          <span class="material-symbols-outlined text-[22px]">favorite</span>
+          <span class="wishlist-count-badge absolute -top-1.5 -right-1.5 bg-secondary text-on-secondary text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+        </button>
+
+        <!-- Shopping Bag Trigger -->
+        <button class="text-on-surface-variant hover:text-secondary transition-colors relative" onclick="openCartDrawer()" title="Shopping Bag">
+          <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
+          <span class="cart-count-badge absolute -top-1.5 -right-1.5 bg-primary text-on-primary border border-secondary text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+        </button>
+
+        <!-- Sovereign Admin Button -->
+        <button class="px-3.5 py-1.5 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary transition-colors text-xs uppercase font-medium tracking-wider flex items-center gap-1.5" onclick="openAdminPortal()" title="Admin Control Suite">
+          <span class="material-symbols-outlined text-[16px]">shield_person</span>
+          <span>Admin</span>
+        </button>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==========================================================
+       STOREFRONT CONTAINER
        ========================================================== -->
   <div id="storefront-view">
 
-    <!-- Top Announcement Bar -->
-    <div class="announcement-bar">
-      <div class="container announcement-inner">
-        <div class="announcement-text">
-          <i class="fas fa-bullhorn" style="color: #38bdf8;"></i>
-          <span class="site-announcement-display">🎉 বিশেষ অফার! ৫০০ টাকার বেশি অর্ডারে আকর্ষণীয় উপহার! দ্রুত অর্ডার করুন।</span>
+    <!-- ========================================================
+         VIEW 1: HOME PAGE
+         ======================================================== -->
+    <div id="view-home">
+      
+      <!-- Hero Section -->
+      <section class="relative w-full h-[880px] min-h-[600px] flex items-center justify-center overflow-hidden -mt-20 pt-20">
+        <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDpNcM7mMCJj7Vd10J7BG0yBb_e7IWZgqCGZUZDg3a3QOzveOM64coxa3ZdNzSP8wCvgpUGudo3n3Kc_V02AX68w6rpHb1xHassDanixENKljNcvfnwyoObjBbRdnLCtnlKQtoEt4xbJTPSsbzXRnvsKIN60EzaTmrBMIXpw6IL83MVVQHVwJTi6fb_-OxKUJ0PElxIcpvxhlaUvhDXjvad439aGtjU0uJYfH0MnFoRDPx3zdsQrX4')"></div>
+        <div class="absolute inset-0 z-10 bg-gradient-to-t from-surface via-surface/50 to-transparent"></div>
+        
+        <div class="relative z-20 max-w-5xl mx-auto px-gutter text-center flex flex-col items-center space-y-space-md">
+          <span class="font-label-md text-secondary uppercase tracking-[0.3em] font-medium bg-surface/80 px-4 py-1 border border-secondary/30 backdrop-blur-sm">Flagship Collection 2026</span>
+          <h1 class="font-display-xl text-on-surface max-w-4xl tracking-tight leading-tight">Elegance Rooted in Faith</h1>
+          <div class="w-16 h-[1px] bg-secondary my-2"></div>
+          <p class="font-body-lg text-on-surface-variant max-w-2xl mx-auto font-light leading-relaxed">
+            Uncompromising craftsmanship blending timeless Islamic heritage with contemporary global luxury standards. Base currency in <strong>৳ (BDT)</strong> with nationwide white-glove delivery.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
+            <button class="px-8 py-4 bg-primary text-on-primary font-label-md uppercase tracking-widest border border-secondary hover:bg-secondary hover:text-on-secondary transition-all duration-300" onclick="switchView('shop')">
+              Explore Collection
+            </button>
+            <button class="px-8 py-4 bg-transparent text-on-surface font-label-md uppercase tracking-widest border border-outline-variant hover:border-secondary hover:text-secondary transition-all duration-300" onclick="switchView('pdp')">
+              View Masterpiece
+            </button>
+          </div>
         </div>
-        <div class="announcement-phone" style="display: none;">
-          <i class="fas fa-phone-alt"></i> <span class="site-phone-display">+8801700000000</span>
+
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 opacity-60 cursor-pointer" onclick="document.getElementById('shop-categories-anchor').scrollIntoView({behavior: 'smooth'})">
+          <span class="font-label-md uppercase text-[10px] tracking-widest text-on-surface-variant">Scroll</span>
+          <div class="w-[1px] h-8 bg-secondary animate-pulse"></div>
+        </div>
+      </section>
+
+      <!-- Category Section -->
+      <section class="w-full py-space-xl max-w-7xl mx-auto px-gutter" id="shop-categories-anchor">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-space-lg gap-4">
+          <div>
+            <span class="font-label-md text-secondary uppercase tracking-[0.2em]">Curated Categories</span>
+            <h2 class="font-headline-lg text-on-surface mt-2">The Sanctum of Craft</h2>
+          </div>
+          <p class="font-body-sm text-on-surface-variant max-w-md">
+            Every artifact and textile is thoughtfully designed with reverence for geometric purity, fine materials, and spiritual grace.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="home-categories-grid">
+          <!-- Dynamic 8 Categories -->
+        </div>
+      </section>
+
+      <!-- Featured Masterpieces Section -->
+      <section class="w-full py-space-xl bg-surface-container-low">
+        <div class="max-w-7xl mx-auto px-gutter">
+          <div class="flex flex-col md:flex-row justify-between items-end mb-space-lg gap-4">
+            <div>
+              <span class="font-label-md text-secondary uppercase tracking-[0.2em]">Masterpieces</span>
+              <h2 class="font-headline-lg text-on-surface mt-2">Featured Editions (৳ BDT)</h2>
+            </div>
+            <button class="px-6 py-2.5 bg-primary text-on-primary font-label-md uppercase tracking-wider hover:bg-secondary hover:text-on-secondary transition-colors" onclick="switchView('shop')">
+              View All Masterpieces
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="home-featured-grid">
+            <!-- Dynamic Featured Products -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Andalusian Archive Banner -->
+      <section class="relative w-full py-32 overflow-hidden flex items-center justify-center">
+        <div class="absolute inset-0 z-0 bg-cover bg-fixed bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDr8qK_6uYmgXl7rD9rCGeaX2ShxPTzd6sGgWOmuRPWJfFmSmjSVXEgkkuaO07qWIcQR_vz19YEvJJ_KA4BYVJ6e5v4dye9347TGcqROmFxglWqCy8ds65Ikz8BU6ySz9tSUownhcafvaq2QciifCgnYB8y5WuVgSmlye96od40Y0EQRL1pBou3G_p_jSdC5VjTeLqb1P2N7tyOJLy9AJt4xo85lM-f1wRaU6akDxGRSuTrdQbeEMs')"></div>
+        <div class="absolute inset-0 z-10 bg-primary/70"></div>
+        <div class="relative z-20 max-w-4xl mx-auto px-gutter text-center flex flex-col items-center space-y-6">
+          <span class="font-label-md text-secondary-fixed uppercase tracking-[0.3em]">The Royal Archive</span>
+          <h2 class="font-display-lg text-on-primary">The Heritage of Andalusian Craft</h2>
+          <p class="font-body-lg text-inverse-primary max-w-2xl font-light">
+            A limited release honoring the golden age of Islamic craftsmanship. Each piece is individually numbered and accompanied by a certificate of authenticity.
+          </p>
+          <div class="pt-4">
+            <button class="px-10 py-5 bg-secondary text-on-secondary font-label-md uppercase tracking-widest border border-secondary-fixed hover:bg-transparent hover:text-on-primary transition-all duration-300" onclick="switchView('shop')">
+              Discover The Archive
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Brand Heritage & Philosophy -->
+      <section class="relative w-full py-space-xl overflow-hidden" id="heritage-section">
+        <div class="max-w-7xl mx-auto px-gutter relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
+            <div class="space-y-6">
+              <span class="font-label-md text-secondary uppercase tracking-[0.2em]">Our Philosophy</span>
+              <h2 class="font-headline-lg text-on-surface">Rooted in Tradition, Elevated for the Modern Sovereign</h2>
+              <p class="font-body-lg text-on-surface-variant font-light leading-relaxed">
+                NOOR was founded on the belief that faith and exquisite aesthetics are inseparable. We collaborate with master artisans across Fez, Istanbul, Lahore, and Dhaka who have preserved centuries-old techniques in textile weaving, metalwork, and calligraphy.
+              </p>
+              <div class="pt-4 flex items-center gap-8">
+                <div>
+                  <span class="font-display-lg text-primary block">100%</span>
+                  <span class="font-label-md text-on-surface-variant uppercase tracking-wider">Ethical Craft</span>
+                </div>
+                <div class="w-[1px] h-12 bg-outline-variant"></div>
+                <div>
+                  <span class="font-display-lg text-primary block">24k</span>
+                  <span class="font-label-md text-on-surface-variant uppercase tracking-wider">Gold Accents</span>
+                </div>
+                <div class="w-[1px] h-12 bg-outline-variant"></div>
+                <div>
+                  <span class="font-display-lg text-primary block">12+</span>
+                  <span class="font-label-md text-on-surface-variant uppercase tracking-wider">Global Ateliers</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative">
+              <div class="aspect-[4/5] w-full overflow-hidden bg-surface-container">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCp-S2pSBCQBHdQFFClNbycuXF0Ibb4UXpXU8AouBi88TpGpoM4IC4Nap5I80wP7ZPwtsIwmqjAKLhvi1Ol3QK5wr-hms0pGphck1QG-QPIsp-2vAtcqXOOQp8kQ2BDpvWmW6UrgY4C9vvNN8LlllphwvoOpN1dnmPTz6dKPDDBFXXIqnSkE_o72S1ArYQHf7UpMgrQ4oEUo9Qp-OrNHImF98eY8SezP1kWLNNZinnc6Sfio5VmF3Y')"></div>
+              </div>
+              <div class="absolute -bottom-8 -left-8 bg-primary text-on-primary p-8 max-w-xs shadow-2xl hidden sm:block border border-secondary/30">
+                <span class="font-label-md text-secondary uppercase tracking-widest block mb-2">Master Artisan Note</span>
+                <p class="font-body-sm text-inverse-primary italic">"True luxury is found in the patience of the hands that make it."</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- ========================================================
+         VIEW 2: PRODUCT DETAIL PAGE (PDP)
+         ======================================================== -->
+    <div id="view-pdp" style="display: none;">
+      
+      <!-- Breadcrumb Navigation -->
+      <div class="max-w-7xl mx-auto px-gutter w-full py-6 flex items-center justify-between text-body-sm text-on-surface-variant">
+        <div class="flex items-center gap-2">
+          <a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('home')">Home</a>
+          <span>/</span>
+          <a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('shop')">Collections</a>
+          <span>/</span>
+          <span class="text-on-surface font-medium" id="pdp-breadcrumb-title">The Medina Cashmere Abaya</span>
+        </div>
+        <div class="hidden md:flex items-center gap-4">
+          <span class="text-secondary font-mono tracking-widest uppercase" id="pdp-ref-code">Ref. NOOR-8942</span>
+        </div>
+      </div>
+
+      <!-- Main PDP Grid Section -->
+      <section class="max-w-7xl mx-auto px-gutter w-full grid grid-cols-1 lg:grid-cols-12 gap-12 pb-space-lg">
+        
+        <!-- Left: Image Gallery (7 Cols) -->
+        <div class="lg:col-span-7 flex flex-col md:flex-row gap-4">
+          <!-- Thumbnails -->
+          <div class="flex md:flex-col gap-4 order-2 md:order-1 overflow-x-auto md:overflow-y-auto max-h-[600px]" id="pdp-thumbnails-container">
+            <!-- Dynamic thumbnails -->
+          </div>
+          <!-- Main Display -->
+          <div class="relative flex-1 bg-surface-container-low overflow-hidden group min-h-[500px] md:min-h-[650px] order-1 md:order-2 border border-secondary/20">
+            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" id="pdp-main-img" src="" alt="">
+            <div class="absolute bottom-6 right-6 bg-surface/90 backdrop-blur-md px-4 py-2 border border-secondary/20 flex items-center gap-2 text-body-sm text-on-surface pointer-events-none">
+              <span class="material-symbols-outlined text-[16px] text-secondary">zoom_in</span>
+              <span>Hover to explore texture</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Information & Actions (5 Cols) -->
+        <div class="lg:col-span-5 flex flex-col space-y-6">
+          <div class="flex items-center justify-between">
+            <span class="text-label-md tracking-widest text-secondary uppercase font-semibold" id="pdp-category">Bespoke Outerwear</span>
+            <div class="flex items-center gap-1 text-secondary">
+              <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="text-body-sm text-on-surface-variant ml-2 font-medium" id="pdp-reviews-count">(48 Reviews)</span>
+            </div>
+          </div>
+
+          <!-- Title & BDT Price -->
+          <div class="space-y-2">
+            <h1 class="font-display-lg text-on-surface tracking-tight" id="pdp-title">The Medina Cashmere Abaya</h1>
+            <div class="flex items-baseline gap-4 pt-2">
+              <span class="font-headline-lg text-on-surface" id="pdp-price">৳14,500</span>
+              <span class="text-body-sm text-on-surface-variant line-through" id="pdp-regular-price">৳18,000</span>
+              <span class="text-label-md text-secondary uppercase bg-secondary/10 px-2.5 py-1">Complimentary Insured Courier</span>
+            </div>
+          </div>
+
+          <p class="text-body-lg text-on-surface-variant leading-relaxed font-light" id="pdp-desc">
+            Hand-loomed from pure Mongolian cashmere, this exquisite piece merges centuries-old nomadic textile traditions with modern architectural draping.
+          </p>
+
+          <!-- Color Swatches -->
+          <div class="space-y-3 pt-2">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-on-surface font-medium uppercase tracking-wider">Color: <span class="text-on-surface-variant font-normal" id="selected-color-name">Onyx Black</span></span>
+            </div>
+            <div class="flex gap-4" id="pdp-color-swatches"></div>
+          </div>
+
+          <!-- Size Selection -->
+          <div class="space-y-3 pt-2">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-on-surface font-medium uppercase tracking-wider">Select Size</span>
+              <a class="text-secondary underline underline-offset-4 hover:text-on-surface transition-colors cursor-pointer" onclick="toggleWhatsAppPopup()">Bespoke Tailoring Sizing</a>
+            </div>
+            <div class="grid grid-cols-4 gap-3" id="pdp-sizes-grid"></div>
+          </div>
+
+          <!-- Quantity and CTAs -->
+          <div class="space-y-4 pt-4">
+            <div class="flex gap-4">
+              <!-- Quantity Selector -->
+              <div class="flex items-center border border-outline-variant px-4 py-3 bg-surface-container-lowest">
+                <button class="text-on-surface-variant hover:text-secondary px-2 font-bold" onclick="decrementPdpQty()">-</button>
+                <span class="px-4 text-body-md font-medium text-on-surface" id="pdp-qty-display">1</span>
+                <button class="text-on-surface-variant hover:text-secondary px-2 font-bold" onclick="incrementPdpQty()">+</button>
+              </div>
+              <!-- Add to Cart -->
+              <button class="flex-1 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-all uppercase tracking-widest text-body-sm font-medium py-4 flex items-center justify-center gap-3 border border-secondary" onclick="addCurrentPdpToCart()">
+                <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+                Add to Bag
+              </button>
+            </div>
+            <!-- Buy Now -->
+            <button class="w-full bg-transparent border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary transition-all uppercase tracking-widest text-body-sm font-medium py-4 flex items-center justify-center gap-2" onclick="buyCurrentPdpNow()">
+              <span class="material-symbols-outlined text-[18px]">bolt</span>
+              Direct Checkout with bKash / Nagad / COD
+            </button>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="grid grid-cols-2 gap-4 pt-6 border-t border-secondary/10">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-secondary">local_shipping</span>
+              <div>
+                <h4 class="text-body-sm font-medium text-on-surface">White-Glove Delivery</h4>
+                <p class="text-body-sm text-on-surface-variant text-xs">Arrives in signature keepsake box</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-secondary">verified</span>
+              <div>
+                <h4 class="text-body-sm font-medium text-on-surface">Ethically Crafted</h4>
+                <p class="text-body-sm text-on-surface-variant text-xs">Certified sustainable artisanal textiles</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Craftsmanship Accordions -->
+      <section class="bg-surface-container-low py-space-lg w-full border-t border-b border-secondary/15">
+        <div class="max-w-4xl mx-auto px-gutter space-y-4">
+          <div class="text-center pb-8">
+            <span class="text-label-md text-secondary uppercase tracking-widest">Artisanal Specifications</span>
+            <h2 class="font-headline-lg text-on-surface mt-2">Craftsmanship & Heritage</h2>
+          </div>
+          
+          <div class="bg-surface border border-outline-variant/40 overflow-hidden transition-all">
+            <button class="w-full px-6 py-5 flex items-center justify-between text-left" onclick="toggleAccordion('pdp-acc-1')">
+              <span class="font-headline-sm text-on-surface">The Origin & Weaving Process</span>
+              <span class="material-symbols-outlined text-secondary" id="pdp-acc-1-icon">add</span>
+            </button>
+            <div class="hidden px-6 pb-6 text-body-md text-on-surface-variant leading-relaxed" id="pdp-acc-1">
+              Sourced from high-altitude free-roaming herds and master silk weavers during the gentle spring harvest. Each fiber is hand-combed, sorted for supreme fineness, and spun slowly by master artisans in traditional workshops before being loomed into a featherlight yet intensely warm drape.
+            </div>
+          </div>
+
+          <div class="bg-surface border border-outline-variant/40 overflow-hidden transition-all">
+            <button class="w-full px-6 py-5 flex items-center justify-between text-left" onclick="toggleAccordion('pdp-acc-2')">
+              <span class="font-headline-sm text-on-surface">Care & Preservation Rituals</span>
+              <span class="material-symbols-outlined text-secondary" id="pdp-acc-2-icon">add</span>
+            </button>
+            <div class="hidden px-6 pb-6 text-body-md text-on-surface-variant leading-relaxed" id="pdp-acc-2">
+              To maintain the pristine luster of your luxury piece, we recommend gentle professional cleaning with organic solvents only. Store folded in the provided organic cotton dust bag with natural cedar blocks to preserve fiber integrity.
+            </div>
+          </div>
+
+          <div class="bg-surface border border-outline-variant/40 overflow-hidden transition-all">
+            <button class="w-full px-6 py-5 flex items-center justify-between text-left" onclick="toggleAccordion('pdp-acc-3')">
+              <span class="font-headline-sm text-on-surface">Complimentary Bespoke Tailoring & Concierge</span>
+              <span class="material-symbols-outlined text-secondary" id="pdp-acc-3-icon">add</span>
+            </button>
+            <div class="hidden px-6 pb-6 text-body-md text-on-surface-variant leading-relaxed" id="pdp-acc-3">
+              Every NOOR purchase includes complimentary custom hem adjustments and sleeve tailoring. Connect directly via our WhatsApp Concierge to arrange bespoke adjustments with our master tailors.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Related Masterpieces Grid -->
+      <section class="max-w-7xl mx-auto px-gutter py-space-lg w-full">
+        <div class="text-center mb-12">
+          <span class="text-label-md text-secondary uppercase tracking-widest">Complete the Ensemble</span>
+          <h2 class="font-headline-lg text-on-surface mt-2">Related Masterpieces</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="pdp-related-grid"></div>
+      </section>
+
+    </div>
+
+
+    <!-- ========================================================
+         VIEW 3: SHOP / CATALOG VIEW
+         ======================================================== -->
+    <div id="view-shop" style="display: none;">
+      <section class="max-w-7xl mx-auto px-gutter py-space-lg w-full">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 border-b border-secondary/20 pb-6">
+          <div>
+            <span class="font-label-md text-secondary uppercase tracking-widest block mb-1">Vault & Catalog</span>
+            <h1 class="font-display-lg text-on-surface">Curated Sovereign Collection</h1>
+            <p class="text-body-sm text-on-surface-variant mt-1" id="shop-product-count">Showing Curated Masterpieces</p>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <label class="text-body-sm font-medium text-on-surface-variant">Sort by:</label>
+            <select id="shop-sort-select" class="px-4 py-2 border border-outline-variant bg-surface text-body-sm focus:border-secondary outline-none">
+              <option value="featured">Featured Editions</option>
+              <option value="price-low">Price: Low to High (৳)</option>
+              <option value="price-high">Price: High to Low (৳)</option>
+              <option value="rating">Top Rated</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Filter Pills Bar -->
+        <div class="flex flex-wrap gap-2.5 mb-10" id="shop-category-filters"></div>
+
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="shop-products-grid"></div>
+      </section>
+    </div>
+
+
+    <!-- ========================================================
+         VIEW 4: CHECKOUT & CURATED BAG
+         ======================================================== -->
+    <div id="view-checkout" style="display: none;">
+      
+      <!-- Checkout Header -->
+      <section class="w-full py-space-md px-gutter max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-space-sm">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-label-md uppercase text-secondary">
+            <span>Secure Flagship Portal</span>
+            <span>/</span>
+            <span>Checkout & Bag</span>
+          </div>
+          <h1 class="font-display-lg text-on-surface">Your Curated Selection</h1>
+        </div>
+        <div class="flex items-center gap-4 text-body-sm text-on-surface-variant">
+          <span class="flex items-center gap-1 text-secondary font-medium">
+            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+            256-Bit Encrypted
+          </span>
+          <span>•</span>
+          <span>Complimentary Insured Shipping</span>
+        </div>
+      </section>
+
+      <!-- Checkout Form & Bag Grid -->
+      <section class="w-full max-w-7xl mx-auto px-gutter pb-space-xl grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+        
+        <!-- Left: Form Steps (7 Cols) -->
+        <div class="lg:col-span-7 space-y-space-md">
+          
+          <!-- Step 1: Customer Information -->
+          <div class="bg-surface-container-lowest p-space-md shadow-sm space-y-space-sm relative border border-secondary/20">
+            <div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-body-sm font-bold">1</span>
+                <h3 class="font-headline-sm uppercase tracking-wider text-on-surface">Patron Information</h3>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              <div class="space-y-1">
+                <label class="text-label-md uppercase text-on-surface-variant">First Name *</label>
+                <input id="checkout-first-name" class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" type="text" placeholder="e.g. Yasmin" required/>
+              </div>
+              <div class="space-y-1">
+                <label class="text-label-md uppercase text-on-surface-variant">Last Name</label>
+                <input id="checkout-last-name" class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" type="text" placeholder="e.g. Al-Sabah"/>
+              </div>
+              <div class="space-y-1">
+                <label class="text-label-md uppercase text-on-surface-variant">Email Address</label>
+                <input id="checkout-email" class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" type="email" placeholder="patron@domain.com"/>
+              </div>
+              <div class="space-y-1">
+                <label class="text-label-md uppercase text-on-surface-variant">Contact Telephone *</label>
+                <input id="checkout-phone" class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" type="tel" placeholder="017XXXXXXXX" required/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Delivery Address -->
+          <div class="bg-surface-container-lowest p-space-md shadow-sm space-y-space-sm relative border border-secondary/20">
+            <div class="absolute top-0 left-0 w-1 h-full bg-secondary/50"></div>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-full bg-surface-container text-on-surface flex items-center justify-center text-body-sm font-bold">2</span>
+                <h3 class="font-headline-sm uppercase tracking-wider text-on-surface">Delivery Address & Zone</h3>
+              </div>
+            </div>
+            
+            <div class="space-y-4 pt-2">
+              <div class="space-y-1">
+                <label class="text-label-md uppercase text-on-surface-variant">Street Address, House & Road *</label>
+                <input id="checkout-street" class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" type="text" placeholder="Villa 42, Road 11, Gulshan 2" required/>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                  <label class="text-label-md uppercase text-on-surface-variant">City / Area *</label>
+                  <input id="checkout-city" class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" type="text" placeholder="Dhaka" required/>
+                </div>
+                
+                <div class="space-y-1">
+                  <label class="text-label-md uppercase text-on-surface-variant">Select Delivery Zone *</label>
+                  <div class="grid grid-cols-2 gap-2">
+                    <label class="p-3 border border-outline-variant flex items-center gap-2 cursor-pointer hover:border-secondary text-xs font-semibold">
+                      <input type="radio" name="checkoutDelivery" value="inside" checked>
+                      <span>Inside Dhaka (<strong id="inside-dhaka-fee-label">৳80</strong>)</span>
+                    </label>
+                    <label class="p-3 border border-outline-variant flex items-center gap-2 cursor-pointer hover:border-secondary text-xs font-semibold">
+                      <input type="radio" name="checkoutDelivery" value="outside">
+                      <span>Outside Dhaka (<strong id="outside-dhaka-fee-label">৳150</strong>)</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Secure Payment -->
+          <div class="bg-surface-container-lowest p-space-md shadow-sm space-y-space-sm relative border border-secondary/20">
+            <div class="absolute top-0 left-0 w-1 h-full bg-secondary/30"></div>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-full bg-surface-container text-on-surface flex items-center justify-center text-body-sm font-bold">3</span>
+                <h3 class="font-headline-sm uppercase tracking-wider text-on-surface">Secure Payment Method</h3>
+              </div>
+            </div>
+
+            <div class="space-y-4 pt-2">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <label class="p-3 border border-secondary bg-secondary/5 text-on-surface font-medium text-xs uppercase flex items-center justify-center gap-1.5 cursor-pointer">
+                  <input type="radio" name="paymentMethod" value="cod" checked class="accent-secondary">
+                  <span>Cash on Delivery</span>
+                </label>
+                <label class="p-3 border border-outline-variant text-on-surface font-medium text-xs uppercase flex items-center justify-center gap-1.5 cursor-pointer hover:border-secondary">
+                  <input type="radio" name="paymentMethod" value="bkash" class="accent-secondary">
+                  <span style="color: #e2136e;">bKash</span>
+                </label>
+                <label class="p-3 border border-outline-variant text-on-surface font-medium text-xs uppercase flex items-center justify-center gap-1.5 cursor-pointer hover:border-secondary">
+                  <input type="radio" name="paymentMethod" value="nagad" class="accent-secondary">
+                  <span style="color: #f7931e;">Nagad</span>
+                </label>
+                <label class="p-3 border border-outline-variant text-on-surface font-medium text-xs uppercase flex items-center justify-center gap-1.5 cursor-pointer hover:border-secondary">
+                  <input type="radio" name="paymentMethod" value="rocket" class="accent-secondary">
+                  <span style="color: #8c3494;">Rocket</span>
+                </label>
+              </div>
+
+              <!-- Payment Instruction Box -->
+              <div id="checkout-payment-instruction-box"></div>
+
+              <!-- TrxID Input -->
+              <div id="checkout-trxid-group" class="space-y-1" style="display: none;">
+                <label class="text-label-md uppercase text-on-surface-variant">Transaction ID (TrxID) *</label>
+                <input id="checkout-trxid-input" class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none transition-colors" placeholder="e.g. 9K7X82LM1" type="text"/>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Bag Summary (5 Cols) -->
+        <div class="lg:col-span-5 space-y-space-md">
+          <div class="bg-surface-container-lowest p-space-md shadow-sm space-y-space-sm border border-secondary/20">
+            <div class="flex justify-between items-center pb-4 border-b border-secondary/20">
+              <h3 class="font-headline-sm uppercase tracking-wider text-on-surface">Shopping Bag <span id="checkout-items-count">(0 Items)</span></h3>
+              <span class="text-body-sm text-secondary font-medium cursor-pointer hover:underline" onclick="openCartDrawer()">Edit Bag</span>
+            </div>
+
+            <!-- Items List -->
+            <div id="checkout-items-list" class="max-h-80 overflow-y-auto"></div>
+
+            <!-- Coupon Box -->
+            <div class="pt-4 space-y-2">
+              <label class="text-label-md uppercase text-on-surface-variant">Private VIP Invitation / Coupon Code</label>
+              <div class="flex gap-2">
+                <input id="checkout-coupon-input" class="px-4 py-2 bg-surface border border-outline-variant text-body-sm w-full focus:border-secondary outline-none uppercase transition-colors" placeholder="e.g. NOORVIP" type="text"/>
+                <button class="px-5 py-2 bg-secondary text-on-secondary hover:bg-primary hover:text-on-primary transition-colors text-body-sm uppercase font-medium" onclick="applyCheckoutCoupon()">Apply</button>
+              </div>
+              <span id="checkout-coupon-msg" class="text-body-sm text-secondary font-medium hidden">✓ VIP Privilege Applied</span>
+            </div>
+
+            <!-- Subtotals -->
+            <div class="pt-4 space-y-3 border-t border-secondary/20">
+              <div class="flex justify-between text-body-sm text-on-surface-variant">
+                <span>Subtotal</span>
+                <strong class="font-medium text-primary" id="checkout-subtotal">৳0</strong>
+              </div>
+              <div class="flex justify-between text-body-sm text-on-surface-variant">
+                <span>VIP Privilege Discount</span>
+                <strong class="font-medium text-secondary" id="checkout-discount">-৳0</strong>
+              </div>
+              <div class="flex justify-between text-body-sm text-on-surface-variant">
+                <span>Insured White-Glove Courier</span>
+                <strong class="font-medium text-primary" id="checkout-delivery-fee">৳80</strong>
+              </div>
+              <div class="flex justify-between text-headline-sm text-primary pt-3 border-t border-secondary/20">
+                <span>Total Due</span>
+                <strong class="font-headline-md text-primary" id="checkout-grand-total">৳0</strong>
+              </div>
+            </div>
+
+            <!-- Confirm Order Button -->
+            <div class="pt-4">
+              <button class="w-full py-4 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-all duration-300 text-body-lg uppercase font-medium tracking-widest shadow-lg flex items-center justify-center gap-3 border border-secondary" onclick="handleCompleteOrder(event)">
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+                Confirm & Complete Order
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <!-- ========================================================
+         VIEW 5: MEMBER PORTAL & LIVE ORDER TRACKING
+         ======================================================== -->
+    <div id="view-member" style="display: none;">
+      <div class="max-w-7xl mx-auto w-full px-gutter py-space-md">
+        
+        <!-- Welcome Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-space-lg gap-space-md border-b border-secondary/20 pb-space-md">
+          <div>
+            <span class="font-label-md text-secondary uppercase tracking-widest block mb-2">Member Portal & Live Tracking</span>
+            <h1 class="font-display-lg text-on-surface">Welcome back, Valued Sovereign</h1>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="px-4 py-2 bg-surface-container-highest border border-secondary/20 flex items-center gap-3">
+              <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+              <div>
+                <span class="font-label-md block text-on-surface-variant uppercase text-[10px]">Tier</span>
+                <span class="font-headline-sm text-on-surface">Royal Obsidian Elite</span>
+              </div>
+            </div>
+            <div class="px-4 py-2 bg-primary text-on-primary flex items-center gap-3 border border-secondary/30">
+              <span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">stars</span>
+              <div>
+                <span class="font-label-md block text-secondary-fixed uppercase text-[10px]">Privilege Balance</span>
+                <span class="font-headline-sm text-on-primary">12,450 pts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-space-md">
+          
+          <!-- Navigation Sidebar -->
+          <aside class="lg:col-span-1 space-y-2">
+            <div class="bg-surface-container-low p-6 border border-secondary/20">
+              <h3 class="font-headline-sm uppercase text-on-surface mb-6 tracking-wider">Navigation</h3>
+              <nav class="space-y-1">
+                <button class="w-full flex items-center justify-between px-4 py-3 bg-primary text-on-primary font-headline-sm transition-all text-left" id="member-nav-orders" onclick="switchMemberTab('orders')">
+                  <span class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary-fixed">local_mall</span> Orders & Tracking</span>
+                </button>
+                <button class="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-container-high text-on-surface font-headline-sm transition-all text-left" id="member-nav-wishlist" onclick="switchMemberTab('wishlist')">
+                  <span class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">favorite</span> Wishlist</span>
+                  <span class="wishlist-count-badge text-secondary font-bold">0</span>
+                </button>
+                <button class="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-container-high text-on-surface font-headline-sm transition-all text-left" id="member-nav-addresses" onclick="switchMemberTab('addresses')">
+                  <span class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">location_on</span> Addresses</span>
+                </button>
+                <button class="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-container-high text-on-surface font-headline-sm transition-all text-left" id="member-nav-rewards" onclick="switchMemberTab('rewards')">
+                  <span class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">redeem</span> Rewards Club</span>
+                </button>
+                <button class="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-container-high text-on-surface font-headline-sm transition-all text-left" id="member-nav-profile" onclick="switchMemberTab('profile')">
+                  <span class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">manage_accounts</span> Profile Settings</span>
+                </button>
+              </nav>
+
+              <div class="mt-8 pt-6 border-t border-secondary/20">
+                <div class="p-4 bg-secondary/10 border border-secondary/30">
+                  <span class="font-headline-sm text-secondary block mb-1">Dedicated Concierge</span>
+                  <p class="text-body-sm text-on-surface-variant mb-3">Your personal stylist is available for private commissions.</p>
+                  <button class="w-full py-2 bg-secondary text-on-secondary font-headline-sm uppercase text-body-sm transition-colors hover:bg-primary" onclick="toggleWhatsAppPopup()">Inquire via WhatsApp</button>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Content Area -->
+          <div class="lg:col-span-3 space-y-space-md">
+            
+            <!-- TAB 1: ORDERS & 5-STEP TRACKING -->
+            <div id="member-tab-orders" class="space-y-space-md">
+              <div class="flex justify-between items-center bg-surface-container-low p-6 border border-secondary/20">
+                <div>
+                  <h2 class="font-headline-lg text-on-surface">Recent Commissions & Live 5-Step Tracking</h2>
+                  <p class="text-body-sm text-on-surface-variant">Track your bespoke orders in real-time.</p>
+                </div>
+              </div>
+              <div id="member-orders-container"></div>
+            </div>
+
+            <!-- TAB 2: WISHLIST -->
+            <div id="member-tab-wishlist" class="space-y-space-md hidden">
+              <div class="flex justify-between items-center bg-surface-container-low p-6 border border-secondary/20">
+                <div>
+                  <h2 class="font-headline-lg text-on-surface">Curated Wishlist</h2>
+                  <p class="text-body-sm text-on-surface-variant">Items saved for your private consideration or gifts.</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="member-wishlist-grid"></div>
+            </div>
+
+            <!-- TAB 3: ADDRESSES -->
+            <div id="member-tab-addresses" class="space-y-space-md hidden">
+              <div class="flex justify-between items-center bg-surface-container-low p-6 border border-secondary/20">
+                <div>
+                  <h2 class="font-headline-lg text-on-surface">Saved Delivery Residences</h2>
+                  <p class="text-body-sm text-on-surface-variant">Manage your primary residences and shipping destinations.</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-surface-container-lowest p-6 border border-secondary/30 relative">
+                  <span class="px-3 py-1 bg-secondary text-on-secondary font-label-md uppercase text-[10px] tracking-wider absolute top-4 right-4">Default Residence</span>
+                  <h3 class="font-headline-sm text-on-surface mt-6">Princess Yasmin Al-Sabah</h3>
+                  <p class="text-body-sm text-on-surface-variant">Villa 42, Road 11, Gulshan 2</p>
+                  <p class="text-body-sm text-on-surface-variant">Dhaka - 1212, Bangladesh</p>
+                  <p class="text-body-sm text-secondary pt-2">Phone: +8801712345678</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 4: REWARDS -->
+            <div id="member-tab-rewards" class="space-y-space-md hidden">
+              <div class="bg-surface-container-low p-8 border border-secondary/30 relative overflow-hidden">
+                <span class="font-label-md text-secondary uppercase tracking-widest block mb-2">Noor Privilege Club</span>
+                <h2 class="font-display-lg text-on-surface mb-4">12,450 Available Points</h2>
+                <p class="text-body-md text-on-surface-variant mb-6">Earn 10 points for every ৳100 spent on bespoke tailoring and fine collections. Redeem points for exclusive private gifts and complimentary courier upgrades.</p>
+                <div class="flex gap-4">
+                  <button class="px-6 py-3 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm uppercase text-body-sm" onclick="showToast('Points applied to your account!', 'success')">Redeem Points</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 5: PROFILE SETTINGS -->
+            <div id="member-tab-profile" class="space-y-space-md hidden">
+              <div class="bg-surface-container-low p-6 border border-secondary/20">
+                <h2 class="font-headline-lg text-on-surface mb-2">Profile & Security Preferences</h2>
+                <div class="space-y-4 max-w-xl mt-6">
+                  <div>
+                    <label class="text-label-md text-on-surface-variant uppercase block mb-1">Full Name</label>
+                    <input class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none" type="text" value="Princess Yasmin Al-Sabah"/>
+                  </div>
+                  <div>
+                    <label class="text-label-md text-on-surface-variant uppercase block mb-1">Email</label>
+                    <input class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none" type="email" value="patron@noor.com.bd"/>
+                  </div>
+                  <div>
+                    <label class="text-label-md text-on-surface-variant uppercase block mb-1">Phone</label>
+                    <input class="w-full px-4 py-3 bg-surface border border-outline-variant text-body-md focus:border-secondary outline-none" type="tel" value="+8801712345678"/>
+                  </div>
+                  <button class="px-6 py-3 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-headline-sm uppercase text-body-sm mt-4" onclick="showToast('Profile updated!', 'success')">Save Changes</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </div>
     </div>
 
-    <!-- Main Navigation Header -->
-    <header class="site-header">
-      <div class="container header-inner">
-        
-        <!-- Logo -->
-        <div class="logo-wrapper" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-          <div class="logo-icon">
-            <i class="fas fa-graduation-cap"></i>
+    <!-- ========================================================
+         FOOTER
+         ======================================================== -->
+    <footer class="w-full bg-surface-container-low py-space-lg border-t border-secondary/20 mt-20">
+      <div class="max-w-7xl mx-auto px-gutter grid grid-cols-1 md:grid-cols-4 gap-space-md mb-space-lg">
+        <div class="space-y-space-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="font-headline-md uppercase text-on-surface tracking-wider">NOOR</span>
           </div>
-          <div class="logo-text">
-            <h1 class="site-name-display">SchoolHub BD</h1>
-            <p class="site-tagline-display">আপনার বিশ্বস্ত অনলাইন শপ</p>
+          <p class="text-body-sm text-on-surface-variant site-tagline-display">Crafting uncompromising elegance rooted in Islamic heritage, blending contemporary global standards with timeless artisanal traditions.</p>
+          <p class="text-body-sm text-on-surface-variant pt-2">
+            <i class="fas fa-map-marker-alt text-secondary mr-2"></i><span class="site-address-display">Gulshan-2, Dhaka, Bangladesh</span>
+          </p>
+        </div>
+        <div class="space-y-space-sm">
+          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider">Customer Care</h4>
+          <ul class="space-y-2 text-body-sm text-on-surface-variant">
+            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('member')">Live Order Tracking</a></li>
+            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('shop')">Collection Catalog</a></li>
+            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="openAdminPortal()">Sovereign Admin Panel</a></li>
+            <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="toggleWhatsAppPopup()">WhatsApp Concierge</a></li>
+          </ul>
+        </div>
+        <div class="space-y-space-sm">
+          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider">Payment Partners</h4>
+          <ul class="space-y-2 text-body-sm text-on-surface-variant">
+            <li><span style="color: #e2136e;"><i class="fas fa-check mr-1.5"></i> bKash (বিকাশ)</span></li>
+            <li><span style="color: #f7931e;"><i class="fas fa-check mr-1.5"></i> Nagad (নগদ)</span></li>
+            <li><span style="color: #8c3494;"><i class="fas fa-check mr-1.5"></i> Rocket (রকেট)</span></li>
+            <li><span class="text-secondary"><i class="fas fa-check mr-1.5"></i> Cash on Delivery</span></li>
+          </ul>
+        </div>
+        <div class="space-y-space-sm">
+          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider">Private Concierge</h4>
+          <p class="text-body-sm text-on-surface-variant">Subscribe to receive private lookbooks and seasonal bespoke releases.</p>
+          <div class="flex gap-2">
+            <input class="px-4 py-2 bg-surface border border-outline-variant text-body-sm w-full focus:border-secondary outline-none" placeholder="Enter email" type="email"/>
+            <button class="px-4 py-2 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors text-body-sm uppercase" onclick="showToast('Thank you for subscribing!', 'success')">Join</button>
           </div>
         </div>
-
-        <!-- Search Bar -->
-        <div class="search-container">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" id="main-search-input" class="search-input" placeholder="পণ্য খুঁজুন (যেমন: ব্যাগ, খাতা, বই, ক্যালকুলেটর)...">
-        </div>
-
-        <!-- Header Actions -->
-        <div class="header-actions">
-          <button class="btn-header-action" onclick="document.getElementById('track-section').scrollIntoView({behavior: 'smooth'})">
-            <i class="fas fa-shipping-fast" style="color: #0284c7;"></i>
-            <span style="display: none; display: inline-block;">ট্র্যাক অর্ডার</span>
-          </button>
-
-          <button class="btn-header-action" onclick="openAdminPortal()" title="অ্যাডমিন প্যানেল প্রবেশ করুন" style="border-color: #cbd5e1;">
-            <i class="fas fa-user-shield" style="color: #6366f1;"></i>
-            <span>অ্যাডমিন</span>
-          </button>
-
-          <button class="btn-header-action cart-btn" onclick="openCartDrawer()" title="কার্ট দেখুন">
-            <i class="fas fa-shopping-bag"></i>
-            <span>কার্ট</span>
-            <span class="cart-badge cart-count-badge">0</span>
-          </button>
-        </div>
-
       </div>
-    </header>
-
-    <!-- Main Content Container -->
-    <main>
-      
-      <!-- Hero Banner Section -->
-      <section class="hero-section">
-        <div class="container">
-          <div class="hero-banner">
-            <div class="hero-content">
-              <span class="hero-tag">
-                <i class="fas fa-bolt"></i> মেগা সিজনাল ডিসকাউন্ট
-              </span>
-              <h2 class="hero-title">
-                সেরা মানের স্কুল ও স্টাডি সামগ্রী <span>সাশ্রয়ী মূল্যে</span>
-              </h2>
-              <p class="hero-desc">
-                বই, ব্যাগ, স্টেশনারি, ক্যালকুলেটর ও ইউনিফর্ম সামগ্রী ঘরে বসেই অর্ডার করুন। বিকাশ, নগদ ও সারা দেশে ক্যাশ অন ডেলিভারি সুবিধা!
-              </p>
-              <div class="hero-buttons">
-                <a href="#products-catalog" class="btn-primary">
-                  <i class="fas fa-shopping-cart"></i> এখনই কেনাকাটা করুন
-                </a>
-                <button class="btn-secondary" onclick="toggleWhatsAppPopup()">
-                  <i class="fab fa-whatsapp" style="color: #25d366; font-size: 1.2rem;"></i> হোয়াটসঅ্যাপে কথা বলুন
-                </button>
-              </div>
-            </div>
-
-            <!-- Hero Highlights -->
-            <div class="hero-highlights">
-              <div class="highlight-card">
-                <i class="fas fa-shield-alt"></i>
-                <h4>১০০% অরিজিনাল</h4>
-                <p>গ্যারান্টিযুক্ত প্রিমিয়াম কোয়ালিটি</p>
-              </div>
-              <div class="highlight-card">
-                <i class="fas fa-truck-moving"></i>
-                <h4>দ্রুত ডেলিভারি</h4>
-                <p>সারা দেশে ২-৩ দিনে হোম ডেলিভারি</p>
-              </div>
-              <div class="highlight-card">
-                <i class="fas fa-hand-holding-usd"></i>
-                <h4>ক্যাশ অন ডেলিভারি</h4>
-                <p>পণ্য দেখে মূল্য পরিশোধের সুযোগ</p>
-              </div>
-              <div class="highlight-card">
-                <i class="fas fa-headset"></i>
-                <h4>২৪/৭ সাপোর্ট</h4>
-                <p>যেকোনো প্রয়োজনে সরাসরি যোগাযোগ</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- Categories Filter Bar -->
-      <section class="categories-section">
-        <div class="container">
-          <div class="categories-scroll" id="categories-bar">
-            <!-- Dynamic Category Pills -->
-          </div>
-        </div>
-      </section>
-
-      <!-- Product Catalog Section -->
-      <section class="products-section" id="products-catalog">
-        <div class="container">
-          
-          <div class="section-header">
-            <div>
-              <h2 class="section-title">
-                <i class="fas fa-fire"></i> আকর্ষণীয় পণ্য সম্ভার
-              </h2>
-              <span id="product-count-display" style="font-size: 0.85rem; color: #64748b;">লোড হচ্ছে...</span>
-            </div>
-            
-            <div class="catalog-controls">
-              <label for="product-sort-select" style="font-size: 0.88rem; font-weight: 600; color: #475569;">সর্ট করুন:</label>
-              <select id="product-sort-select" class="sort-select">
-                <option value="featured">জনপ্রিয়তা অনুযায়ী (Featured)</option>
-                <option value="price-low">মূল্য: কম থেকে বেশি</option>
-                <option value="price-high">মূল্য: বেশি থেকে কম</option>
-                <option value="rating">রেটিং অনুযায়ী</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Products Grid -->
-          <div class="products-grid" id="products-grid">
-            <!-- Dynamic Product Cards -->
-          </div>
-
-        </div>
-      </section>
-
-      <!-- Order Tracking Section -->
-      <section class="container" id="track-section">
-        <div class="track-order-section">
-          <div class="track-order-grid">
-            <div>
-              <span class="badge badge-best" style="margin-bottom: 8px;">লাইভ ট্র্যাকিং</span>
-              <h2 style="font-size: 1.75rem; font-weight: 800; color: #1e293b; margin-bottom: 10px;">
-                আপনার অর্ডার ট্র্যাক করুন
-              </h2>
-              <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6;">
-                অর্ডার করার পর প্রাপ্ত <strong>Order ID (যেমন: ORD-8921)</strong> অথবা আপনার দেওয়া <strong>মোবাইল নম্বর</strong> দিয়ে সরাসরি অর্ডারের বর্তমান অবস্থা জানুন।
-              </p>
-              
-              <div style="display: flex; gap: 16px; margin-top: 1.5rem;">
-                <div style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #0284c7; font-weight: 600;">
-                  <i class="fas fa-check-circle"></i> পেন্ডিং
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #6366f1; font-weight: 600;">
-                  <i class="fas fa-box"></i> প্রসেসিং
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #10b981; font-weight: 600;">
-                  <i class="fas fa-shipping-fast"></i> ডেলিভারি পথে
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div class="track-form-box">
-                <form id="track-order-form">
-                  <label class="form-label" style="font-size: 0.95rem;">অর্ডার আইডি বা মোবাইল নম্বর দিন:</label>
-                  <div class="track-input-group">
-                    <input type="text" id="track-order-input" class="track-input" placeholder="ORD-XXXX বা 017XXXXXXXX" required>
-                    <button type="submit" class="btn-primary" style="border-radius: var(--radius-md); padding: 0 20px;">
-                      খুঁজুন
-                    </button>
-                  </div>
-                </form>
-                <div id="track-order-result-box" style="margin-top: 1rem;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-grid">
-          
-          <div class="footer-col">
-            <div class="logo-wrapper" style="margin-bottom: 1rem;">
-              <div class="logo-icon" style="width: 38px; height: 38px; font-size: 1.1rem;">
-                <i class="fas fa-graduation-cap"></i>
-              </div>
-              <div class="logo-text">
-                <h3 class="site-name-display" style="color: #fff; font-size: 1.15rem;">SchoolHub BD</h3>
-              </div>
-            </div>
-            <p class="site-tagline-display" style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 1rem;">
-              আপনার বিশ্বস্ত অনলাইন শপ - সেরা দামে সেরা পণ্য
-            </p>
-            <p style="font-size: 0.85rem; color: #94a3b8;">
-              <i class="fas fa-map-marker-alt" style="color: #38bdf8; margin-right: 6px;"></i>
-              <span class="site-address-display">House 42, Road 11, Dhanmondi, Dhaka</span>
-            </p>
-          </div>
-
-          <div class="footer-col">
-            <h4>কুইক লিংক</h4>
-            <ul class="footer-links">
-              <li><a href="#products-catalog">সকল পণ্য</a></li>
-              <li><a href="#track-section">অর্ডার ট্র্যাকিং</a></li>
-              <li><a href="javascript:void(0)" onclick="openAdminPortal()">অ্যাডমিন প্যানেল</a></li>
-              <li><a href="javascript:void(0)" onclick="toggleWhatsAppPopup()">সহায়তা কেন্দ্র</a></li>
-            </ul>
-          </div>
-
-          <div class="footer-col">
-            <h4>পেমেন্ট পার্টনার</h4>
-            <ul class="footer-links">
-              <li><span style="color: #ec4899;"><i class="fas fa-check"></i> bKash (বিকাশ)</span></li>
-              <li><span style="color: #f97316;"><i class="fas fa-check"></i> Nagad (নগদ)</span></li>
-              <li><span style="color: #a855f7;"><i class="fas fa-check"></i> Rocket (রকেট)</span></li>
-              <li><span style="color: #10b981;"><i class="fas fa-check"></i> Cash on Delivery</span></li>
-            </ul>
-          </div>
-
-          <div class="footer-col">
-            <h4>যোগাযোগ করুন</h4>
-            <p style="font-size: 0.9rem; margin-bottom: 8px;">
-              <i class="fas fa-phone-alt" style="color: #38bdf8; margin-right: 8px;"></i>
-              <span class="site-phone-display">+8801700000000</span>
-            </p>
-            <p style="font-size: 0.9rem; margin-bottom: 8px;">
-              <i class="fas fa-envelope" style="color: #38bdf8; margin-right: 8px;"></i>
-              <span class="site-email-display">info@schoolhub.com.bd</span>
-            </p>
-            <button class="btn-secondary" style="margin-top: 10px; width: 100%; justify-content: center; font-size: 0.85rem;" onclick="toggleWhatsAppPopup()">
-              <i class="fab fa-whatsapp" style="color: #25d366;"></i> লাইভ চ্যাট সাপোর্ট
-            </button>
-          </div>
-
-        </div>
-
-        <div class="footer-bottom">
-          <p>© 2026 <span class="site-name-display">SchoolHub BD</span>. All Rights Reserved. Base Currency: ৳ (BDT).</p>
-        </div>
+      <div class="max-w-7xl mx-auto px-gutter pt-8 border-t border-secondary/10 text-center text-body-sm text-on-surface-variant flex flex-col sm:flex-row justify-between items-center gap-4">
+        <span>© 2026 NOOR Flagship. All rights reserved. Base Currency: <strong>৳ (BDT)</strong></span>
+        <button class="text-secondary underline text-xs uppercase" onclick="openAdminPortal()">Access Sovereign Admin</button>
       </div>
     </footer>
 
@@ -289,697 +891,445 @@
 
 
   <!-- ==========================================================
-       2. FLOATING WHATSAPP BUTTON & QUICK POPUP
+       FLOATING WHATSAPP BUTTON & CHAT POPUP
        ========================================================== -->
   <div class="floating-whatsapp-container">
-    
-    <!-- Quick Message Popup Card -->
     <div class="whatsapp-popup-card" id="whatsapp-popup-card">
-      <div class="wa-popup-header">
-        <div class="wa-avatar">
+      <div class="bg-primary text-on-primary p-4 flex items-center gap-3 border-b border-secondary/30">
+        <div class="w-10 h-10 rounded-full bg-secondary/20 border border-secondary text-secondary-fixed flex items-center justify-center text-xl">
           <i class="fab fa-whatsapp"></i>
         </div>
-        <div class="wa-header-info">
-          <h4>কাস্টমার সাপোর্ট</h4>
-          <p><i class="fas fa-circle" style="color: #25d366; font-size: 8px;"></i> অনলাইন আছেন</p>
+        <div>
+          <h4 class="font-headline-sm text-xs uppercase tracking-wider text-secondary-fixed">Private Concierge</h4>
+          <p class="text-[10px] text-on-surface-variant text-white/70">Online & Ready to Assist</p>
         </div>
-        <button onclick="toggleWhatsAppPopup()" style="margin-left: auto; color: #fff; font-size: 1.1rem;">
+        <button onclick="toggleWhatsAppPopup()" class="ml-auto text-white/70 hover:text-white">
           <i class="fas fa-times"></i>
         </button>
       </div>
-
-      <div class="wa-popup-body">
-        <div class="wa-bubble">
-          আসসালামু আলাইকুম! কোনো পণ্য বা অর্ডার সম্পর্কে জানতে চান? সরাসরি হোয়াটসঅ্যাপে মেসেজ দিন।
+      
+      <div class="p-4 bg-surface-container-low text-xs space-y-3">
+        <div class="bg-white p-3 border border-secondary/15 rounded-md shadow-sm">
+          Assalamu Alaikum! Inquire about sizing, custom tailoring, or track an active commission with our stylist.
         </div>
-        <div class="form-group" style="margin-bottom: 0;">
-          <textarea id="wa-custom-msg-input" class="form-control" rows="2" placeholder="আপনার মেসেজ লিখুন..."></textarea>
-        </div>
+        <textarea id="wa-custom-msg-input" class="w-full p-2.5 bg-white border border-outline-variant text-xs outline-none focus:border-secondary" rows="2" placeholder="Write your message..."></textarea>
       </div>
 
-      <div class="wa-popup-footer">
-        <button class="wa-start-chat-btn" onclick="sendWhatsAppMessage()">
-          <i class="fab fa-whatsapp"></i> চ্যাট শুরু করুন
+      <div class="p-3 bg-white border-t border-secondary/10">
+        <button class="w-full py-2.5 bg-[#25d366] hover:bg-[#128c7e] text-white font-medium text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors" onclick="sendWhatsAppMessage()">
+          <i class="fab fa-whatsapp text-sm"></i> Start WhatsApp Chat
         </button>
       </div>
     </div>
 
-    <!-- Floating Trigger Button -->
-    <div class="whatsapp-float-btn" onclick="toggleWhatsAppPopup()" title="WhatsApp এ মেসেজ পাঠান">
+    <div class="whatsapp-float-btn" onclick="toggleWhatsAppPopup()" title="Connect on WhatsApp">
       <i class="fab fa-whatsapp"></i>
     </div>
-
   </div>
 
 
   <!-- ==========================================================
-       3. MODALS & DRAWERS
+       CART DRAWER MODAL
        ========================================================== -->
-
-  <!-- A. Cart Drawer -->
   <div class="modal-overlay" id="cart-drawer-modal" onclick="if(event.target === this) closeCartDrawer()">
     <div class="cart-drawer">
-      <div class="cart-header">
-        <h3><i class="fas fa-shopping-cart" style="color: var(--primary);"></i> শপিং ব্যাগ</h3>
-        <button class="btn-close-modal" onclick="closeCartDrawer()"><i class="fas fa-times"></i></button>
+      <div class="p-6 flex justify-between items-center border-b border-secondary/20">
+        <h3 class="font-headline-sm uppercase tracking-wider text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary">shopping_bag</span>
+          Shopping Bag
+        </h3>
+        <button class="text-on-surface-variant hover:text-on-surface" onclick="closeCartDrawer()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
       </div>
-      
-      <div class="cart-body" id="cart-drawer-body">
+
+      <div class="flex-1 overflow-y-auto p-6" id="cart-drawer-body">
         <!-- Dynamic Cart Items -->
       </div>
 
-      <div class="cart-footer">
-        <div class="cart-summary-row">
-          <span>মোট পণ্যের মূল্য (Subtotal):</span>
-          <strong id="cart-drawer-subtotal">৳0</strong>
+      <div class="p-6 bg-surface-container-low border-t border-secondary/20 space-y-4">
+        <div class="flex justify-between font-headline-sm">
+          <span class="text-on-surface-variant">Subtotal:</span>
+          <strong class="text-primary font-bold" id="cart-drawer-subtotal">৳0</strong>
         </div>
-        <button class="cart-checkout-btn" onclick="openCheckoutModal()">
-          <i class="fas fa-lock"></i> চেকআউট ও অর্ডার সম্পন্ন করুন
+        <button class="w-full py-4 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-all uppercase tracking-widest text-body-sm font-medium flex items-center justify-center gap-2 border border-secondary" onclick="closeCartDrawer(); switchView('checkout');">
+          <span class="material-symbols-outlined text-[18px]">lock</span>
+          Proceed to Checkout
         </button>
       </div>
     </div>
   </div>
 
 
-  <!-- B. Checkout Modal -->
-  <div class="center-modal-overlay" id="checkout-modal" onclick="if(event.target === this) closeCheckoutModal()">
-    <div class="center-modal-box">
-      <div class="modal-content-inner">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
-          <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b;">
-            <i class="fas fa-clipboard-check" style="color: var(--primary);"></i> চেকআউট ও পেমেন্ট
-          </h3>
-          <button class="btn-close-modal" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
-        </div>
-
-        <form id="checkout-form">
-          
-          <!-- Customer Info -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label">আপনার পূর্ণ নাম *</label>
-              <input type="text" name="customerName" class="form-control" placeholder="যেমন: তানভীর হাসান" required>
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label">মোবাইল নম্বর *</label>
-              <input type="tel" name="customerPhone" class="form-control" placeholder="017XXXXXXXX" required>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">পূর্ণ ঠিকানা (ডেলিভারির জন্য) *</label>
-            <input type="text" name="customerAddress" class="form-control" placeholder="বাসা নং, রোড, এলাকা, জেলা" required>
-          </div>
-
-          <!-- Delivery Area -->
-          <div class="form-group">
-            <label class="form-label">ডেলিভারি এরিয়া নির্বাচন করুন *</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <label style="border: 1px solid var(--border-color); padding: 10px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                <input type="radio" name="deliveryArea" value="inside" checked>
-                <span>ঢাকার ভিতরে (<strong id="inside-dhaka-fee-label">৳60</strong>)</span>
-              </label>
-              <label style="border: 1px solid var(--border-color); padding: 10px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                <input type="radio" name="deliveryArea" value="outside">
-                <span>ঢাকার বাহিরে (<strong id="outside-dhaka-fee-label">৳120</strong>)</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Payment Methods -->
-          <div class="form-group">
-            <label class="form-label">পেমেন্ট পদ্ধতি নির্বাচন করুন *</label>
-            <div class="payment-methods-grid">
-              
-              <label class="payment-option active">
-                <input type="radio" name="paymentMethod" value="cod" checked>
-                <div class="payment-option-info">
-                  <h5 style="color: #15803d;"><i class="fas fa-truck"></i> Cash on Delivery</h5>
-                  <p>হাতে পেয়ে ক্যাশ টাকা দিন</p>
-                </div>
-              </label>
-
-              <label class="payment-option">
-                <input type="radio" name="paymentMethod" value="bkash">
-                <div class="payment-option-info">
-                  <h5 style="color: var(--bkash);"><i class="fas fa-mobile-alt"></i> bKash (বিকাশ)</h5>
-                  <p>সেন্ড মানি ও TrxID প্রদান</p>
-                </div>
-              </label>
-
-              <label class="payment-option">
-                <input type="radio" name="paymentMethod" value="nagad">
-                <div class="payment-option-info">
-                  <h5 style="color: var(--nagad);"><i class="fas fa-wallet"></i> Nagad (নগদ)</h5>
-                  <p>সেন্ড মানি ও TrxID প্রদান</p>
-                </div>
-              </label>
-
-              <label class="payment-option">
-                <input type="radio" name="paymentMethod" value="rocket">
-                <div class="payment-option-info">
-                  <h5 style="color: var(--rocket);"><i class="fas fa-rocket"></i> Rocket (রকেট)</h5>
-                  <p>সেন্ড মানি ও TrxID প্রদান</p>
-                </div>
-              </label>
-
-            </div>
-
-            <!-- Dynamic Payment Instructions -->
-            <div id="payment-instruction-box" class="payment-instruction-box"></div>
-
-            <!-- Transaction ID Input (Hidden on COD) -->
-            <div id="trxid-form-group" class="form-group" style="display: none;">
-              <label class="form-label">পেমেন্ট TrxID (ট্রানজেকশন আইডি) *</label>
-              <input type="text" name="trxId" class="form-control" placeholder="যেমন: 9K7X82LM1">
-            </div>
-          </div>
-
-          <!-- Coupon Code Box -->
-          <div class="form-group">
-            <label class="form-label">কুপন / ডিসকাউন্ট কোড (যদি থাকে)</label>
-            <div style="display: flex; gap: 8px;">
-              <input type="text" id="coupon-input" class="form-control" placeholder="যেমন: WELCOME10">
-              <button type="button" class="btn-secondary" style="background: #0f172a; color: #fff; padding: 0 16px; border-radius: var(--radius-md);" onclick="applyCouponCode()">
-                প্রয়োগ করুন
-              </button>
-            </div>
-          </div>
-
-          <!-- Order Summary Breakdown -->
-          <div style="background: #f8fafc; border-radius: var(--radius-md); padding: 1rem; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
-            <h4 style="font-size: 0.95rem; margin-bottom: 8px; color: #334155;">অর্ডারের সংক্ষিপ্ত বিবরণ:</h4>
-            <div id="checkout-items-list" style="margin-bottom: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"></div>
-            
-            <div class="cart-summary-row">
-              <span>সাবটোটাল:</span>
-              <strong id="checkout-subtotal">৳0</strong>
-            </div>
-            <div class="cart-summary-row">
-              <span>ডেলিভারি চার্জ:</span>
-              <strong id="checkout-delivery-fee">৳60</strong>
-            </div>
-            <div class="cart-summary-row" style="color: #ef4444;">
-              <span>ডিসকাউন্ট:</span>
-              <strong id="checkout-discount">-৳0</strong>
-            </div>
-            <div class="cart-summary-row cart-summary-total">
-              <span>সর্বমোট প্রদেয় বিল:</span>
-              <strong id="checkout-grand-total" style="color: var(--primary);">৳0</strong>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">বিশেষ কোনো নির্দেশ বা নোট (ঐচ্ছিক)</label>
-            <input type="text" name="customerNotes" class="form-control" placeholder="যেমন: বিকেলে ডেলিভারি করবেন...">
-          </div>
-
-          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 14px; font-size: 1.05rem;">
-            <i class="fas fa-check-circle"></i> নিশ্চিত করুন ও অর্ডার সম্পন্ন করুন
-          </button>
-
-        </form>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- C. Quick View Modal -->
-  <div class="center-modal-overlay" id="quick-view-modal" onclick="if(event.target === this) closeQuickView()">
-    <div class="center-modal-box" style="max-width: 700px;">
-      <div class="modal-content-inner" style="position: relative;">
-        <button class="btn-close-modal" style="position: absolute; top: 16px; right: 16px; z-index: 10;" onclick="closeQuickView()"><i class="fas fa-times"></i></button>
-        <div id="quick-view-content"></div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- D. Order Success & Invoice Modal -->
+  <!-- ==========================================================
+       ORDER SUCCESS MODAL
+       ========================================================== -->
   <div class="center-modal-overlay" id="order-success-modal">
-    <div class="center-modal-box" style="max-width: 550px;">
-      <div class="modal-content-inner" id="order-success-content"></div>
-    </div>
-  </div>
-
-
-  <!-- E. Admin Login PIN Modal -->
-  <div class="center-modal-overlay" id="admin-login-modal" onclick="if(event.target === this) closeAdminLogin()">
-    <div class="center-modal-box" style="max-width: 400px; text-align: center;">
-      <div class="modal-content-inner">
-        <div style="width: 50px; height: 50px; border-radius: 50%; background: #e0f2fe; color: var(--primary); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
-          <i class="fas fa-lock"></i>
-        </div>
-        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 6px;">অ্যাডমিন নিরাপত্তা যাচাই</h3>
-        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem;">অ্যাডমিন প্যানেল পরিচালনা করতে আপনার সিকিউরিটি পিন (PIN) দিন।</p>
-        
-        <form onsubmit="handleAdminLogin(event)">
-          <div class="form-group">
-            <input type="password" id="admin-pin-input" class="form-control" placeholder="Security PIN (Default: admin123)" required style="text-align: center; font-size: 1.1rem; letter-spacing: 2px;">
-          </div>
-          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px;">
-            লগইন করুন
-          </button>
-        </form>
-      </div>
+    <div class="center-modal-box p-8 max-w-lg">
+      <div id="order-success-content"></div>
     </div>
   </div>
 
 
   <!-- ==========================================================
-       4. FULL ADMIN PORTAL SUITE
+       ADMIN LOGIN PIN MODAL
+       ========================================================== -->
+  <div class="center-modal-overlay" id="admin-login-modal" onclick="if(event.target === this) closeAdminLogin()">
+    <div class="center-modal-box p-8 max-w-sm text-center">
+      <div class="w-14 h-14 rounded-full bg-primary text-secondary-fixed border border-secondary flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-[28px]">shield_person</span>
+      </div>
+      <h3 class="font-headline-sm uppercase tracking-wider text-on-surface mb-1">Sovereign Security PIN</h3>
+      <p class="text-body-sm text-on-surface-variant mb-6">Enter your security PIN to manage store catalog, orders, and payment numbers.</p>
+      
+      <form onsubmit="handleAdminLogin(event)">
+        <input type="password" id="admin-pin-input" class="w-full p-3 bg-surface border border-outline-variant text-center tracking-[0.3em] font-mono text-lg focus:border-secondary outline-none mb-4" placeholder="••••••••" required>
+        <button type="submit" class="w-full py-3 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors font-label-md uppercase tracking-wider">
+          Access Admin Suite
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================
+       ADMIN PORTAL FULL SUITE
        ========================================================== -->
   <div id="admin-portal-view">
-    <div class="admin-layout">
+    <div class="flex flex-col lg:flex-row min-h-screen">
       
       <!-- Admin Sidebar -->
-      <aside class="admin-sidebar">
-        <div class="admin-brand">
-          <i class="fas fa-shield-alt"></i>
+      <aside class="w-full lg:w-64 bg-black p-6 border-b lg:border-b-0 lg:border-r border-secondary/20 flex flex-col flex-shrink-0">
+        <div class="flex items-center gap-3 pb-6 border-b border-secondary/20 mb-6">
+          <div class="w-8 h-8 rounded-full bg-secondary/20 border border-secondary flex items-center justify-center text-secondary-fixed">
+            <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+          </div>
           <div>
-            <h3>Admin Suite</h3>
-            <p style="font-size: 0.75rem; color: #38bdf8;">Full Control Panel</p>
+            <h3 class="font-headline-sm text-sm uppercase tracking-widest text-white">Sovereign Admin</h3>
+            <p class="text-[10px] text-secondary tracking-widest uppercase">Full Control</p>
           </div>
         </div>
 
-        <ul class="admin-nav-links">
-          <li>
-            <button class="admin-nav-btn active" data-tab="dashboard" onclick="switchAdminTab('dashboard')">
-              <i class="fas fa-tachometer-alt"></i> ড্যাশবোর্ড (Dashboard)
-            </button>
-          </li>
-          <li>
-            <button class="admin-nav-btn" data-tab="products" onclick="switchAdminTab('products')">
-              <i class="fas fa-box-open"></i> পণ্য ব্যবস্থাপনা (Products)
-            </button>
-          </li>
-          <li>
-            <button class="admin-nav-btn" data-tab="orders" onclick="switchAdminTab('orders')">
-              <i class="fas fa-shopping-cart"></i> অর্ডার তালিকা (Orders)
-            </button>
-          </li>
-          <li>
-            <button class="admin-nav-btn" data-tab="categories" onclick="switchAdminTab('categories')">
-              <i class="fas fa-tags"></i> ক্যাটাগরি (Categories)
-            </button>
-          </li>
-          <li>
-            <button class="admin-nav-btn" data-tab="coupons" onclick="switchAdminTab('coupons')">
-              <i class="fas fa-ticket-alt"></i> কুপন ও ছাড় (Coupons)
-            </button>
-          </li>
-          <li>
-            <button class="admin-nav-btn" data-tab="settings" onclick="switchAdminTab('settings')">
-              <i class="fas fa-cog"></i> ওয়েবসাইট সেটিংস (Settings)
-            </button>
-          </li>
-        </ul>
-
-        <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; gap: 8px;">
-          <button class="btn-secondary" style="width: 100%; justify-content: center; font-size: 0.85rem;" onclick="exitAdminPortal()">
-            <i class="fas fa-globe"></i> ওয়েবসাইটে ফিরে যান
+        <nav class="space-y-2 flex-1">
+          <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 active transition-colors" data-tab="dashboard" onclick="switchAdminTab('dashboard')">
+            <span class="material-symbols-outlined text-[18px] text-secondary">dashboard</span> Dashboard
           </button>
-          <button class="btn-secondary" style="width: 100%; justify-content: center; font-size: 0.85rem; color: #ef4444; border-color: #ef4444;" onclick="adminLogout()">
-            <i class="fas fa-sign-out-alt"></i> লগআউট
+          <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="products" onclick="switchAdminTab('products')">
+            <span class="material-symbols-outlined text-[18px] text-secondary">inventory_2</span> Products & Stock
+          </button>
+          <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="orders" onclick="switchAdminTab('orders')">
+            <span class="material-symbols-outlined text-[18px] text-secondary">order_approve</span> Orders & Timeline
+          </button>
+          <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="categories" onclick="switchAdminTab('categories')">
+            <span class="material-symbols-outlined text-[18px] text-secondary">category</span> Categories
+          </button>
+          <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="coupons" onclick="switchAdminTab('coupons')">
+            <span class="material-symbols-outlined text-[18px] text-secondary">confirmation_number</span> VIP Coupons
+          </button>
+          <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="settings" onclick="switchAdminTab('settings')">
+            <span class="material-symbols-outlined text-[18px] text-secondary">settings</span> Store & Payments
+          </button>
+        </nav>
+
+        <div class="pt-6 border-t border-secondary/20 space-y-2 mt-auto">
+          <button class="w-full py-2.5 bg-white/10 text-white hover:bg-secondary hover:text-on-secondary text-xs uppercase tracking-wider transition-colors" onclick="exitAdminPortal()">
+            Return to Storefront
+          </button>
+          <button class="w-full py-2.5 border border-error/50 text-error hover:bg-error hover:text-white text-xs uppercase tracking-wider transition-colors" onclick="adminLogout()">
+            Log Out
           </button>
         </div>
       </aside>
 
-      <!-- Admin Main Content Area -->
-      <main class="admin-content">
+      <!-- Admin Main Content -->
+      <main class="flex-1 p-6 lg:p-10 bg-[#161616] overflow-y-auto">
         
         <!-- Topbar -->
-        <div class="admin-topbar">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-black p-6 border border-secondary/20 mb-8">
           <div>
-            <h2 style="font-size: 1.35rem; font-weight: 800; color: #1e293b;">ম্যানেজমেন্ট কন্ট্রোল ড্যাশবোর্ড</h2>
-            <p style="font-size: 0.85rem; color: #64748b;">মুদ্রা: <strong>৳ (BDT)</strong> | লাইভ ডাটাবেজ নিয়ন্ত্রণ</p>
+            <h2 class="font-headline-lg text-white">Sovereign Management Suite</h2>
+            <p class="text-xs text-secondary tracking-widest uppercase">Base Currency: <strong>৳ (BDT)</strong> | Live LocalStorage Database</p>
           </div>
-          <div>
-            <button class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="exportDatabaseData()">
-              <i class="fas fa-download"></i> ডাটা ব্যাকআপ
-            </button>
-          </div>
+          <button class="px-5 py-2.5 bg-secondary text-on-secondary hover:bg-white hover:text-black transition-colors font-label-md uppercase text-xs tracking-wider" onclick="exportDatabaseData()">
+            Export Backup JSON
+          </button>
         </div>
 
-        <!-- 1. DASHBOARD TAB PANE -->
+        <!-- 1. DASHBOARD TAB -->
         <div class="admin-tab-pane" id="admin-tab-dashboard">
-          
-          <!-- Stats Cards -->
-          <div class="stat-cards-grid">
-            <div class="stat-card">
-              <div class="stat-icon-wrap rev"><i class="fas fa-coins"></i></div>
-              <div class="stat-info">
-                <h4>মোট বিক্রি (Total Sales)</h4>
-                <div class="stat-val" id="admin-stat-sales">৳0</div>
-              </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="p-6 bg-black border border-secondary/30">
+              <span class="text-xs uppercase text-secondary tracking-widest block mb-1">Total Revenue</span>
+              <div class="text-2xl font-headline-lg text-white font-bold" id="admin-stat-sales">৳0</div>
             </div>
-
-            <div class="stat-card">
-              <div class="stat-icon-wrap ord"><i class="fas fa-shopping-bag"></i></div>
-              <div class="stat-info">
-                <h4>মোট অর্ডার (Total Orders)</h4>
-                <div class="stat-val" id="admin-stat-orders">0</div>
-              </div>
+            <div class="p-6 bg-black border border-secondary/30">
+              <span class="text-xs uppercase text-secondary tracking-widest block mb-1">Total Commissions</span>
+              <div class="text-2xl font-headline-lg text-white font-bold" id="admin-stat-orders">0</div>
             </div>
-
-            <div class="stat-card">
-              <div class="stat-icon-wrap pen"><i class="fas fa-clock"></i></div>
-              <div class="stat-info">
-                <h4>পেন্ডিং অর্ডার (Pending)</h4>
-                <div class="stat-val" id="admin-stat-pending">0</div>
-              </div>
+            <div class="p-6 bg-black border border-secondary/30">
+              <span class="text-xs uppercase text-secondary tracking-widest block mb-1">Active Pipeline</span>
+              <div class="text-2xl font-headline-lg text-white font-bold" id="admin-stat-pending">0</div>
             </div>
-
-            <div class="stat-card">
-              <div class="stat-icon-wrap prd"><i class="fas fa-boxes"></i></div>
-              <div class="stat-info">
-                <h4>মোট পণ্য (Total Products)</h4>
-                <div class="stat-val" id="admin-stat-products">0</div>
-              </div>
+            <div class="p-6 bg-black border border-secondary/30">
+              <span class="text-xs uppercase text-secondary tracking-widest block mb-1">Masterpieces in Vault</span>
+              <div class="text-2xl font-headline-lg text-white font-bold" id="admin-stat-products">0</div>
             </div>
           </div>
 
-          <!-- Recent Orders Card -->
-          <div class="admin-card">
-            <div class="admin-card-header">
-              <h3>সাম্প্রতিক অর্ডারসমূহ (Recent Orders)</h3>
-              <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchAdminTab('orders')">
-                সকল অর্ডার দেখুন <i class="fas fa-arrow-right"></i>
-              </button>
+          <div class="bg-black p-6 border border-secondary/20">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-headline-sm text-white uppercase tracking-wider">Recent Commissions</h3>
+              <button class="text-xs text-secondary underline uppercase" onclick="switchAdminTab('orders')">View All</button>
             </div>
-            
-            <div class="table-responsive">
-              <table class="data-table">
+            <div class="overflow-x-auto">
+              <table class="data-table bg-white text-black">
                 <thead>
                   <tr>
-                    <th>অর্ডার আইডি</th>
-                    <th>গ্রাহক</th>
-                    <th>সর্বমোট</th>
-                    <th>স্ট্যাটাস</th>
-                    <th>তারিখ</th>
-                    <th>অ্যাকশন</th>
+                    <th>Order Ref</th>
+                    <th>Patron</th>
+                    <th>Grand Total</th>
+                    <th>Timeline Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
-                <tbody id="admin-recent-orders-tbody">
-                  <!-- Dynamic Recent Orders -->
-                </tbody>
+                <tbody id="admin-recent-orders-tbody"></tbody>
               </table>
             </div>
           </div>
-
         </div>
 
-
-        <!-- 2. PRODUCTS TAB PANE -->
+        <!-- 2. PRODUCTS TAB -->
         <div class="admin-tab-pane" id="admin-tab-products" style="display: none;">
-          <div class="admin-card">
-            <div class="admin-card-header">
-              <h3>পণ্য তালিকা ও ইনভেন্টরি</h3>
-              <button class="btn-primary" onclick="openProductEditModal()">
-                <i class="fas fa-plus"></i> নতুন পণ্য যোগ করুন
+          <div class="bg-black p-6 border border-secondary/20">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-headline-sm text-white uppercase tracking-wider">Vault Inventory & Products</h3>
+              <button class="px-4 py-2 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider hover:bg-white hover:text-black transition-colors" onclick="openProductEditModal()">
+                + Add Masterpiece
               </button>
             </div>
-
-            <div class="table-responsive">
-              <table class="data-table">
+            <div class="overflow-x-auto">
+              <table class="data-table bg-white text-black">
                 <thead>
                   <tr>
-                    <th>ছবি</th>
-                    <th>পণ্যের নাম</th>
-                    <th>ক্যাটাগরি</th>
-                    <th>মূল্য (৳)</th>
-                    <th>স্টক</th>
-                    <th>রেটিং</th>
-                    <th>অ্যাকশন</th>
+                    <th>Image</th>
+                    <th>Title & Badge</th>
+                    <th>Category</th>
+                    <th>Price (৳ BDT)</th>
+                    <th>Stock</th>
+                    <th>Rating</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody id="admin-products-tbody">
-                  <!-- Dynamic Products Table -->
-                </tbody>
+                <tbody id="admin-products-tbody"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-
-        <!-- 3. ORDERS TAB PANE -->
+        <!-- 3. ORDERS TAB -->
         <div class="admin-tab-pane" id="admin-tab-orders" style="display: none;">
-          <div class="admin-card">
-            <div class="admin-card-header">
-              <h3>সকল অর্ডার পরিচালনা</h3>
-              <div style="display: flex; gap: 8px;">
-                <select onchange="renderAdminOrdersTable(this.value)" class="sort-select">
-                  <option value="all">সকল অর্ডার</option>
-                  <option value="Pending">পেন্ডিং (Pending)</option>
-                  <option value="Confirmed">কনফার্মড (Confirmed)</option>
-                  <option value="Processing">প্রসেসিং (Processing)</option>
-                  <option value="Shipped">শিপড (Shipped)</option>
-                  <option value="Delivered">ডেলিভারড (Delivered)</option>
-                  <option value="Cancelled">ক্যান্সেলড (Cancelled)</option>
-                </select>
-              </div>
+          <div class="bg-black p-6 border border-secondary/20">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-headline-sm text-white uppercase tracking-wider">Commission Orders & 5-Step Status</h3>
+              <select onchange="renderAdminOrdersTable(this.value)" class="px-3 py-1.5 bg-[#222] text-white border border-secondary/40 text-xs">
+                <option value="all">All Orders</option>
+                <option value="Pending">1. Order Placed</option>
+                <option value="Processing">2. Artisanal Crafting</option>
+                <option value="Confirmed">3. Quality Inspection</option>
+                <option value="Shipped">4. Dispatched</option>
+                <option value="Delivered">5. Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
             </div>
-
-            <div class="table-responsive">
-              <table class="data-table">
+            <div class="overflow-x-auto">
+              <table class="data-table bg-white text-black">
                 <thead>
                   <tr>
-                    <th>অর্ডার আইডি / তারিখ</th>
-                    <th>গ্রাহকের তথ্য</th>
-                    <th>পেমেন্ট ও TrxID</th>
-                    <th>সর্বমোট বিল</th>
-                    <th>স্ট্যাটাস আপডেট</th>
-                    <th>অ্যাকশন</th>
+                    <th>Ref / Date</th>
+                    <th>Patron & Phone</th>
+                    <th>Payment & Trx</th>
+                    <th>Total (৳)</th>
+                    <th>5-Step Status Update</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
-                <tbody id="admin-orders-tbody">
-                  <!-- Dynamic Orders Table -->
-                </tbody>
+                <tbody id="admin-orders-tbody"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-
-        <!-- 4. CATEGORIES TAB PANE -->
+        <!-- 4. CATEGORIES TAB -->
         <div class="admin-tab-pane" id="admin-tab-categories" style="display: none;">
-          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
-            
-            <div class="admin-card">
-              <h3>নতুন ক্যাটাগরি তৈরি</h3>
-              <form onsubmit="handleAddCategorySubmit(event)" style="margin-top: 1rem;">
-                <div class="form-group">
-                  <label class="form-label">ক্যাটাগরির নাম *</label>
-                  <input type="text" id="new-cat-name" class="form-control" placeholder="যেমন: ড্রয়িং কিট" required>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="bg-black p-6 border border-secondary/20">
+              <h3 class="font-headline-sm text-white uppercase tracking-wider mb-4">Add Category</h3>
+              <form onsubmit="handleAddCategorySubmit(event)" class="space-y-4">
+                <div>
+                  <label class="text-xs uppercase text-secondary block mb-1">Category Name *</label>
+                  <input type="text" id="new-cat-name" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" placeholder="e.g. Royal Kaftans" required>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">ক্যাটাগরি আইডি (Slug)</label>
-                  <input type="text" id="new-cat-id" class="form-control" placeholder="যেমন: drawing-kit">
+                <div>
+                  <label class="text-xs uppercase text-secondary block mb-1">Category Slug / ID</label>
+                  <input type="text" id="new-cat-id" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" placeholder="e.g. kaftans">
                 </div>
-                <div class="form-group">
-                  <label class="form-label">আইকন ক্লাস (FontAwesome)</label>
-                  <input type="text" id="new-cat-icon" class="form-control" value="fa-tag">
+                <div>
+                  <label class="text-xs uppercase text-secondary block mb-1">Material Symbol</label>
+                  <input type="text" id="new-cat-icon" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" value="diamond">
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
-                  ক্যাটাগরি সেভ করুন
-                </button>
+                <button type="submit" class="w-full py-3 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider">Save Category</button>
               </form>
             </div>
-
-            <div class="admin-card">
-              <h3>বিদ্যমান ক্যাটাগরিসমূহ</h3>
-              <div class="table-responsive" style="margin-top: 1rem;">
-                <table class="data-table">
+            <div class="lg:col-span-2 bg-black p-6 border border-secondary/20">
+              <h3 class="font-headline-sm text-white uppercase tracking-wider mb-4">Active Categories</h3>
+              <div class="overflow-x-auto">
+                <table class="data-table bg-white text-black">
                   <thead>
                     <tr>
-                      <th>আইকন</th>
-                      <th>ক্যাটাগরির নাম</th>
-                      <th>আইডি (Slug)</th>
-                      <th>অ্যাকশন</th>
+                      <th>Icon</th>
+                      <th>Category Name</th>
+                      <th>Slug</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
-                  <tbody id="admin-categories-tbody">
-                    <!-- Dynamic Categories Table -->
-                  </tbody>
+                  <tbody id="admin-categories-tbody"></tbody>
                 </table>
               </div>
             </div>
-
           </div>
         </div>
 
-
-        <!-- 5. COUPONS TAB PANE -->
+        <!-- 5. COUPONS TAB -->
         <div class="admin-tab-pane" id="admin-tab-coupons" style="display: none;">
-          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
-            
-            <div class="admin-card">
-              <h3>নতুন কুপন কোড তৈরি</h3>
-              <form onsubmit="handleAddCouponSubmit(event)" style="margin-top: 1rem;">
-                <div class="form-group">
-                  <label class="form-label">কুপন কোড *</label>
-                  <input type="text" name="couponCode" class="form-control" placeholder="যেমন: EID50" required style="text-transform: uppercase;">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="bg-black p-6 border border-secondary/20">
+              <h3 class="font-headline-sm text-white uppercase tracking-wider mb-4">Create VIP Coupon</h3>
+              <form onsubmit="handleAddCouponSubmit(event)" class="space-y-4">
+                <div>
+                  <label class="text-xs uppercase text-secondary block mb-1">Coupon Code *</label>
+                  <input type="text" name="couponCode" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs uppercase outline-none focus:border-secondary" placeholder="e.g. EID2026" required>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">ছাড়ের ধরন</label>
-                  <select name="couponType" class="form-control">
-                    <option value="percent">শতাংশ ছাড় (% Percentage)</option>
-                    <option value="fixed">নির্দিষ্ট টাকা ছাড় (Fixed ৳)</option>
+                <div>
+                  <label class="text-xs uppercase text-secondary block mb-1">Discount Type</label>
+                  <select name="couponType" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary">
+                    <option value="percent">Percentage (% Off)</option>
+                    <option value="fixed">Fixed BDT (৳ Off)</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">ছাড়ের পরিমাণ (Value) *</label>
-                  <input type="number" name="couponValue" class="form-control" placeholder="যেমন: 10 বা 100" required>
+                <div>
+                  <label class="text-xs uppercase text-secondary block mb-1">Discount Value *</label>
+                  <input type="number" name="couponValue" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" placeholder="e.g. 15 or 500" required>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">সর্বনিম্ন কত টাকার অর্ডারে প্রযোজ্য (৳)</label>
-                  <input type="number" name="couponMinSpend" class="form-control" value="500">
+                <div>
+                  <label class="text-xs uppercase text-secondary block mb-1">Minimum Order (৳)</label>
+                  <input type="number" name="couponMinSpend" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" value="3000">
                 </div>
-                <div class="form-group">
-                  <label class="form-label">সর্বোচ্চ ছাড়ের সীমা (৳, শুধু % এর জন্য)</label>
-                  <input type="number" name="couponMaxDiscount" class="form-control" value="300">
+                <div>
+                  <label class="text-xs uppercase text-secondary block mb-1">Max Cap (৳)</label>
+                  <input type="number" name="couponMaxDiscount" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" value="2500">
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
-                  কুপন সেভ করুন
-                </button>
+                <button type="submit" class="w-full py-3 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider">Register VIP Code</button>
               </form>
             </div>
-
-            <div class="admin-card">
-              <h3>সক্রিয় কুপনসমূহ</h3>
-              <div class="table-responsive" style="margin-top: 1rem;">
-                <table class="data-table">
+            <div class="lg:col-span-2 bg-black p-6 border border-secondary/20">
+              <h3 class="font-headline-sm text-white uppercase tracking-wider mb-4">Active VIP Codes</h3>
+              <div class="overflow-x-auto">
+                <table class="data-table bg-white text-black">
                   <thead>
                     <tr>
-                      <th>কোড</th>
-                      <th>ছাড়</th>
-                      <th>সর্বনিম্ন অর্ডার</th>
-                      <th>স্ট্যাটাস</th>
-                      <th>অ্যাকশন</th>
+                      <th>Code</th>
+                      <th>Benefit</th>
+                      <th>Min Spend</th>
+                      <th>Status</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
-                  <tbody id="admin-coupons-tbody">
-                    <!-- Dynamic Coupons Table -->
-                  </tbody>
+                  <tbody id="admin-coupons-tbody"></tbody>
                 </table>
               </div>
             </div>
-
           </div>
         </div>
 
-
-        <!-- 6. SETTINGS TAB PANE -->
+        <!-- 6. SETTINGS TAB -->
         <div class="admin-tab-pane" id="admin-tab-settings" style="display: none;">
-          <div class="admin-card">
-            <h3>ওয়েবসাইট ও পেমেন্ট নম্বর সেটিংস</h3>
-            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem;">এখানে দেওয়া মোবাইল ও হোয়াটসঅ্যাপ নম্বরে গ্রাহকরা সরাসরি মেসেজ ও পেমেন্ট পাঠাতে পারবে।</p>
-
+          <div class="bg-black p-6 border border-secondary/20 mb-8">
+            <h3 class="font-headline-sm text-white uppercase tracking-wider mb-2">Flagship Settings & Merchant Numbers</h3>
+            <p class="text-xs text-on-surface-variant mb-6">Configure WhatsApp, bKash/Nagad/Rocket receiver numbers, and delivery charges in ৳ BDT.</p>
+            
             <form id="admin-settings-form" onsubmit="handleSaveSettingsSubmit(event)">
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
-                
-                <div class="form-group">
-                  <label class="form-label">দোকান / ওয়েবসাইটের নাম</label>
-                  <input type="text" name="storeName" class="form-control" required>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Brand Name</label>
+                  <input type="text" name="storeName" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
                 </div>
-                
-                <div class="form-group">
-                  <label class="form-label">ট্যাগলাইন / স্লোগান</label>
-                  <input type="text" name="tagline" class="form-control">
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Tagline</label>
+                  <input type="text" name="tagline" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label">হোয়াটসঅ্যাপ নম্বর (কান্ট্রি কোড সহ, যেমন: 88017XXXXXXXX) *</label>
-                  <input type="text" name="whatsappNumber" class="form-control" required>
+                <div>
+                  <label class="uppercase text-secondary block mb-1">WhatsApp Number (e.g. 88017XXXXXXXX) *</label>
+                  <input type="text" name="whatsappNumber" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label">যোগাযোগ ফোন নম্বর</label>
-                  <input type="text" name="contactPhone" class="form-control">
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Contact Phone</label>
+                  <input type="text" name="contactPhone" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label">হোয়াটসঅ্যাপের ডিফল্ট শুভেচ্ছা বার্তা</label>
-                  <input type="text" name="whatsappDefaultMsg" class="form-control">
+                <div>
+                  <label class="uppercase text-[#e2136e] block mb-1">bKash Merchant / Personal Number</label>
+                  <input type="text" name="bkashNumber" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label">ইমেইল ঠিকানা</label>
-                  <input type="email" name="contactEmail" class="form-control">
+                <div>
+                  <label class="uppercase text-[#f7931e] block mb-1">Nagad Merchant / Personal Number</label>
+                  <input type="text" name="nagadNumber" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
                 </div>
-
-                <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">অফিস / দোকানের পূর্ণ ঠিকানা</label>
-                  <input type="text" name="address" class="form-control">
+                <div>
+                  <label class="uppercase text-[#8c3494] block mb-1">Rocket Number</label>
+                  <input type="text" name="rocketNumber" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
                 </div>
-
-                <!-- Payment Numbers -->
-                <div class="form-group">
-                  <label class="form-label" style="color: var(--bkash);"><i class="fas fa-mobile-alt"></i> বিকাশ (bKash) নম্বর ও নির্দেশনা</label>
-                  <input type="text" name="bkashNumber" class="form-control" placeholder="017XXXXXXXX (Personal/Send Money)">
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Security PIN (Default: admin123)</label>
+                  <input type="text" name="adminPin" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label" style="color: var(--nagad);"><i class="fas fa-wallet"></i> নগদ (Nagad) নম্বর ও নির্দেশনা</label>
-                  <input type="text" name="nagadNumber" class="form-control" placeholder="018XXXXXXXX (Personal/Send Money)">
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Inside Dhaka Courier Fee (৳)</label>
+                  <input type="number" name="insideDhakaDelivery" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label" style="color: var(--rocket);"><i class="fas fa-rocket"></i> রকেট (Rocket) নম্বর</label>
-                  <input type="text" name="rocketNumber" class="form-control" placeholder="019XXXXXXXX-X (Personal)">
+                <div>
+                  <label class="uppercase text-secondary block mb-1">Outside Dhaka Courier Fee (৳)</label>
+                  <input type="number" name="outsideDhakaDelivery" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label">অ্যাডমিন সিকিউরিটি PIN</label>
-                  <input type="text" name="adminPin" class="form-control" placeholder="admin123" required>
+                <div class="md:col-span-2">
+                  <label class="uppercase text-secondary block mb-1">Address</label>
+                  <input type="text" name="address" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label">ঢাকার ভিতরে ডেলিভারি চার্জ (৳)</label>
-                  <input type="number" name="insideDhakaDelivery" class="form-control" required>
+                <div class="md:col-span-2">
+                  <label class="uppercase text-secondary block mb-1">Announcement Banner Text</label>
+                  <input type="text" name="announcement" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
                 </div>
-
-                <div class="form-group">
-                  <label class="form-label">ঢাকার বাহিরে ডেলিভারি চার্জ (৳)</label>
-                  <input type="number" name="outsideDhakaDelivery" class="form-control" required>
-                </div>
-
-                <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">টপ অ্যানাউন্সমেন্ট ব্যানার টেক্সট</label>
-                  <input type="text" name="announcement" class="form-control">
-                </div>
-
               </div>
-
-              <div style="margin-top: 1.5rem; display: flex; gap: 12px;">
-                <button type="submit" class="btn-primary" style="padding: 12px 28px;">
-                  <i class="fas fa-save"></i> সেটিংস সংরক্ষণ করুন
-                </button>
-              </div>
+              <button type="submit" class="mt-6 px-8 py-3 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider hover:bg-white hover:text-black transition-colors">
+                Save All Settings
+              </button>
             </form>
           </div>
 
-          <!-- Data Backup & Reset Card -->
-          <div class="admin-card">
-            <h3>ডাটাবেজ ব্যাকআপ ও রিস্টোর (Backup & Restore)</h3>
-            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem;">আপনার ওয়েবসাইট এর সমস্ত পণ্য, অর্ডার ও সেটিংস এক ক্লিকে ব্যাকআপ ফাইল আকারে সংরক্ষণ বা রিস্টোর করুন।</p>
-
-            <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
-              <button class="btn-primary" onclick="exportDatabaseData()">
-                <i class="fas fa-file-export"></i> ব্যাকআপ এক্সপোর্ট (Export JSON)
+          <div class="bg-black p-6 border border-secondary/20">
+            <h3 class="font-headline-sm text-white uppercase tracking-wider mb-2">Database Backup & Demo Reset</h3>
+            <div class="flex flex-wrap gap-4 mt-4">
+              <button class="px-5 py-2.5 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider" onclick="exportDatabaseData()">
+                Export JSON Backup
               </button>
-              
-              <label class="btn-secondary" style="background: #f1f5f9; color: var(--text-main); cursor: pointer;">
-                <i class="fas fa-file-import"></i> ব্যাকআপ রিস্টোর (Import JSON)
-                <input type="file" accept=".json" onchange="importDatabaseData(event)" style="display: none;">
+              <label class="px-5 py-2.5 bg-white/10 text-white font-label-md uppercase text-xs tracking-wider cursor-pointer hover:bg-white/20">
+                Import JSON Backup
+                <input type="file" accept=".json" onchange="importDatabaseData(event)" class="hidden">
               </label>
-
-              <button class="btn-secondary" style="background: #fee2e2; color: #ef4444; border-color: #ef4444; margin-left: auto;" onclick="resetAllDataDemo()">
-                <i class="fas fa-history"></i> প্রাথমিক ডেমো ডাটায় রিসেট করুন
+              <button class="px-5 py-2.5 border border-error/50 text-error hover:bg-error hover:text-white font-label-md uppercase text-xs tracking-wider ml-auto" onclick="resetAllDataDemo()">
+                Reset Initial Demo Data
               </button>
             </div>
           </div>
-
         </div>
 
       </main>
@@ -989,81 +1339,68 @@
 
 
   <!-- ==========================================================
-       5. ADMIN PRODUCT CREATE/EDIT MODAL
+       ADMIN PRODUCT MODAL
        ========================================================== -->
   <div class="center-modal-overlay" id="admin-product-modal" onclick="if(event.target === this) closeProductEditModal()">
-    <div class="center-modal-box" style="max-width: 620px;">
-      <div class="modal-content-inner">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
-          <h3 id="product-modal-title" style="font-size: 1.25rem; font-weight: 700;">পণ্য সম্পাদন করুন</h3>
-          <button class="btn-close-modal" onclick="closeProductEditModal()"><i class="fas fa-times"></i></button>
-        </div>
-
-        <form id="admin-product-form" onsubmit="handleSaveProductSubmit(event)">
-          <input type="hidden" name="productId">
-
-          <div class="form-group">
-            <label class="form-label">পণ্যের নাম *</label>
-            <input type="text" name="prodName" class="form-control" placeholder="যেমন: প্রিমিয়াম ওয়াটারপ্রুফ স্কুল ব্যাগ" required>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <div class="form-group">
-              <label class="form-label">ক্যাটাগরি *</label>
-              <select name="prodCategory" id="prod-category-select" class="form-control" required></select>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">ব্যাজ / ট্যাগ (ঐচ্ছিক)</label>
-              <input type="text" name="prodBadge" class="form-control" placeholder="যেমন: Hot Deal, New, Best Seller">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">বর্তমান বিক্রয় মূল্য (৳ BDT) *</label>
-              <input type="number" name="prodPrice" class="form-control" placeholder="যেমন: 1250" required>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">পূর্বের নিয়মিত মূল্য (৳ BDT)</label>
-              <input type="number" name="prodRegularPrice" class="form-control" placeholder="যেমন: 1500 (ছাড় দেখাতে)">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">স্টক পরিমাণ (সংখ্যা)</label>
-              <input type="number" name="prodStock" class="form-control" value="50">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">ছবির লিংক (Image URL)</label>
-              <input type="url" name="prodImage" class="form-control" placeholder="https://images.unsplash.com/...">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">পণ্যের বিবরণ (Description)</label>
-            <textarea name="prodDescription" class="form-control" rows="3" placeholder="পণ্যের কোয়ালিটি, সাইজ এবং মেটেরিয়াল সম্পর্কিত বিবরণ..."></textarea>
-          </div>
-
-          <div style="display: flex; gap: 10px; margin-top: 1.5rem;">
-            <button type="submit" class="btn-primary" style="flex: 1; justify-content: center;">
-              <i class="fas fa-save"></i> পণ্য সেভ করুন
-            </button>
-            <button type="button" class="btn-secondary" style="background: #f1f5f9; color: var(--text-main);" onclick="closeProductEditModal()">
-              বাতিল
-            </button>
-          </div>
-        </form>
+    <div class="center-modal-box p-8 max-w-xl">
+      <div class="flex justify-between items-center border-b border-secondary/20 pb-4 mb-6">
+        <h3 id="product-modal-title" class="font-headline-sm uppercase tracking-wider text-on-surface">Edit Masterpiece</h3>
+        <button onclick="closeProductEditModal()" class="text-on-surface-variant hover:text-on-surface">
+          <span class="material-symbols-outlined">close</span>
+        </button>
       </div>
+
+      <form id="admin-product-form" onsubmit="handleSaveProductSubmit(event)" class="space-y-4 text-xs">
+        <input type="hidden" name="productId">
+        <div>
+          <label class="uppercase text-secondary font-medium block mb-1">Title *</label>
+          <input type="text" name="prodName" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none" required>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Category *</label>
+            <select name="prodCategory" id="prod-category-select" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none" required></select>
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Badge Tag</label>
+            <input type="text" name="prodBadge" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none" placeholder="e.g. Masterpiece, Best Seller">
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Selling Price (৳ BDT) *</label>
+            <input type="number" name="prodPrice" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none" required>
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Regular Price (৳ BDT)</label>
+            <input type="number" name="prodRegularPrice" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none">
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Stock Quantity</label>
+            <input type="number" name="prodStock" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none" value="25">
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Image URL</label>
+            <input type="url" name="prodImage" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="uppercase text-secondary font-medium block mb-1">Description</label>
+          <textarea name="prodDescription" rows="3" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none"></textarea>
+        </div>
+        <div class="flex gap-4 pt-4 border-t border-secondary/15">
+          <button type="submit" class="flex-1 py-3 bg-secondary text-on-secondary font-label-md uppercase tracking-wider">Save Masterpiece</button>
+          <button type="button" class="flex-1 py-3 bg-surface-container text-on-surface font-label-md uppercase tracking-wider" onclick="closeProductEditModal()">Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
 
 
   <!-- ==========================================================
-       6. ADMIN ORDER DETAILS MODAL
+       ADMIN ORDER DETAILS MODAL
        ========================================================== -->
   <div class="center-modal-overlay" id="admin-order-details-modal" onclick="if(event.target === this) closeOrderDetailsModal()">
-    <div class="center-modal-box" style="max-width: 650px;">
-      <div class="modal-content-inner" id="admin-order-details-content"></div>
+    <div class="center-modal-box p-8 max-w-2xl">
+      <div id="admin-order-details-content"></div>
     </div>
   </div>
 
