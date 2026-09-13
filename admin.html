@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NOOR Flagship - Sovereign Admin Panel</title>
+  <meta name="description" content="Sovereign Admin Panel for NOOR Flagship. Manage catalog, live orders, payments, coupons, and store settings in BDT (৳).">
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Plus+Jakarta+Sans:wght@100..900&family=Hind+Siliguri:wght@400;500;600;700&display=swap"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- Tailwind CSS CDN & Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#000000",
+            "on-primary": "#ffffff",
+            "secondary": "#735c00",
+            "secondary-container": "#fed65b",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#745c00",
+            "secondary-fixed": "#ffe088",
+            "secondary-fixed-dim": "#e9c349",
+            "surface": "#f9f9f9",
+            "on-surface": "#1a1c1c",
+            "on-surface-variant": "#444748",
+            "surface-container-low": "#f3f3f4",
+            "surface-container": "#eeeeee",
+            "surface-container-high": "#e8e8e8",
+            "surface-container-highest": "#e2e2e2",
+            "surface-container-lowest": "#ffffff",
+            "outline": "#747878",
+            "outline-variant": "#c4c7c7",
+            "error": "#ba1a1a",
+            "inverse-primary": "#c8c6c5"
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="bg-[#111111] text-[#e2e2e2] font-body-md min-h-screen">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- ==========================================================
+       ADMIN AUTHENTICATION LOCK SCREEN
+       ========================================================== -->
+  <div id="admin-auth-screen" class="fixed inset-0 bg-[#0a0a0a] z-50 flex items-center justify-center p-4">
+    <div class="bg-[#161616] border border-secondary/40 p-8 max-w-md w-full text-center shadow-2xl">
+      <div class="w-16 h-16 rounded-full bg-black border border-secondary text-secondary-fixed flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-[32px]">shield_person</span>
+      </div>
+      <h2 class="font-headline-lg text-white text-xl uppercase tracking-widest mb-1">Sovereign Admin Panel</h2>
+      <p class="text-xs text-secondary tracking-widest uppercase mb-6">Security Access Verification</p>
+      
+      <form onsubmit="handleDedicatedAdminLogin(event)" class="space-y-4">
+        <div>
+          <input type="password" id="dedicated-admin-pin" class="w-full p-3.5 bg-black border border-secondary/40 text-center tracking-[0.3em] font-mono text-xl text-white focus:border-secondary outline-none" placeholder="••••••••" required autofocus>
+          <p class="text-[11px] text-on-surface-variant mt-2">Default PIN: <strong class="text-secondary font-mono">admin123</strong></p>
+        </div>
+        <button type="submit" class="w-full py-3.5 bg-secondary text-on-secondary hover:bg-white hover:text-black transition-colors font-label-md uppercase tracking-wider text-xs font-semibold">
+          Unlock Admin Suite
+        </button>
+        <div class="pt-2">
+          <a href="index.html" class="text-xs text-secondary-fixed underline hover:text-white transition-colors">
+            ← Return to Live Storefront
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================
+       MAIN ADMIN PORTAL INTERFACE
+       ========================================================== -->
+  <div id="admin-main-interface" class="flex flex-col lg:flex-row min-h-screen hidden">
+    
+    <!-- Sidebar -->
+    <aside class="w-full lg:w-64 bg-black p-6 border-b lg:border-b-0 lg:border-r border-secondary/20 flex flex-col flex-shrink-0">
+      <div class="flex items-center gap-3 pb-6 border-b border-secondary/20 mb-6">
+        <div class="w-9 h-9 rounded-full bg-secondary/20 border border-secondary flex items-center justify-center text-secondary-fixed">
+          <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+        </div>
+        <div>
+          <h3 class="font-headline-sm text-sm uppercase tracking-widest text-white">NOOR Admin</h3>
+          <p class="text-[10px] text-secondary tracking-widest uppercase">Base Currency: ৳ BDT</p>
+        </div>
+      </div>
+
+      <nav class="space-y-2 flex-1">
+        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 active transition-colors" data-tab="dashboard" onclick="switchAdminTab('dashboard')">
+          <span class="material-symbols-outlined text-[18px] text-secondary">dashboard</span> Dashboard
+        </button>
+        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="products" onclick="switchAdminTab('products')">
+          <span class="material-symbols-outlined text-[18px] text-secondary">inventory_2</span> Products & Stock
+        </button>
+        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="orders" onclick="switchAdminTab('orders')">
+          <span class="material-symbols-outlined text-[18px] text-secondary">order_approve</span> Orders & Timeline
+        </button>
+        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="categories" onclick="switchAdminTab('categories')">
+          <span class="material-symbols-outlined text-[18px] text-secondary">category</span> Categories
+        </button>
+        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="coupons" onclick="switchAdminTab('coupons')">
+          <span class="material-symbols-outlined text-[18px] text-secondary">confirmation_number</span> VIP Coupons
+        </button>
+        <button class="admin-nav-btn w-full p-3 text-left text-xs uppercase tracking-wider font-semibold flex items-center gap-3 hover:bg-white/10 transition-colors" data-tab="settings" onclick="switchAdminTab('settings')">
+          <span class="material-symbols-outlined text-[18px] text-secondary">settings</span> Store & Payments
+        </button>
+      </nav>
+
+      <div class="pt-6 border-t border-secondary/20 space-y-2 mt-auto">
+        <a href="index.html" class="w-full py-2.5 bg-white/10 text-white hover:bg-secondary hover:text-on-secondary text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-[16px]">storefront</span> Live Storefront
+        </a>
+        <button class="w-full py-2.5 border border-error/50 text-error hover:bg-error hover:text-white text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2" onclick="dedicatedAdminLogout()">
+          <span class="material-symbols-outlined text-[16px]">logout</span> Lock & Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 lg:p-10 bg-[#161616] overflow-y-auto">
+      
+      <!-- Topbar -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-black p-6 border border-secondary/20 mb-8">
+        <div>
+          <h2 class="font-headline-lg text-white">Sovereign Management Suite</h2>
+          <p class="text-xs text-secondary tracking-widest uppercase">Base Currency: <strong>৳ (BDT)</strong> | Live LocalStorage Database</p>
+        </div>
+        <div class="flex gap-3">
+          <button class="px-4 py-2.5 bg-secondary text-on-secondary hover:bg-white hover:text-black transition-colors font-label-md uppercase text-xs tracking-wider" onclick="exportDatabaseData()">
+            Export Backup JSON
+          </button>
+          <a href="index.html" target="_blank" class="px-4 py-2.5 bg-white/10 text-white hover:bg-secondary transition-colors font-label-md uppercase text-xs tracking-wider flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">open_in_new</span> View Store
+          </a>
+        </div>
+      </div>
+
+      <!-- 1. DASHBOARD TAB -->
+      <div class="admin-tab-pane" id="admin-tab-dashboard">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="p-6 bg-black border border-secondary/30">
+            <span class="text-xs uppercase text-secondary tracking-widest block mb-1">Total Revenue</span>
+            <div class="text-2xl font-headline-lg text-white font-bold" id="admin-stat-sales">৳0</div>
+          </div>
+          <div class="p-6 bg-black border border-secondary/30">
+            <span class="text-xs uppercase text-secondary tracking-widest block mb-1">Total Commissions</span>
+            <div class="text-2xl font-headline-lg text-white font-bold" id="admin-stat-orders">0</div>
+          </div>
+          <div class="p-6 bg-black border border-secondary/30">
+            <span class="text-xs uppercase text-secondary tracking-widest block mb-1">Active Pipeline</span>
+            <div class="text-2xl font-headline-lg text-white font-bold" id="admin-stat-pending">0</div>
+          </div>
+          <div class="p-6 bg-black border border-secondary/30">
+            <span class="text-xs uppercase text-secondary tracking-widest block mb-1">Masterpieces in Vault</span>
+            <div class="text-2xl font-headline-lg text-white font-bold" id="admin-stat-products">0</div>
+          </div>
+        </div>
+
+        <div class="bg-black p-6 border border-secondary/20">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="font-headline-sm text-white uppercase tracking-wider">Recent Commissions</h3>
+            <button class="text-xs text-secondary underline uppercase" onclick="switchAdminTab('orders')">View All</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data-table bg-white text-black">
+              <thead>
+                <tr>
+                  <th>Order Ref</th>
+                  <th>Patron</th>
+                  <th>Grand Total</th>
+                  <th>Timeline Status</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-recent-orders-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. PRODUCTS TAB -->
+      <div class="admin-tab-pane" id="admin-tab-products" style="display: none;">
+        <div class="bg-black p-6 border border-secondary/20">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="font-headline-sm text-white uppercase tracking-wider">Vault Inventory & Products</h3>
+            <button class="px-4 py-2 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider hover:bg-white hover:text-black transition-colors" onclick="openProductEditModal()">
+              + Add Masterpiece
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data-table bg-white text-black">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Title & Badge</th>
+                  <th>Category</th>
+                  <th>Price (৳ BDT)</th>
+                  <th>Stock</th>
+                  <th>Rating</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. ORDERS TAB -->
+      <div class="admin-tab-pane" id="admin-tab-orders" style="display: none;">
+        <div class="bg-black p-6 border border-secondary/20">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="font-headline-sm text-white uppercase tracking-wider">Commission Orders & 5-Step Status</h3>
+            <select onchange="renderAdminOrdersTable(this.value)" class="px-3 py-1.5 bg-[#222] text-white border border-secondary/40 text-xs">
+              <option value="all">All Orders</option>
+              <option value="Pending">1. Order Placed</option>
+              <option value="Processing">2. Artisanal Crafting</option>
+              <option value="Confirmed">3. Quality Inspection</option>
+              <option value="Shipped">4. Dispatched</option>
+              <option value="Delivered">5. Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data-table bg-white text-black">
+              <thead>
+                <tr>
+                  <th>Ref / Date</th>
+                  <th>Patron & Phone</th>
+                  <th>Payment & Trx</th>
+                  <th>Total (৳)</th>
+                  <th>5-Step Status Update</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-orders-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. CATEGORIES TAB -->
+      <div class="admin-tab-pane" id="admin-tab-categories" style="display: none;">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="bg-black p-6 border border-secondary/20">
+            <h3 class="font-headline-sm text-white uppercase tracking-wider mb-4">Add Category</h3>
+            <form onsubmit="handleAddCategorySubmit(event)" class="space-y-4">
+              <div>
+                <label class="text-xs uppercase text-secondary block mb-1">Category Name *</label>
+                <input type="text" id="new-cat-name" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" placeholder="e.g. Royal Kaftans" required>
+              </div>
+              <div>
+                <label class="text-xs uppercase text-secondary block mb-1">Category Slug / ID</label>
+                <input type="text" id="new-cat-id" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" placeholder="e.g. kaftans">
+              </div>
+              <div>
+                <label class="text-xs uppercase text-secondary block mb-1">Material Symbol</label>
+                <input type="text" id="new-cat-icon" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" value="diamond">
+              </div>
+              <button type="submit" class="w-full py-3 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider">Save Category</button>
+            </form>
+          </div>
+          <div class="lg:col-span-2 bg-black p-6 border border-secondary/20">
+            <h3 class="font-headline-sm text-white uppercase tracking-wider mb-4">Active Categories</h3>
+            <div class="overflow-x-auto">
+              <table class="data-table bg-white text-black">
+                <thead>
+                  <tr>
+                    <th>Icon</th>
+                    <th>Category Name</th>
+                    <th>Slug</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-categories-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. COUPONS TAB -->
+      <div class="admin-tab-pane" id="admin-tab-coupons" style="display: none;">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="bg-black p-6 border border-secondary/20">
+            <h3 class="font-headline-sm text-white uppercase tracking-wider mb-4">Create VIP Coupon</h3>
+            <form onsubmit="handleAddCouponSubmit(event)" class="space-y-4">
+              <div>
+                <label class="text-xs uppercase text-secondary block mb-1">Coupon Code *</label>
+                <input type="text" name="couponCode" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs uppercase outline-none focus:border-secondary" placeholder="e.g. EID2026" required>
+              </div>
+              <div>
+                <label class="text-xs uppercase text-secondary block mb-1">Discount Type</label>
+                <select name="couponType" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary">
+                  <option value="percent">Percentage (% Off)</option>
+                  <option value="fixed">Fixed BDT (৳ Off)</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs uppercase text-secondary block mb-1">Discount Value *</label>
+                <input type="number" name="couponValue" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" placeholder="e.g. 15 or 500" required>
+              </div>
+              <div>
+                <label class="text-xs uppercase text-secondary block mb-1">Minimum Order (৳)</label>
+                <input type="number" name="couponMinSpend" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" value="3000">
+              </div>
+              <div>
+                <label class="text-xs uppercase text-secondary block mb-1">Max Cap (৳)</label>
+                <input type="number" name="couponMaxDiscount" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant text-xs outline-none focus:border-secondary" value="2500">
+              </div>
+              <button type="submit" class="w-full py-3 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider">Register VIP Code</button>
+            </form>
+          </div>
+          <div class="lg:col-span-2 bg-black p-6 border border-secondary/20">
+            <h3 class="font-headline-sm text-white uppercase tracking-wider mb-4">Active VIP Codes</h3>
+            <div class="overflow-x-auto">
+              <table class="data-table bg-white text-black">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Benefit</th>
+                    <th>Min Spend</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-coupons-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. SETTINGS TAB -->
+      <div class="admin-tab-pane" id="admin-tab-settings" style="display: none;">
+        <div class="bg-black p-6 border border-secondary/20 mb-8">
+          <h3 class="font-headline-sm text-white uppercase tracking-wider mb-2">Flagship Settings & Merchant Numbers</h3>
+          <p class="text-xs text-on-surface-variant mb-6">Configure WhatsApp, bKash/Nagad/Rocket receiver numbers, and delivery charges in ৳ BDT.</p>
+          
+          <form id="admin-settings-form" onsubmit="handleSaveSettingsSubmit(event)">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+              <div>
+                <label class="uppercase text-secondary block mb-1">Brand Name</label>
+                <input type="text" name="storeName" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
+              </div>
+              <div>
+                <label class="uppercase text-secondary block mb-1">Tagline</label>
+                <input type="text" name="tagline" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
+              </div>
+              <div>
+                <label class="uppercase text-secondary block mb-1">WhatsApp Number (e.g. 88017XXXXXXXX) *</label>
+                <input type="text" name="whatsappNumber" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
+              </div>
+              <div>
+                <label class="uppercase text-secondary block mb-1">Contact Phone</label>
+                <input type="text" name="contactPhone" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
+              </div>
+              <div>
+                <label class="uppercase text-[#e2136e] block mb-1">bKash Merchant / Personal Number</label>
+                <input type="text" name="bkashNumber" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
+              </div>
+              <div>
+                <label class="uppercase text-[#f7931e] block mb-1">Nagad Merchant / Personal Number</label>
+                <input type="text" name="nagadNumber" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
+              </div>
+              <div>
+                <label class="uppercase text-[#8c3494] block mb-1">Rocket Number</label>
+                <input type="text" name="rocketNumber" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
+              </div>
+              <div>
+                <label class="uppercase text-secondary block mb-1">Security PIN (Default: admin123)</label>
+                <input type="text" name="adminPin" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
+              </div>
+              <div>
+                <label class="uppercase text-secondary block mb-1">Inside Dhaka Courier Fee (৳)</label>
+                <input type="number" name="insideDhakaDelivery" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
+              </div>
+              <div>
+                <label class="uppercase text-secondary block mb-1">Outside Dhaka Courier Fee (৳)</label>
+                <input type="number" name="outsideDhakaDelivery" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary" required>
+              </div>
+              <div class="md:col-span-2">
+                <label class="uppercase text-secondary block mb-1">Address</label>
+                <input type="text" name="address" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
+              </div>
+              <div class="md:col-span-2">
+                <label class="uppercase text-secondary block mb-1">Announcement Banner Text</label>
+                <input type="text" name="announcement" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
+              </div>
+            </div>
+            <button type="submit" class="mt-6 px-8 py-3 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider hover:bg-white hover:text-black transition-colors">
+              Save All Settings
+            </button>
+          </form>
+        </div>
+
+        <div class="bg-black p-6 border border-secondary/20">
+          <h3 class="font-headline-sm text-white uppercase tracking-wider mb-2">Database Backup & Demo Reset</h3>
+          <div class="flex flex-wrap gap-4 mt-4">
+            <button class="px-5 py-2.5 bg-secondary text-on-secondary font-label-md uppercase text-xs tracking-wider" onclick="exportDatabaseData()">
+              Export JSON Backup
+            </button>
+            <label class="px-5 py-2.5 bg-white/10 text-white font-label-md uppercase text-xs tracking-wider cursor-pointer hover:bg-white/20">
+              Import JSON Backup
+              <input type="file" accept=".json" onchange="importDatabaseData(event)" class="hidden">
+            </label>
+            <button class="px-5 py-2.5 border border-error/50 text-error hover:bg-error hover:text-white font-label-md uppercase text-xs tracking-wider ml-auto" onclick="resetAllDataDemo()">
+              Reset Initial Demo Data
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- ==========================================================
+       ADMIN PRODUCT MODAL
+       ========================================================== -->
+  <div class="center-modal-overlay" id="admin-product-modal" onclick="if(event.target === this) closeProductEditModal()">
+    <div class="center-modal-box p-8 max-w-xl">
+      <div class="flex justify-between items-center border-b border-secondary/20 pb-4 mb-6">
+        <h3 id="product-modal-title" class="font-headline-sm uppercase tracking-wider text-on-surface">Edit Masterpiece</h3>
+        <button onclick="closeProductEditModal()" class="text-on-surface-variant hover:text-on-surface">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="admin-product-form" onsubmit="handleSaveProductSubmit(event)" class="space-y-4 text-xs">
+        <input type="hidden" name="productId">
+        <div>
+          <label class="uppercase text-secondary font-medium block mb-1">Title *</label>
+          <input type="text" name="prodName" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none text-black" required>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Category *</label>
+            <select name="prodCategory" id="prod-category-select" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none text-black" required></select>
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Badge Tag</label>
+            <input type="text" name="prodBadge" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none text-black" placeholder="e.g. Masterpiece, Best Seller">
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Selling Price (৳ BDT) *</label>
+            <input type="number" name="prodPrice" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none text-black" required>
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Regular Price (৳ BDT)</label>
+            <input type="number" name="prodRegularPrice" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none text-black">
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Stock Quantity</label>
+            <input type="number" name="prodStock" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none text-black" value="25">
+          </div>
+          <div>
+            <label class="uppercase text-secondary font-medium block mb-1">Image URL</label>
+            <input type="url" name="prodImage" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none text-black">
+          </div>
+        </div>
+        <div>
+          <label class="uppercase text-secondary font-medium block mb-1">Description</label>
+          <textarea name="prodDescription" rows="3" class="w-full p-2.5 border border-outline-variant focus:border-secondary outline-none text-black"></textarea>
+        </div>
+        <div class="flex gap-4 pt-4 border-t border-secondary/15">
+          <button type="submit" class="flex-1 py-3 bg-secondary text-on-secondary font-label-md uppercase tracking-wider">Save Masterpiece</button>
+          <button type="button" class="flex-1 py-3 bg-surface-container text-on-surface font-label-md uppercase tracking-wider" onclick="closeProductEditModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================
+       ADMIN ORDER DETAILS MODAL
+       ========================================================== -->
+  <div class="center-modal-overlay" id="admin-order-details-modal" onclick="if(event.target === this) closeOrderDetailsModal()">
+    <div class="center-modal-box p-8 max-w-2xl">
+      <div id="admin-order-details-content"></div>
+    </div>
+  </div>
+
+
+  <!-- Core Application Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/admin.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const auth = sessionStorage.getItem("noor_admin_auth");
+      if (auth === "true") {
+        document.getElementById("admin-auth-screen").style.display = "none";
+        document.getElementById("admin-main-interface").classList.remove("hidden");
+        switchAdminTab("dashboard");
+      }
+    });
+
+    function handleDedicatedAdminLogin(e) {
+      e.preventDefault();
+      const pin = document.getElementById("dedicated-admin-pin").value.trim();
+      const settings = Store.getSettings();
+      if (pin === (settings.adminPin || "admin123")) {
+        sessionStorage.setItem("noor_admin_auth", "true");
+        document.getElementById("admin-auth-screen").style.display = "none";
+        document.getElementById("admin-main-interface").classList.remove("hidden");
+        showToast("Welcome to NOOR Sovereign Admin Suite", "success");
+        switchAdminTab("dashboard");
+      } else {
+        showToast("Invalid PIN code! (Default: admin123)", "error");
+      }
+    }
+
+    function dedicatedAdminLogout() {
+      sessionStorage.removeItem("noor_admin_auth");
+      location.reload();
+    }
+  </script>
+</body>
+</html>
