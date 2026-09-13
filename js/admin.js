@@ -7,6 +7,33 @@
 let isAdminLoggedIn = false;
 let currentAdminTab = "dashboard";
 
+// Reliable Universal Toast Notification System
+function showToast(message, type = "success") {
+  let container = document.getElementById("toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  const iconName = type === 'error' ? 'error' : (type === 'warning' ? 'warning' : 'check_circle');
+  const iconColor = type === 'error' ? '#ef4444' : (type === 'warning' ? '#f59e0b' : '#10b981');
+  toast.innerHTML = `
+    <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1; color: ${iconColor}; flex-shrink: 0;">${iconName}</span>
+    <span style="flex: 1; font-weight: 600; font-size: 0.95rem;">${message}</span>
+  `;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(-15px)";
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+window.showToast = showToast;
+
 // Initialize Admin Portal via secret hash or direct trigger
 function openAdminPortal() {
   const sessionAuth = sessionStorage.getItem("noor_admin_auth");
@@ -715,6 +742,7 @@ function loadAdminSettingsForm() {
 function handleSaveSettingsSubmit(e) {
   e.preventDefault();
   const form = e.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
 
   const newSettings = {
     storeName: form.storeName.value.trim(),
@@ -745,7 +773,26 @@ function handleSaveSettingsSubmit(e) {
   };
 
   Store.saveSettings(newSettings);
-  showToast("All flagship settings, logo & brand title saved successfully!", "success");
+
+  // Instant Button Confirmation State
+  if (submitBtn) {
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = `✅ সফলভাবে সংরক্ষিত হয়েছে! (SAVED SUCCESSFULLY)`;
+    submitBtn.style.background = "#059669";
+    submitBtn.style.color = "#ffffff";
+    submitBtn.style.borderColor = "#10b981";
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+      submitBtn.innerHTML = originalText;
+      submitBtn.style.background = "";
+      submitBtn.style.color = "";
+      submitBtn.style.borderColor = "";
+      submitBtn.disabled = false;
+    }, 3000);
+  }
+
+  showToast("✅ সেটিংস ও ব্র্যান্ড তথ্য সফলভাবে সংরক্ষিত হয়েছে! (All Settings Saved Successfully!)", "success");
 }
 
 // 7. Backup & Reset
