@@ -955,15 +955,15 @@
       <div class="max-w-7xl mx-auto px-gutter grid grid-cols-1 md:grid-cols-4 gap-space-md mb-space-lg">
         <div class="space-y-space-sm">
           <div class="flex items-center gap-3 mb-2">
-            <span class="font-headline-md uppercase text-on-surface tracking-wider">NOOR</span>
+            <span class="font-headline-md uppercase text-on-surface tracking-wider site-name-display">INSAF Collection</span>
           </div>
-          <p class="text-body-sm text-on-surface-variant site-tagline-display">Crafting uncompromising elegance rooted in Islamic heritage, blending contemporary global standards with timeless artisanal traditions.</p>
+          <p class="text-body-sm text-on-surface-variant site-tagline-display">Elegance Rooted in Faith - ইসলামিক লাক্সারি লাইফস্টাইল ও প্রিমিয়াম কালেকশন</p>
           <p class="text-body-sm text-on-surface-variant pt-2">
-            <i class="fas fa-map-marker-alt text-secondary mr-2"></i><span class="site-address-display">Gulshan-2, Dhaka, Bangladesh</span>
+            <i class="fas fa-map-marker-alt text-secondary mr-2"></i><span class="site-address-display">Gazipur, Dhaka, Bangladesh</span>
           </p>
         </div>
         <div class="space-y-space-sm">
-          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider">Customer Care</h4>
+          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider footer-care-title-display">Customer Care</h4>
           <ul class="space-y-2 text-body-sm text-on-surface-variant">
             <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('member')">Live Order Tracking</a></li>
             <li><a class="hover:text-secondary transition-colors cursor-pointer" onclick="switchView('shop')">Collection Catalog</a></li>
@@ -971,17 +971,17 @@
           </ul>
         </div>
         <div class="space-y-space-sm">
-          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider">Payment Partners</h4>
+          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider footer-payment-title-display">Payment Partners</h4>
           <ul class="space-y-2 text-body-sm text-on-surface-variant">
-            <li><span style="color: #e2136e;"><i class="fas fa-check mr-1.5"></i> bKash (বিকাশ)</span></li>
-            <li><span style="color: #f7931e;"><i class="fas fa-check mr-1.5"></i> Nagad (নগদ)</span></li>
-            <li><span style="color: #8c3494;"><i class="fas fa-check mr-1.5"></i> Rocket (রকেট)</span></li>
-            <li><span class="text-secondary"><i class="fas fa-check mr-1.5"></i> Cash on Delivery</span></li>
+            <li><span style="color: #e2136e;"><i class="fas fa-check mr-1.5"></i> <span class="footer-bkash-label">bKash (বিকাশ)</span></span></li>
+            <li><span style="color: #f7931e;"><i class="fas fa-check mr-1.5"></i> <span class="footer-nagad-label">Nagad (নগদ)</span></span></li>
+            <li><span style="color: #8c3494;"><i class="fas fa-check mr-1.5"></i> <span class="footer-rocket-label">Rocket (রকেট)</span></span></li>
+            <li><span class="text-secondary"><i class="fas fa-check mr-1.5"></i> <span class="footer-cod-label">Cash on Delivery</span></span></li>
           </ul>
         </div>
         <div class="space-y-space-sm">
-          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider">Private Concierge</h4>
-          <p class="text-body-sm text-on-surface-variant">Subscribe to receive private lookbooks and seasonal bespoke releases.</p>
+          <h4 class="font-headline-sm uppercase text-on-surface tracking-wider footer-newsletter-title-display">Private Concierge</h4>
+          <p class="text-body-sm text-on-surface-variant footer-newsletter-desc-display">Subscribe to receive private lookbooks and seasonal bespoke releases.</p>
           <div class="flex gap-2">
             <input class="px-4 py-2 bg-surface border border-outline-variant text-body-sm w-full focus:border-secondary outline-none" placeholder="Enter email" type="email"/>
             <button class="px-4 py-2 bg-primary text-on-primary hover:bg-secondary hover:text-on-secondary transition-colors text-body-sm uppercase" onclick="showToast('Thank you for subscribing!', 'success')">Join</button>
@@ -989,7 +989,7 @@
         </div>
       </div>
       <div class="max-w-7xl mx-auto px-gutter pt-8 border-t border-secondary/10 text-center text-body-sm text-on-surface-variant">
-        <span>© 2026 NOOR Flagship. All rights reserved. Base Currency: <strong>৳ (BDT)</strong></span>
+        <span class="site-copyright-display">© 2026 INSAF Collection. All rights reserved. Base Currency: <strong>৳ (BDT)</strong></span>
       </div>
     </footer>
 
@@ -1821,12 +1821,62 @@
                   </div>
                 </div>
 
-                <div class="md:col-span-2">
-                  <label class="uppercase text-secondary block mb-1">Address</label>
-                  <input type="text" name="address" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
+                <!-- Footer Customizer -->
+                <div class="md:col-span-2 p-4 bg-black/60 border border-secondary/40 rounded-lg space-y-3">
+                  <h4 class="font-headline-sm text-amber-400 uppercase text-xs tracking-wider flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">view_compact</span>
+                    ফুটার ও কাস্টমার কেয়ার কাস্টমাইজেশন (Footer & Customer Care Settings)
+                  </h4>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label class="uppercase text-secondary block mb-1">Footer Tagline / About Text</label>
+                      <input type="text" name="footerTagline" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="Elegance Rooted in Faith - ইসলামিক লাক্সারি লাইফস্টাইল...">
+                    </div>
+                    <div>
+                      <label class="uppercase text-secondary block mb-1">Store Address / Physical Location (ঠিকানা)</label>
+                      <input type="text" name="address" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="Gazipur, Dhaka, Bangladesh">
+                    </div>
+                    <div>
+                      <label class="uppercase text-secondary block mb-1">Customer Care Column Title</label>
+                      <input type="text" name="footerCareTitle" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="CUSTOMER CARE">
+                    </div>
+                    <div>
+                      <label class="uppercase text-secondary block mb-1">Payment Partners Column Title</label>
+                      <input type="text" name="footerPaymentTitle" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="PAYMENT PARTNERS">
+                    </div>
+                    <div>
+                      <label class="uppercase text-[#e2136e] block mb-1">bKash Display Text (বিকাশ টেক্সট)</label>
+                      <input type="text" name="footerBkashText" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="bKash (বিকাশ)">
+                    </div>
+                    <div>
+                      <label class="uppercase text-[#f7931e] block mb-1">Nagad Display Text (নগদ টেক্সট)</label>
+                      <input type="text" name="footerNagadText" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="Nagad (নগদ)">
+                    </div>
+                    <div>
+                      <label class="uppercase text-[#8c3494] block mb-1">Rocket Display Text (রকেট টেক্সট)</label>
+                      <input type="text" name="footerRocketText" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="Rocket (রকেট)">
+                    </div>
+                    <div>
+                      <label class="uppercase text-secondary block mb-1">Cash on Delivery Text (ক্যাশ অন ডেলিভারি টেক্সট)</label>
+                      <input type="text" name="footerCodText" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="Cash on Delivery">
+                    </div>
+                    <div>
+                      <label class="uppercase text-secondary block mb-1">Newsletter Column Title</label>
+                      <input type="text" name="footerNewsletterTitle" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="PRIVATE CONCIERGE">
+                    </div>
+                    <div>
+                      <label class="uppercase text-secondary block mb-1">Newsletter Short Description</label>
+                      <input type="text" name="footerNewsletterDesc" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="Subscribe to receive private lookbooks...">
+                    </div>
+                    <div class="md:col-span-2">
+                      <label class="uppercase text-secondary block mb-1">Footer Copyright Notice (কপিরাইট লাইন)</label>
+                      <input type="text" name="footerCopyright" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary text-xs" placeholder="© 2026 INSAF Collection. All rights reserved.">
+                    </div>
+                  </div>
                 </div>
+
                 <div class="md:col-span-2">
-                  <label class="uppercase text-secondary block mb-1">Announcement Banner Text</label>
+                  <label class="uppercase text-secondary block mb-1">Announcement Banner Text (শীর্ষ নোটিশ বার)</label>
                   <input type="text" name="announcement" class="w-full p-2.5 bg-[#222] text-white border border-outline-variant outline-none focus:border-secondary">
                 </div>
               </div>

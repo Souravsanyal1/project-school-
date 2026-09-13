@@ -107,11 +107,41 @@ function applyStoreSettings() {
   const settings = Store.getSettings();
   document.querySelectorAll(".site-name-display").forEach(el => el.textContent = settings.storeName || "INSAF");
   document.querySelectorAll(".site-brand-subtitle-display").forEach(el => el.textContent = settings.brandSubtitle || "Collection Gazipur");
-  document.querySelectorAll(".site-tagline-display").forEach(el => el.textContent = settings.tagline || "");
+  document.querySelectorAll(".site-tagline-display").forEach(el => el.textContent = settings.footerTagline || settings.tagline || "Elegance Rooted in Faith - ইসলামিক লাক্সারি লাইফস্টাইল ও প্রিমিয়াম কালেকশন");
   document.querySelectorAll(".site-phone-display").forEach(el => el.textContent = settings.contactPhone || "");
   document.querySelectorAll(".site-email-display").forEach(el => el.textContent = settings.contactEmail || "");
-  document.querySelectorAll(".site-address-display").forEach(el => el.textContent = settings.address || "");
+  document.querySelectorAll(".site-address-display").forEach(el => el.textContent = settings.address || "Gazipur, Dhaka, Bangladesh");
   document.querySelectorAll(".site-announcement-display").forEach(el => el.textContent = settings.announcement || "");
+
+  // Footer Dynamic Text Bindings
+  const footerCareTitleEl = document.querySelector(".footer-care-title-display");
+  if (footerCareTitleEl) footerCareTitleEl.textContent = settings.footerCareTitle || "CUSTOMER CARE";
+
+  const footerPaymentTitleEl = document.querySelector(".footer-payment-title-display");
+  if (footerPaymentTitleEl) footerPaymentTitleEl.textContent = settings.footerPaymentTitle || "PAYMENT PARTNERS";
+
+  const footerBkashEl = document.querySelector(".footer-bkash-label");
+  if (footerBkashEl) footerBkashEl.textContent = settings.footerBkashText || "bKash (বিকাশ)";
+
+  const footerNagadEl = document.querySelector(".footer-nagad-label");
+  if (footerNagadEl) footerNagadEl.textContent = settings.footerNagadText || "Nagad (নগদ)";
+
+  const footerRocketEl = document.querySelector(".footer-rocket-label");
+  if (footerRocketEl) footerRocketEl.textContent = settings.footerRocketText || "Rocket (রকেট)";
+
+  const footerCodEl = document.querySelector(".footer-cod-label");
+  if (footerCodEl) footerCodEl.textContent = settings.footerCodText || "Cash on Delivery";
+
+  const footerNewsTitleEl = document.querySelector(".footer-newsletter-title-display");
+  if (footerNewsTitleEl) footerNewsTitleEl.textContent = settings.footerNewsletterTitle || "PRIVATE CONCIERGE";
+
+  const footerNewsDescEl = document.querySelector(".footer-newsletter-desc-display");
+  if (footerNewsDescEl) footerNewsDescEl.textContent = settings.footerNewsletterDesc || "Subscribe to receive private lookbooks and seasonal bespoke releases.";
+
+  const footerCopyEl = document.querySelector(".site-copyright-display");
+  if (footerCopyEl) {
+    footerCopyEl.innerHTML = settings.footerCopyright || `© ${new Date().getFullYear()} ${settings.storeName || "INSAF Collection"}. All rights reserved. Base Currency: <strong>${settings.currency || "৳"} (${settings.currencyCode || "BDT"})</strong>`;
+  }
 
   // Dynamic Logo (Image or Material Symbol Icon)
   document.querySelectorAll(".header-logo-container").forEach(el => {

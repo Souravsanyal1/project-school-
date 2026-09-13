@@ -1092,6 +1092,18 @@ function loadAdminSettingsForm() {
   form.adminPin.value = settings.adminPin || "admin123";
   form.announcement.value = settings.announcement || "";
 
+  // Footer fields
+  if (form.footerTagline) form.footerTagline.value = settings.footerTagline || settings.tagline || "";
+  if (form.footerCareTitle) form.footerCareTitle.value = settings.footerCareTitle || "CUSTOMER CARE";
+  if (form.footerPaymentTitle) form.footerPaymentTitle.value = settings.footerPaymentTitle || "PAYMENT PARTNERS";
+  if (form.footerBkashText) form.footerBkashText.value = settings.footerBkashText || "bKash (বিকাশ)";
+  if (form.footerNagadText) form.footerNagadText.value = settings.footerNagadText || "Nagad (নগদ)";
+  if (form.footerRocketText) form.footerRocketText.value = settings.footerRocketText || "Rocket (রকেট)";
+  if (form.footerCodText) form.footerCodText.value = settings.footerCodText || "Cash on Delivery";
+  if (form.footerNewsletterTitle) form.footerNewsletterTitle.value = settings.footerNewsletterTitle || "PRIVATE CONCIERGE";
+  if (form.footerNewsletterDesc) form.footerNewsletterDesc.value = settings.footerNewsletterDesc || "Subscribe to receive private lookbooks and seasonal bespoke releases.";
+  if (form.footerCopyright) form.footerCopyright.value = settings.footerCopyright || `© ${new Date().getFullYear()} ${settings.storeName || "INSAF Collection"}. All rights reserved. Base Currency: ৳ (BDT)`;
+
   // Hero section settings
   if (form.heroBgImage) {
     const heroImg = settings.heroBgImage || "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1600&q=85";
@@ -1147,7 +1159,17 @@ function handleSaveSettingsSubmit(e) {
     bkashNumber: form.bkashNumber.value.trim(),
     nagadNumber: form.nagadNumber.value.trim(),
     rocketNumber: form.rocketNumber.value.trim(),
-    announcement: form.announcement.value.trim()
+    announcement: form.announcement.value.trim(),
+    footerTagline: form.footerTagline ? form.footerTagline.value.trim() : form.tagline.value.trim(),
+    footerCareTitle: form.footerCareTitle ? form.footerCareTitle.value.trim() : "CUSTOMER CARE",
+    footerPaymentTitle: form.footerPaymentTitle ? form.footerPaymentTitle.value.trim() : "PAYMENT PARTNERS",
+    footerBkashText: form.footerBkashText ? form.footerBkashText.value.trim() : "bKash (বিকাশ)",
+    footerNagadText: form.footerNagadText ? form.footerNagadText.value.trim() : "Nagad (নগদ)",
+    footerRocketText: form.footerRocketText ? form.footerRocketText.value.trim() : "Rocket (রকেট)",
+    footerCodText: form.footerCodText ? form.footerCodText.value.trim() : "Cash on Delivery",
+    footerNewsletterTitle: form.footerNewsletterTitle ? form.footerNewsletterTitle.value.trim() : "PRIVATE CONCIERGE",
+    footerNewsletterDesc: form.footerNewsletterDesc ? form.footerNewsletterDesc.value.trim() : "Subscribe to receive private lookbooks and seasonal bespoke releases.",
+    footerCopyright: form.footerCopyright ? form.footerCopyright.value.trim() : `© ${new Date().getFullYear()} ${form.storeName.value.trim() || "INSAF Collection"}. All rights reserved. Base Currency: ৳ (BDT)`
   };
 
   Store.saveSettings(newSettings);

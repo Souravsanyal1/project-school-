@@ -34,7 +34,17 @@ const DEFAULT_SETTINGS = {
   bkashNumber: "01700000000 (Merchant/Send Money)",
   nagadNumber: "01800000000 (Merchant/Send Money)",
   rocketNumber: "01900000000-8 (Personal)",
-  announcement: "✨ বিশেষ রমজান ও সিজনাল অফার! প্রতিটি ক্রয়ে আকর্ষণীয় প্রিমিয়াম গিফট বক্স ও ফ্রি শিপিং।"
+  announcement: "✨ বিশেষ রমজান ও সিজনাল অফার! প্রতিটি ক্রয়ে আকর্ষণীয় প্রিমিয়াম গিফট বক্স ও ফ্রি শিপিং।",
+  footerTagline: "Elegance Rooted in Faith - ইসলামিক লাক্সারি লাইফস্টাইল ও প্রিমিয়াম কালেকশন",
+  footerCareTitle: "CUSTOMER CARE",
+  footerPaymentTitle: "PAYMENT PARTNERS",
+  footerBkashText: "bKash (বিকাশ)",
+  footerNagadText: "Nagad (নগদ)",
+  footerRocketText: "Rocket (রকেট)",
+  footerCodText: "Cash on Delivery",
+  footerNewsletterTitle: "PRIVATE CONCIERGE",
+  footerNewsletterDesc: "Subscribe to receive private lookbooks and seasonal bespoke releases.",
+  footerCopyright: "© 2026 INSAF Collection. All rights reserved. Base Currency: ৳ (BDT)"
 };
 
 const DEFAULT_CATEGORIES = [
